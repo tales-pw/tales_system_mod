@@ -1,0 +1,91 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name = "forge"
+            url = "https://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+
+apply plugin: "net.minecraftforge.gradle.forge"
+
+version = modVersion
+group = modGroup
+archivesBaseName = modBaseName
+
+minecraft {
+    version = project.forgeVersion
+    runDir = "run"
+    mappings = project.mcpVersion
+
+    replaceIn "TalesSystem.java"
+    replace "@MODID@", modBaseName
+    replace "@VERSION@", forgeVersion
+
+    serverRunArgs += 'nogui'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'CofDSystem'
+        url = 'https://maven.pkg.github.com/tales-pw/CofDSystem'
+
+        credentials {
+            // token only has rights to read published packages
+            username = "tales-pw-worker"
+            password "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"
+        }
+    }
+}
+
+configurations {
+    shade
+    compile.extendsFrom shade
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+    testImplementation "org.mockito:mockito-core:3.+"
+
+    shade 'pw.tales:cofdsystem:3.0.0a1'
+    shade 'com.squareup.okhttp3:okhttp:3.11.0'
+    shade('com.google.inject:guice:4.1.0') {
+        exclude group: "com.google.guava", module: "guava"
+    }
+}
+
+jar {
+    configurations.shade.each { dep ->
+        from(project.zipTree(dep)){
+            exclude 'META-INF', 'META-INF/**'
+        }
+
+        from(project.zipTree(dep)){
+            include 'META-INF/services', 'META-INF/services/**'
+        }
+    }
+}
+
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include "mcmod.info"
+
+        // replace version and mcversion
+        expand "version": project.version, "mcversion": project.minecraft.version
+    }
+
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude "mcmod.info"
+    }
+}

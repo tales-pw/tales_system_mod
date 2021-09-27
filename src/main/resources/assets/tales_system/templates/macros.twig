@@ -1,0 +1,68 @@
+{%- macro colorize_die(value, permutation, pool_size, number) -%}
+    {%- if pool_size == 0 -%}
+        {%- if value == 10 -%}
+            {{- value | wrapColor("dice_success") -}}
+        {%- elseif value == 1 -%}
+            {{- value | wrapColor("dice_dramatic_failure") -}}
+        {%- else -%}
+            {{- value | wrapColor("dice_failure") -}}
+        {%- endif -%}
+    {%- elseif permutation.getName() == "rote_action" -%}
+        {%- if value >= 8 -%}
+            {{- value | wrapColor("dice_success") -}}
+        {%- elseif (number <= pool_size) -%}
+            {{- value | wrapColor("dice_reroll") -}}
+        {%- else -%}
+            {{- value | wrapColor("dice_failure") -}}
+        {%- endif -%}
+    {%- else -%}
+        {%- set explode = permutation.getExplode() -%}
+        {%- if value < 8 -%}
+            {{- value | wrapColor("dice_failure") -}}
+        {%- else -%}
+            {%- if value >= explode -%}
+                {{- value | wrapColor("dice_explode") -}}
+            {%- else -%}
+                {{- value | wrapColor("dice_success") -}}
+            {%- endif -%}
+        {%- endif -%}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro colorizeResult(rollResult) -%}
+    {%- if rollResult.getName() == "exceptional_success" -%}
+        {%- filter wrapColor("dice_explode") -%}
+            исключительный успех
+        {%- endfilter -%}
+    {%- elseif rollResult.getName() == "success" -%}
+        {%- filter wrapColor("dice_success") -%}
+            успех
+        {%- endfilter -%}
+    {%- elseif rollResult.getName() == "dramatic_failure" -%}
+        {%- filter wrapColor("dice_dramatic_failure") -%}
+            драматический провал
+        {%- endfilter -%}
+    {%- elseif rollResult.getName() == "failure" -%}
+        {%- filter wrapColor("dice_failure") -%}
+            провал
+        {%- endfilter -%}
+    {%- else -%}
+        {{- rollResult -}}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro stringifyPermutation(permutation) -%}
+    {%- if permutation.getName() == "none" -%}
+        Без взрыва
+    {%- elseif permutation.getName() == "default" -%}
+        Обычный
+    {%- elseif permutation.getName() == "nine_again" -%}
+        Взрыв на 9
+    {%- elseif permutation.getName() == "eight_again" -%}
+        Взрыв на 8
+    {%- elseif permutation.getName() == "rote_action" -%}
+        Машинально
+    {%- else -%}
+        {{- permutation -}}
+    {%- endif -%}
+{%- endmacro -%}

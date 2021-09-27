@@ -1,0 +1,21 @@
+{% import 'assets/tales_system/templates/macros.twig' as macros %}{#- -#}
+§eРежим:§f {{ macros.stringifyPermutation(permutation) }}
+
+§eРазмер пула:§f {{ pool_size }}
+
+§eКоличество успехов:§f {{ successes }}
+
+§eРезультаты бросков:§f
+{% for dice_row in batch(dice_results, 10) -%}
+    {%- set row_loop = loop -%}
+    {%- for dice in dice_row -%}
+        {{- macros.colorize_die(dice, permutation, pool_size, 10 * row_loop.index + loop.index + 1) -}}
+
+        {%- if not (loop.last and row_loop.last) -%}
+            {{- ", " -}}
+        {%- endif -%}
+    {%- endfor -%}
+{%- if (row_loop.index) < (dice_results.size() / 10) %}
+
+{% endif -%}
+{%- endfor -%}{#- -#}

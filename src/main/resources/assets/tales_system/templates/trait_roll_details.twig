@@ -1,0 +1,6 @@
+§eНавыки:§f {{ traits | join(' + ') }} {{- (modifier >= 0) ? ' + ' : ' - ' -}} {{ modifier | abs }}
+
+§eМодификаторы:§f
+{% for entry in modifiers.entrySet() -%}{{ entry.getKey() }}: {{ entry.getValue() }}
+
+{%endfor%}{% include 'assets/tales_system/templates/roll_details.twig' -%}
