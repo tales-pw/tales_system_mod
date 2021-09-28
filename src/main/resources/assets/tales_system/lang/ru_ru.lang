@@ -141,3 +141,10 @@ target.hand=запястье
 target.head=голова
 target.heart=сердце
 target.leg=нога
+
+# Расстояния
+cofd.range.close=Вблизи
+cofd.range.short=Малая
+cofd.range.medium=Средняя
+cofd.range.long=Дальняя
+cofd.range.extreme=Огромная

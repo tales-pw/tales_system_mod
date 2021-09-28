@@ -141,3 +141,10 @@ target.hand=hand
 target.head=head
 target.heart=heart
 target.leg=leg
+
+# Ranges
+cofd.range.close=Close
+cofd.range.short=Short
+cofd.range.medium=Medium
+cofd.range.long=Long
+cofd.range.extreme=Extreme

@@ -9,6 +9,7 @@ import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.network.handler
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.network.handlers.EntityGOUnloadHandler;
 import pw.tales.cofdsystem.mod.server.modules.go_source.IGOSource;
 import pw.tales.cofdsystem.mod.server.modules.go_source_merged.MergedGoSource;
+import pw.tales.cofdsystem.mod.server.modules.position.network.handlers.GetRangeMessageHandler;
 import pw.tales.cofdsystem.mod.server.modules.scene.network.ServerSceneAddHandler;
 import pw.tales.cofdsystem.mod.server.modules.simple_roll.network.SimpleRollMessageHandler;
 import pw.tales.cofdsystem.mod.server.views.View;
@@ -31,6 +32,7 @@ public class ServerGuiceModule extends CommonGuiceModule {
     requestStaticInjection(EntityGOUnloadHandler.class);
     requestStaticInjection(EntityGOControlHandler.class);
     requestStaticInjection(TooltipRequestHandler.class);
+    requestStaticInjection(GetRangeMessageHandler.class);
     requestStaticInjection(View.class);
   }
 }

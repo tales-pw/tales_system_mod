@@ -18,9 +18,12 @@ public class ArmorStatsView extends StatsView {
     ITextComponent header = this.buildHeader("Предмет является доспехом:");
     return new TextComponentEmpty()
         .appendSibling(header)
-        .appendSibling(this.buildStat("Сила", this.armor.getStrengthReq()))
-        .appendSibling(this.buildStat("Защита", this.armor.getDefenceMod()))
-        .appendSibling(this.buildStat("Скорость", this.armor.getSpeedMod()))
+        .appendSibling(this.buildKV("Сила", this.armor.getStrengthReq()))
+        .appendText("\n")
+        .appendSibling(this.buildKV("Защита", this.armor.getDefenceMod()))
+        .appendText("\n")
+        .appendSibling(this.buildKV("Скорость", this.armor.getSpeedMod()))
+        .appendText("\n")
         .appendSibling(this.buildRating(
             "Рейтинг",
             this.armor.getGeneral(),
@@ -34,6 +37,6 @@ public class ArmorStatsView extends StatsView {
         general,
         ballistic
     );
-    return this.buildStat(label, rating);
+    return this.buildKV(label, rating);
   }
 }
