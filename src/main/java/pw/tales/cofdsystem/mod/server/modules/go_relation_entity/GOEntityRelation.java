@@ -265,4 +265,8 @@ public class GOEntityRelation extends GORelation<Entity> implements IModule {
 
     return capability.getDN();
   }
+
+  public boolean isBound(Entity entity) {
+    return this.getBind(entity) != null;
+  }
 }
