@@ -9,6 +9,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import org.mockito.Mockito;
 import pw.tales.cofdsystem.common.EnumHand;
 import pw.tales.cofdsystem.mod.TalesSystemTest;
+import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.GOEntityRelation;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_item.GOItemRelation;
 
 public class SystemSlotsModuleTest extends TalesSystemTest {
@@ -19,9 +20,11 @@ public class SystemSlotsModuleTest extends TalesSystemTest {
   public void setUp() throws Exception {
     this.equipmentModule = mock(EquipmentModule.class, Mockito.RETURNS_DEEP_STUBS);
     GOItemRelation goItemRelation = mock(GOItemRelation.class, Mockito.RETURNS_DEEP_STUBS);
+    GOEntityRelation goEntityRelation = mock(GOEntityRelation.class, Mockito.RETURNS_DEEP_STUBS);
     super.setUp();
     this.slotsHandler = new SystemSlotsModule(
         this.equipmentModule,
+        goEntityRelation,
         goItemRelation
     );
   }

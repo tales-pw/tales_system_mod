@@ -16,6 +16,7 @@ import pw.tales.cofdsystem.mod.server.modules.equipment.system_slots.ArmorSlot;
 import pw.tales.cofdsystem.mod.server.modules.equipment.system_slots.MainHandSlot;
 import pw.tales.cofdsystem.mod.server.modules.equipment.system_slots.OffHandSlot;
 import pw.tales.cofdsystem.mod.server.modules.equipment.system_slots.SystemSlot;
+import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.GOEntityRelation;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.events.GameObjectAttachedEvent;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_item.GOItemRelation;
 
@@ -23,10 +24,16 @@ import pw.tales.cofdsystem.mod.server.modules.go_relation_item.GOItemRelation;
 public class SystemSlotsModule implements IModule {
 
   private final List<SystemSlot> slots = new ArrayList<>();
+  private final GOEntityRelation goEntityRelation;
   private final GOItemRelation goItemRelation;
 
   @Inject
-  public SystemSlotsModule(EquipmentModule equipmentModule, GOItemRelation goItemRelation) {
+  public SystemSlotsModule(
+      EquipmentModule equipmentModule,
+      GOEntityRelation goEntityRelation,
+      GOItemRelation goItemRelation
+  ) {
+    this.goEntityRelation = goEntityRelation;
     this.goItemRelation = goItemRelation;
 
     slots.add(new MainHandSlot(equipmentModule));
@@ -37,6 +44,10 @@ public class SystemSlotsModule implements IModule {
   @SubscribeEvent
   public void onLivingEquipmentChangeEvent(LivingEquipmentChangeEvent event) {
     EntityLivingBase entity = event.getEntityLiving();
+
+    if (!this.goEntityRelation.isBound(entity)) {
+      return;
+    }
 
     slots.forEach(slot -> slot.update(
         entity,
@@ -53,7 +64,9 @@ public class SystemSlotsModule implements IModule {
       return;
     }
 
-    EntityLivingBase entityLivingBase = (EntityLivingBase) entity;
+    if (!this.goEntityRelation.isBound(entity)) {
+      return;
+    }
 
     TalesSystem.logger.debug(
         "Initialize {} equipment from {}.",
@@ -61,7 +74,7 @@ public class SystemSlotsModule implements IModule {
         entity
     );
 
-    this.initEquipment(entityLivingBase);
+    this.initEquipment((EntityLivingBase) entity);
   }
 
   public void initEquipment(EntityLivingBase entity) {
