@@ -1,5 +1,8 @@
 package pw.tales.cofdsystem.mod.server.modules.position.view;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -10,6 +13,11 @@ import pw.tales.cofdsystem.mod.server.views.TextComponentEmpty;
 import pw.tales.cofdsystem.mod.server.views.View;
 
 public class RangeView extends View {
+
+  public static final DecimalFormat DISTANCE_FORMAT = new DecimalFormat(
+      "#.#",
+      DecimalFormatSymbols.getInstance(Locale.ENGLISH)
+  );
 
   private final double distance;
   private final EnumRange range;
@@ -43,7 +51,7 @@ public class RangeView extends View {
   }
 
   public static String getRangeTranslationKey(EnumRange range) {
-    return String.format("distance.%s", range.name);
+    return String.format("cofd.range.%s", range.name);
   }
 
   private ITextComponent buildDistance() {
@@ -53,7 +61,7 @@ public class RangeView extends View {
     label.getStyle().setColor(TextFormatting.YELLOW);
 
     ITextComponent value = new TextComponentString(
-        Double.toString(this.distance)
+        DISTANCE_FORMAT.format(this.distance)
     );
     value.getStyle().setColor(TextFormatting.GRAY);
 
