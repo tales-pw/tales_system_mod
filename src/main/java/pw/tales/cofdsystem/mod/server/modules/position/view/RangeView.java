@@ -36,14 +36,34 @@ public class RangeView extends View {
         .appendSibling(this.buildKV("Число", this.distance));
   }
 
+  /**
+   * Build component with label and value.
+   *
+   * @param key       Label text.
+   * @param enumRange EnumRange object.
+   * @return component
+   */
   private ITextComponent buildKV(String key, EnumRange enumRange) {
     return this.buildKV(key, getRangeTranslationKey(enumRange));
   }
 
+  /**
+   * Get translation key for range.
+   *
+   * @param range EnumRange object.
+   * @return translation key
+   */
   private static String getRangeTranslationKey(EnumRange range) {
     return String.format("cofd.range.%s", range.name);
   }
 
+  /**
+   * Build component with label and value.
+   *
+   * @param key      Label text.
+   * @param distance Distance.
+   * @return component
+   */
   private ITextComponent buildKV(String key, double distance) {
     String distanceText = DISTANCE_FORMAT.format(distance);
     return this.buildKV(key, String.format("%sm", distanceText));

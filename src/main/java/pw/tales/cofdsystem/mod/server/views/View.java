@@ -67,10 +67,24 @@ public abstract class View {
     return header;
   }
 
-  protected ITextComponent buildKV(String key, Integer value) {
+  /**
+   * Build component with label and value.
+   *
+   * @param key   Label text.
+   * @param value Integer value.
+   * @return component
+   */
+  protected ITextComponent buildKV(String key, int value) {
     return this.buildKV(key, Integer.toString(value));
   }
 
+  /**
+   * Build component with label and value.
+   *
+   * @param key   Label text.
+   * @param value String value.
+   * @return component
+   */
   protected ITextComponent buildKV(String key, String value) {
     ITextComponent statName = new TextComponentTranslation(key);
     statName.getStyle().setColor(TextFormatting.YELLOW);
