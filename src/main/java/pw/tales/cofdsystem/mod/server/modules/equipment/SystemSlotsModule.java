@@ -18,23 +18,19 @@ import pw.tales.cofdsystem.mod.server.modules.equipment.system_slots.OffHandSlot
 import pw.tales.cofdsystem.mod.server.modules.equipment.system_slots.SystemSlot;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.GOEntityRelation;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.events.GameObjectAttachedEvent;
-import pw.tales.cofdsystem.mod.server.modules.go_relation_item.GOItemRelation;
 
 @Singleton
 public class SystemSlotsModule implements IModule {
 
   private final List<SystemSlot> slots = new ArrayList<>();
   private final GOEntityRelation goEntityRelation;
-  private final GOItemRelation goItemRelation;
 
   @Inject
   public SystemSlotsModule(
       EquipmentModule equipmentModule,
-      GOEntityRelation goEntityRelation,
-      GOItemRelation goItemRelation
+      GOEntityRelation goEntityRelation
   ) {
     this.goEntityRelation = goEntityRelation;
-    this.goItemRelation = goItemRelation;
 
     slots.add(new MainHandSlot(equipmentModule));
     slots.add(new OffHandSlot(equipmentModule));
