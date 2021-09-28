@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import pw.tales.cofdsystem.mod.server.modules.operators.OperatorsModule;
 
@@ -64,5 +65,19 @@ public abstract class View {
     TextComponentString header = new TextComponentString(text);
     this.applyHeaderStyles(header);
     return header;
+  }
+
+  protected ITextComponent buildKV(String key, Integer value) {
+    return this.buildKV(key, Integer.toString(value));
+  }
+
+  protected ITextComponent buildKV(String key, String value) {
+    ITextComponent statName = new TextComponentTranslation(key);
+    statName.getStyle().setColor(TextFormatting.YELLOW);
+
+    ITextComponent statValue = new TextComponentTranslation(value);
+    statValue.getStyle().setColor(TextFormatting.GRAY);
+
+    return statName.appendText(": ").appendSibling(statValue);
   }
 }

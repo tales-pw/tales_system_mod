@@ -5,13 +5,13 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
 import pw.tales.cofdsystem.common.EnumRange;
 import pw.tales.cofdsystem.mod.server.views.TextComponentEmpty;
 import pw.tales.cofdsystem.mod.server.views.View;
 
+/**
+ * View for range command output.
+ */
 public class RangeView extends View {
 
   public static final DecimalFormat DISTANCE_FORMAT = new DecimalFormat(
@@ -30,41 +30,22 @@ public class RangeView extends View {
   @Override
   public ITextComponent build(EntityPlayerMP viewer) {
     return new TextComponentEmpty()
-        .appendText("\n")
         .appendSibling(this.buildHeader("Дальность"))
-        .appendSibling(this.buildRange())
-        .appendSibling(this.buildDistance());
+        .appendSibling(this.buildKV("Система", this.range))
+        .appendText("\n")
+        .appendSibling(this.buildKV("Число", this.distance));
   }
 
-  private ITextComponent buildRange() {
-    ITextComponent label = new TextComponentString(
-        "Система:"
-    );
-    label.getStyle().setColor(TextFormatting.YELLOW);
-
-    ITextComponent value = new TextComponentTranslation(
-        getRangeTranslationKey(this.range)
-    );
-    value.getStyle().setColor(TextFormatting.GRAY);
-
-    return label.appendText(" ").appendSibling(value).appendText("\n");
+  private ITextComponent buildKV(String key, EnumRange enumRange) {
+    return this.buildKV(key, getRangeTranslationKey(enumRange));
   }
 
-  public static String getRangeTranslationKey(EnumRange range) {
+  private static String getRangeTranslationKey(EnumRange range) {
     return String.format("cofd.range.%s", range.name);
   }
 
-  private ITextComponent buildDistance() {
-    ITextComponent label = new TextComponentString(
-        "Число:"
-    );
-    label.getStyle().setColor(TextFormatting.YELLOW);
-
-    ITextComponent value = new TextComponentString(
-        DISTANCE_FORMAT.format(this.distance)
-    );
-    value.getStyle().setColor(TextFormatting.GRAY);
-
-    return label.appendText(" ").appendSibling(value);
+  private ITextComponent buildKV(String key, double distance) {
+    String distanceText = DISTANCE_FORMAT.format(distance);
+    return this.buildKV(key, String.format("%sm", distanceText));
   }
 }

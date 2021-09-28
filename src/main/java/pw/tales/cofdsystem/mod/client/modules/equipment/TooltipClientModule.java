@@ -55,8 +55,6 @@ public class TooltipClientModule implements IModule {
         this.currentTooltip.getFormattedText().split("\n")
     );
 
-    lines = lines.subList(0, lines.size() - 1);
-
     event.getToolTip().addAll(lines);
   }
 

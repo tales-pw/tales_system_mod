@@ -28,8 +28,10 @@ public class WeaponStatsView extends StatsView {
 
     return new TextComponentEmpty()
         .appendSibling(header)
-        .appendSibling(this.buildStat("Урон", this.weapon.getDamageMod()))
-        .appendSibling(this.buildStat("Инициатива", this.weapon.getInitiativeMod()))
+        .appendSibling(this.buildKV("Урон", this.weapon.getDamageMod()))
+        .appendText("\n")
+        .appendSibling(this.buildKV("Инициатива", this.weapon.getInitiativeMod()))
+        .appendText("\n")
         .appendSibling(this.buildTags("Тэги", tags));
   }
 
@@ -63,7 +65,6 @@ public class WeaponStatsView extends StatsView {
 
     return new TextComponentEmpty()
         .appendSibling(header)
-        .appendSibling(tagsComponent)
-        .appendText("\n");
+        .appendSibling(tagsComponent);
   }
 }
