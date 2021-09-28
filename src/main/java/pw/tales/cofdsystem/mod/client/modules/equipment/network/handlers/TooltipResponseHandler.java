@@ -18,6 +18,7 @@ public class TooltipResponseHandler implements IMessageHandler<TooltipResponseMe
   @Nullable
   public IMessage onMessage(TooltipResponseMessage message, MessageContext ctx) {
     ITextComponent tooltip = message.getTooltip();
+
     tooltipClientModule.handleTooltipResponse(message.getRequestID(), tooltip);
     return null;
   }

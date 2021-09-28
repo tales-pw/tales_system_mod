@@ -20,10 +20,4 @@ public abstract class StatsView extends View {
 
     return statName.appendText(":").appendSibling(statValue).appendText("\n");
   }
-
-  protected ITextComponent buildHeader(String text) {
-    ITextComponent header = new TextComponentString(text).appendText("\n");
-    header.getStyle().setColor(TextFormatting.BLUE);
-    return header;
-  }
 }

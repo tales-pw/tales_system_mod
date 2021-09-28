@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import javax.annotation.Nullable;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import pw.tales.cofdsystem.mod.server.modules.operators.OperatorsModule;
 
@@ -52,4 +53,16 @@ public abstract class View {
    * @return ITextComponent.
    */
   public abstract ITextComponent build(EntityPlayerMP viewer);
+
+  /**
+   * Build header component.
+   *
+   * @param text Header text.
+   * @return Header component.
+   */
+  protected ITextComponent buildHeader(String text) {
+    TextComponentString header = new TextComponentString(text);
+    this.applyHeaderStyles(header);
+    return header;
+  }
 }

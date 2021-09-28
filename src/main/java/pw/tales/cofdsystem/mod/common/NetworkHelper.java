@@ -13,6 +13,7 @@ import pw.tales.cofdsystem.mod.common.modules.go_relation_entity.network.message
 import pw.tales.cofdsystem.mod.common.modules.go_relation_entity.network.messages.EntityGOUnloadMessage;
 import pw.tales.cofdsystem.mod.common.modules.gui_windows.network.messages.SystemWindowRemoveMessage;
 import pw.tales.cofdsystem.mod.common.modules.gui_windows.network.messages.SystemWindowUpdateMessage;
+import pw.tales.cofdsystem.mod.common.modules.position.network.messages.GetRangeMessage;
 import pw.tales.cofdsystem.mod.common.modules.scene.network.mesages.SceneAddMessage;
 import pw.tales.cofdsystem.mod.common.network.messages.SimpleRollMessage;
 import pw.tales.cofdsystem.mod.server.modules.attack.network.AttackMessageHandler;
@@ -20,6 +21,7 @@ import pw.tales.cofdsystem.mod.server.modules.equipment.network.handlers.Tooltip
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.network.handlers.EntityGOBindHandler;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.network.handlers.EntityGOControlHandler;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.network.handlers.EntityGOUnloadHandler;
+import pw.tales.cofdsystem.mod.server.modules.position.network.handlers.GetRangeMessageHandler;
 import pw.tales.cofdsystem.mod.server.modules.scene.network.ServerSceneAddHandler;
 import pw.tales.cofdsystem.mod.server.modules.simple_roll.network.SimpleRollMessageHandler;
 
@@ -79,6 +81,12 @@ public class NetworkHelper {
         TooltipResponseHandler.class,
         TooltipResponseMessage.class,
         packetNumber++, Side.CLIENT
+    );
+
+    TalesSystem.network.registerMessage(
+        GetRangeMessageHandler.class,
+        GetRangeMessage.class,
+        packetNumber++, Side.SERVER
     );
   }
 }

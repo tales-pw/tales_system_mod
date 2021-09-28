@@ -20,6 +20,7 @@ import pw.tales.cofdsystem.mod.server.modules.go_source_remote.RemoteGOModule;
 import pw.tales.cofdsystem.mod.server.modules.gui_windows.WindowsModule;
 import pw.tales.cofdsystem.mod.server.modules.notification.NotificationModule;
 import pw.tales.cofdsystem.mod.server.modules.operators.OperatorsModule;
+import pw.tales.cofdsystem.mod.server.modules.position.ServerPositionModule;
 import pw.tales.cofdsystem.mod.server.modules.scene.SceneModule;
 import pw.tales.cofdsystem.mod.server.modules.simple_roll.SimpleRollModule;
 import pw.tales.cofdsystem.mod.server.modules.system_data.SystemDataModule;
@@ -40,7 +41,8 @@ public class ServerProxy extends CommonProxy {
       NotificationModule.class,
       RemoteGOModule.class,
       LocalGOModule.class,
-      WindowsModule.class
+      WindowsModule.class,
+      ServerPositionModule.class
   );
 
   private final CofDSystem cofdSystem = new CofDSystem();
