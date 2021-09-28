@@ -2,10 +2,13 @@ package pw.tales.cofdsystem.mod.server.modules.equipment;
 
 import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.Singleton;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -22,19 +25,24 @@ import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.events.GameObje
 @Singleton
 public class SystemSlotsModule implements IModule {
 
-  private final List<SystemSlot> slots = new ArrayList<>();
+  private static final Set<Class<? extends SystemSlot>> SLOT_CLASSES = ImmutableSet.of(
+      MainHandSlot.class,
+      OffHandSlot.class,
+      ArmorSlot.class
+  );
+
+  private final List<SystemSlot> slots;
   private final GOEntityRelation goEntityRelation;
 
   @Inject
   public SystemSlotsModule(
-      EquipmentModule equipmentModule,
+      Injector injector,
       GOEntityRelation goEntityRelation
   ) {
     this.goEntityRelation = goEntityRelation;
-
-    slots.add(new MainHandSlot(equipmentModule));
-    slots.add(new OffHandSlot(equipmentModule));
-    slots.add(new ArmorSlot(equipmentModule));
+    this.slots = SLOT_CLASSES.stream()
+        .map(injector::getInstance)
+        .collect(Collectors.toList());
   }
 
   @SubscribeEvent

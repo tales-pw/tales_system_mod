@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import com.google.inject.Injector;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import org.mockito.Mockito;
@@ -19,9 +20,11 @@ public class SystemSlotsModuleTest extends TalesSystemTest {
   public void setUp() throws Exception {
     this.equipmentModule = mock(EquipmentModule.class, Mockito.RETURNS_DEEP_STUBS);
     GOEntityRelation goEntityRelation = mock(GOEntityRelation.class, Mockito.RETURNS_DEEP_STUBS);
+    Injector injector = mock(Injector.class, Mockito.RETURNS_DEEP_STUBS);
+
     super.setUp();
     this.slotsHandler = new SystemSlotsModule(
-        this.equipmentModule,
+        injector,
         goEntityRelation
     );
   }
