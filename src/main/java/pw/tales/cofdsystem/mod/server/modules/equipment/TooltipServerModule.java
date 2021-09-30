@@ -22,7 +22,10 @@ public class TooltipServerModule implements IModule {
     this.equipmentModule = equipmentModule;
   }
 
-  public ITextComponent buildTooltip(EntityPlayerMP player, ItemStack itemStack) {
+  public CompletableFuture<ITextComponent> buildTooltip(
+      EntityPlayerMP player,
+      ItemStack itemStack
+  ) {
     return Utils.merge(
         this.buildArmorTooltip(player, itemStack),
         this.buildWeaponTooltip(player, itemStack)
@@ -45,7 +48,7 @@ public class TooltipServerModule implements IModule {
       }
 
       return component;
-    }).join();
+    });
   }
 
   public CompletableFuture<ITextComponent> buildArmorTooltip(
