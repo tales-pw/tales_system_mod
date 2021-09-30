@@ -27,7 +27,7 @@ public class ClientEntityGOUnloadCommand extends EntityGOUnloadCommand {
       String[] args
   ) throws CommandException {
     TalesSystem.network.sendToServer(
-        new EntityGOUnloadMessage(this.targets.getEntities())
+        new EntityGOUnloadMessage(this.targets.getLoadedEntities())
     );
   }
 }

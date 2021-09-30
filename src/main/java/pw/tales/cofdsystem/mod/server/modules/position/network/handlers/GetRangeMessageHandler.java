@@ -31,13 +31,23 @@ public class GetRangeMessageHandler extends TalesMessageHandler<GetRangeMessage>
       from = entities[0];
       to = entities[1];
     } else {
-      throw new WrongUsageException("command.range.error");
+      throw new WrongUsageException("command.range.wrong_usage");
+    }
+
+    if (from == null) {
+      throw new WrongUsageException("command.range.from_unloaded");
+    }
+
+    if (to == null) {
+      throw new WrongUsageException("command.range.to_unloaded");
     }
 
     double distance = positionModule.getDistance(from, to);
     EnumRange range = positionModule.measureDistance(distance);
 
-    RangeView rangeView = new RangeView(distance, range);
+    RangeView rangeView = new RangeView(
+        from, to, distance, range
+    );
     player.sendMessage(rangeView.build(player));
   }
 }

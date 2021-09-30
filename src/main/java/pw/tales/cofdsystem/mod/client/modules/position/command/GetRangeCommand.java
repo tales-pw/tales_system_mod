@@ -2,6 +2,7 @@ package pw.tales.cofdsystem.mod.client.modules.position.command;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import java.util.UUID;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
@@ -30,6 +31,8 @@ public class GetRangeCommand extends TalesCommand {
       ICommandSender sender,
       String[] args
   ) throws CommandException, CofDSystemException {
-    TalesSystem.network.sendToServer(new GetRangeMessage(this.targets.getEntities()));
+    TalesSystem.network.sendToServer(new GetRangeMessage(
+        this.targets.getUUIDs().toArray(new UUID[0])
+    ));
   }
 }

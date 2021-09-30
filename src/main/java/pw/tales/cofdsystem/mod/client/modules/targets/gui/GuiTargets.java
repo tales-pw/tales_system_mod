@@ -93,7 +93,7 @@ public class GuiTargets extends Gui {
   }
 
   private void drawSelectedMarks() {
-    for (Entity entity : this.targets.getEntities()) {
+    for (Entity entity : this.targets.getLoadedEntities()) {
       this.drawSelectMark(entity);
     }
   }
