@@ -13,7 +13,7 @@ import pw.tales.cofdsystem.action_attack.builder.AttackBuilder;
 import pw.tales.cofdsystem.action_attack.builder.EnumSpecifiedTarget;
 import pw.tales.cofdsystem.common.EnumSide;
 import pw.tales.cofdsystem.mod.common.haxe_adapters.HaxeMapAdapter;
-import pw.tales.cofdsystem.mod.server.modules.attack.AttackManager;
+import pw.tales.cofdsystem.mod.server.modules.attack.Attack;
 import pw.tales.cofdsystem.mod.server.modules.attack.command.ConfigureActorCommand;
 import pw.tales.cofdsystem.mod.server.modules.attack.command.ConfigureCommand.ConfigureAction;
 import pw.tales.cofdsystem.mod.server.views.ChatActionsBuilder;
@@ -24,20 +24,14 @@ public class ActorMenuView extends MenuView {
   public static final HaxeMapAdapter<EnumSpecifiedTarget> TARGETS = new HaxeMapAdapter<>(
       EnumSpecifiedTarget.VALUES);
 
-  private final AttackManager attackManager;
-
-  public ActorMenuView(
-      UUID uuid,
-      AttackManager attackManager,
-      AttackBuilder attack
-  ) {
-    super(uuid, attack, EnumSide.ACTOR);
-    this.attackManager = attackManager;
+  public ActorMenuView(Attack attack) {
+    super(attack, EnumSide.ACTOR);
   }
 
   @Override
   public int getModifier() {
-    return this.attack.actorModifier;
+    AttackBuilder builder = this.attack.getBuilder();
+    return builder.actorModifier;
   }
 
   public ITextComponent build(EntityPlayerMP viewer) {
@@ -45,16 +39,18 @@ public class ActorMenuView extends MenuView {
     ITextComponent header = new TextComponentString("Атака");
     header.getStyle().setBold(true).setColor(TextFormatting.DARK_AQUA);
 
+    AttackBuilder builder = this.attack.getBuilder();
+
     ITextComponent othersComponent = new ChatActionsBuilder(TextFormatting.GRAY)
         .addText(
             "Безрассудная атака",
             this.generateCommand(ConfigureAction.SET_ALL_OUT, null),
-            this.attack.actorAllOut
+            builder.actorAllOut
         )
         .addText(
             "Сила Воли",
             this.generateCommand(ConfigureAction.SPEND_WILLPOWER, null),
-            this.attack.actorWillpower
+            builder.actorWillpower
         )
         .build();
 
@@ -62,7 +58,7 @@ public class ActorMenuView extends MenuView {
         .addText(
             "OK",
             this.generateCommand(ConfigureAction.CONFIRM, null),
-            this.attackManager.isConfirmed(this.uuid, EnumSide.ACTOR)
+            this.attack.isConfirmed(EnumSide.ACTOR)
         )
         .build();
 
@@ -83,21 +79,33 @@ public class ActorMenuView extends MenuView {
 
   @Override
   public String generateCommand(Object... args) {
+    UUID uuid = this.attack.getId();
     ConfigureAction attackAction = (ConfigureAction) args[0];
     return ConfigureActorCommand.generate(uuid, attackAction, args[1]);
   }
 
   private ITextComponent buildHandComponent() {
+    UUID uuid = this.attack.getId();
+    AttackBuilder builder = this.attack.getBuilder();
+
     ITextComponent handComponent = new ChatActionsBuilder(TextFormatting.GRAY)
         .addText(
             "Основной рукой",
-            ConfigureActorCommand.generate(uuid, ConfigureAction.SET_HAND, HAND),
-            this.attack.actorHand == HAND
+            ConfigureActorCommand.generate(
+                uuid,
+                ConfigureAction.SET_HAND,
+                HAND
+            ),
+            builder.actorHand == HAND
         )
         .addText(
             "Второй рукой",
-            ConfigureActorCommand.generate(uuid, ConfigureAction.SET_HAND, OFFHAND),
-            this.attack.actorHand == OFFHAND
+            ConfigureActorCommand.generate(
+                uuid,
+                ConfigureAction.SET_HAND,
+                OFFHAND
+            ),
+            builder.actorHand == OFFHAND
         )
         .build();
     return new TextComponentString("Рука: ").appendSibling(handComponent).appendText("\n");
@@ -107,13 +115,16 @@ public class ActorMenuView extends MenuView {
     // Specified target
     ChatActionsBuilder specifiedTarget = new ChatActionsBuilder(TextFormatting.GRAY);
 
+    UUID uuid = attack.getId();
+    AttackBuilder builder = this.attack.getBuilder();
+
     for (EnumSpecifiedTarget target : TARGETS.values()) {
       specifiedTarget = specifiedTarget.add(
           new TextComponentTranslation(
               String.format("target.%s", target.toString())
           ),
           ConfigureActorCommand.generate(uuid, ConfigureAction.SET_TARGET, target),
-          this.attack.specifiedTarget == target
+          builder.specifiedTarget == target
       );
     }
 

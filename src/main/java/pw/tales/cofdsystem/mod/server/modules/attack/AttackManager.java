@@ -2,85 +2,98 @@ package pw.tales.cofdsystem.mod.server.modules.attack;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nullable;
 import pw.tales.cofdsystem.CofDSystem;
 import pw.tales.cofdsystem.action_attack.builder.AttackBuilder;
-import pw.tales.cofdsystem.common.EnumSide;
 import pw.tales.cofdsystem.game_object.GameObject;
+import pw.tales.cofdsystem.mod.server.modules.attack.storage.IAttackRepository;
+import pw.tales.cofdsystem.mod.server.modules.attack.views.ActorMenuView;
+import pw.tales.cofdsystem.mod.server.modules.attack.views.TargetMenuView;
+import pw.tales.cofdsystem.mod.server.modules.gui_windows.WindowsModule;
+import pw.tales.cofdsystem.mod.server.modules.notification.NotificationModule;
+import pw.tales.cofdsystem.mod.server.modules.operators.OperatorsModule;
 
 @Singleton
 public class AttackManager {
 
-  private final HashMap<UUID, AttackBuilder> builders = new HashMap<>();
-
-  private final Set<UUID> attackerConfirmation = new HashSet<>();
-  private final Set<UUID> targetConfirmation = new HashSet<>();
-
+  private final IAttackRepository repository;
+  private final WindowsModule windowsModule;
+  private final NotificationModule notificationModule;
+  private final OperatorsModule operatorsModule;
   private final CofDSystem system;
 
   @Inject
-  public AttackManager(CofDSystem system) {
+  public AttackManager(
+      IAttackRepository repository,
+      WindowsModule windowsModule,
+      NotificationModule notificationModule,
+      OperatorsModule operatorsModule,
+      CofDSystem system
+  ) {
+    this.repository = repository;
+    this.windowsModule = windowsModule;
+    this.notificationModule = notificationModule;
+    this.operatorsModule = operatorsModule;
     this.system = system;
   }
 
-  public UUID save(AttackBuilder builder) {
-    UUID uuid = UUID.randomUUID();
-    builders.put(uuid, builder);
-    return uuid;
+  public Attack create(
+      GameObject attacker,
+      GameObject target
+  ) {
+    AttackBuilder builder = new AttackBuilder(
+        attacker,
+        target
+    );
+
+    Attack attack = this.repository.save(builder);
+
+    this.notificationModule.updateGoWindow(
+        new ActorMenuView(attack),
+        attack.getWindowId(),
+        attacker,
+        true
+    );
+
+    this.notificationModule.updateGoWindow(
+        new TargetMenuView(attack),
+        attack.getWindowId(),
+        target,
+        true
+    );
+
+    this.operatorsModule.showWindow(
+        new ActorMenuView(attack),
+        attack.getWindowId()
+    );
+
+    return attack;
   }
 
   public void finish(UUID uuid) {
-    AttackBuilder builder = this.fetch(uuid);
-    Objects.requireNonNull(builder);
+    Attack attack = this.repository.fetch(uuid);
+    Objects.requireNonNull(attack);
 
-    system.act(builder.build());
+    attack.execute(this.system);
 
-    builders.remove(uuid);
-    attackerConfirmation.remove(uuid);
-    targetConfirmation.remove(uuid);
+    this.repository.remove(uuid);
+
+    this.windowsModule.removeWindowForAll(attack.getWindowId());
   }
 
   @Nullable
-  public AttackBuilder fetch(UUID uuid) {
-    return builders.get(uuid);
-  }
-
-  public boolean isConfirmed(UUID uuid) {
-    return isConfirmed(uuid, EnumSide.ACTOR) && isConfirmed(uuid, EnumSide.TARGET);
-  }
-
-  public boolean isConfirmed(UUID uuid, EnumSide side) {
-    Set<UUID> confirmation = this.getSideConfirmation(side);
-    return confirmation.contains(uuid);
-  }
-
-  private Set<UUID> getSideConfirmation(EnumSide side) {
-    if (side == EnumSide.ACTOR) {
-      return attackerConfirmation;
-    }
-    return targetConfirmation;
-  }
-
-  public void confirm(UUID uuid, EnumSide side) {
-    Set<UUID> confirmation = this.getSideConfirmation(side);
-    confirmation.add(uuid);
+  public Attack fetch(UUID uuid) {
+    return this.repository.fetch(uuid);
   }
 
   public void clearGOAttacks(GameObject gameObject) {
-    for (Entry<UUID, AttackBuilder> entry : this.builders.entrySet()) {
-      UUID uuid = entry.getKey();
-      AttackBuilder builder = entry.getValue();
-
-      if (builder.isRelated(gameObject)) {
-        this.builders.remove(uuid);
+    for (Attack attack : this.repository.getAll()) {
+      if (attack.isRelated(gameObject)) {
+        this.repository.remove(attack);
+        this.windowsModule.removeWindowForAll(attack.getWindowId());
       }
-
     }
   }
 }

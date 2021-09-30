@@ -18,6 +18,7 @@ import pw.tales.cofdsystem.common.EnumHand;
 import pw.tales.cofdsystem.common.EnumSide;
 import pw.tales.cofdsystem.exceptions.CofDSystemException;
 import pw.tales.cofdsystem.mod.common.TalesCommand;
+import pw.tales.cofdsystem.mod.server.modules.attack.Attack;
 import pw.tales.cofdsystem.mod.server.modules.attack.AttackManager;
 import pw.tales.cofdsystem.mod.server.modules.gui_windows.WindowsModule;
 import pw.tales.cofdsystem.mod.server.views.View;
@@ -73,9 +74,9 @@ public abstract class ConfigureCommand extends TalesCommand {
     }
 
     UUID uuid = UUID.fromString(args[0]);
-    AttackBuilder builder = attackManager.fetch(uuid);
+    Attack attack = attackManager.fetch(uuid);
 
-    if (builder == null) {
+    if (attack == null) {
       throw new CommandException("command.configure.builder_not_found");
     }
 
@@ -96,21 +97,22 @@ public abstract class ConfigureCommand extends TalesCommand {
       );
     }
 
+    AttackBuilder builder = attack.getBuilder();
     switch (confAction) {
       case SET_HAND:
         EnumHand hand = EnumHand.byName(args[2]);
         builder.setHand(this.side, hand);
-        this.updateWindow(player, uuid, builder);
+        this.updateWindow(player, attack);
         break;
       case SET_MODIFIER:
         int modifier = Integer.parseInt(args[2]);
         builder.setModifier(this.side, modifier);
-        this.updateWindow(player, uuid, builder);
+        this.updateWindow(player, attack);
         break;
       case SET_RESIST_TYPE:
         EnumResistType resistType = EnumResistType.byName(args[2]);
         builder.setResist(resistType);
-        this.updateWindow(player, uuid, builder);
+        this.updateWindow(player, attack);
         break;
       case SET_TARGET:
         EnumSpecifiedTarget specTarget = EnumSpecifiedTarget.byName(args[2]);
@@ -118,48 +120,41 @@ public abstract class ConfigureCommand extends TalesCommand {
           specTarget = null;
         }
         builder.setTarget(specTarget);
-        this.updateWindow(player, uuid, builder);
+        this.updateWindow(player, attack);
         break;
       case SET_ALL_OUT:
         builder.setAllOut(!builder.actorAllOut);
-        this.updateWindow(player, uuid, builder);
+        this.updateWindow(player, attack);
         break;
       case SPEND_WILLPOWER:
         builder.spendWillpower(this.side, !builder.actorWillpower);
-        this.updateWindow(player, uuid, builder);
+        this.updateWindow(player, attack);
         break;
       default:
-        this.attackManager.confirm(uuid, this.side);
-        if (this.attackManager.isConfirmed(uuid)) {
+        attack.confirm(this.side);
+        if (attack.isBothConfirmed()) {
           this.attackManager.finish(uuid);
-          this.closeWindow(uuid);
         } else {
-          this.updateWindow(player, uuid, builder);
+          this.updateWindow(player, attack);
         }
     }
   }
 
-  private void closeWindow(UUID uuid) {
-    this.windowsModule.removeWindowForAll(uuid.toString());
-  }
-
   private void updateWindow(
       EntityPlayerMP player,
-      UUID uuid,
-      AttackBuilder builder
+      Attack attack
   ) {
     this.windowsModule.updateWindow(
         player,
-        this.createWindowView(player, uuid, builder),
-        uuid.toString(),
+        this.createWindowView(player, attack),
+        attack.getWindowId(),
         false
     );
   }
 
   protected abstract View createWindowView(
       EntityPlayerMP entityPlayerMP,
-      UUID uuid,
-      AttackBuilder builder
+      Attack attack
   );
 
   public enum ConfigureAction {

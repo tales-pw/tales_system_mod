@@ -6,8 +6,8 @@ import java.util.UUID;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import pw.tales.cofdsystem.action_attack.builder.AttackBuilder;
 import pw.tales.cofdsystem.common.EnumSide;
+import pw.tales.cofdsystem.mod.server.modules.attack.Attack;
 import pw.tales.cofdsystem.mod.server.modules.attack.AttackManager;
 import pw.tales.cofdsystem.mod.server.modules.attack.views.ActorMenuView;
 import pw.tales.cofdsystem.mod.server.modules.gui_windows.WindowsModule;
@@ -53,9 +53,8 @@ public class ConfigureActorCommand extends ConfigureCommand {
   @Override
   protected View createWindowView(
       EntityPlayerMP player,
-      UUID uuid,
-      AttackBuilder builder
+      Attack attack
   ) {
-    return new ActorMenuView(uuid, this.attackManager, builder);
+    return new ActorMenuView(attack);
   }
 }

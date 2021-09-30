@@ -8,7 +8,7 @@ import net.minecraft.util.text.TextFormatting;
 import pw.tales.cofdsystem.action_attack.builder.AttackBuilder;
 import pw.tales.cofdsystem.action_attack.builder.EnumResistType;
 import pw.tales.cofdsystem.common.EnumSide;
-import pw.tales.cofdsystem.mod.server.modules.attack.AttackManager;
+import pw.tales.cofdsystem.mod.server.modules.attack.Attack;
 import pw.tales.cofdsystem.mod.server.modules.attack.command.ConfigureCommand;
 import pw.tales.cofdsystem.mod.server.modules.attack.command.ConfigureCommand.ConfigureAction;
 import pw.tales.cofdsystem.mod.server.modules.attack.command.ConfigureTargetCommand;
@@ -17,22 +17,19 @@ import pw.tales.cofdsystem.mod.server.views.TextComponentEmpty;
 
 public class TargetMenuView extends MenuView {
 
-  private final AttackManager attackManager;
-
-  public TargetMenuView(UUID uuid,
-      AttackManager attackManager,
-      AttackBuilder attack
-  ) {
-    super(uuid, attack, EnumSide.TARGET);
-    this.attackManager = attackManager;
+  public TargetMenuView(Attack attack) {
+    super(attack, EnumSide.TARGET);
   }
 
   @Override
   public int getModifier() {
-    return this.attack.targetModifier;
+    AttackBuilder builder = this.attack.getBuilder();
+    return builder.targetModifier;
   }
 
   public ITextComponent build(EntityPlayerMP viewer) {
+    AttackBuilder builder = this.attack.getBuilder();
+
     // Main Header
     ITextComponent header = new TextComponentString("Защита");
     header.getStyle().setBold(true).setColor(TextFormatting.DARK_AQUA);
@@ -41,7 +38,7 @@ public class TargetMenuView extends MenuView {
         .addText(
             "Сила Воли",
             this.generateCommand(ConfigureAction.SPEND_WILLPOWER, null),
-            attack.targetWillpower
+            builder.targetWillpower
         )
         .build();
 
@@ -49,7 +46,7 @@ public class TargetMenuView extends MenuView {
         .addText(
             "OK",
             this.generateCommand(ConfigureAction.CONFIRM, null),
-            this.attackManager.isConfirmed(this.uuid, EnumSide.TARGET)
+            this.attack.isConfirmed(EnumSide.TARGET)
         )
         .build();
 
@@ -67,22 +64,24 @@ public class TargetMenuView extends MenuView {
   }
 
   private ITextComponent buildDefenceComponent() {
+    AttackBuilder builder = this.attack.getBuilder();
+
     // Resist types
     ITextComponent resistTypesComponent = new ChatActionsBuilder(TextFormatting.GRAY)
         .addText(
             "Обычная защита",
             this.generateCommand(ConfigureAction.SET_RESIST_TYPE, EnumResistType.DEFAULT),
-            this.attack.targetResistType == EnumResistType.DEFAULT
+            builder.targetResistType == EnumResistType.DEFAULT
         )
         .addText(
             "Уворот",
             this.generateCommand(ConfigureAction.SET_RESIST_TYPE, EnumResistType.DODGE),
-            this.attack.targetResistType == EnumResistType.DODGE
+            builder.targetResistType == EnumResistType.DODGE
         )
         .addText(
             "Не защищаться",
             this.generateCommand(ConfigureAction.SET_RESIST_TYPE, EnumResistType.NO_DEFENCE),
-            this.attack.targetResistType == EnumResistType.NO_DEFENCE
+            builder.targetResistType == EnumResistType.NO_DEFENCE
         )
         .build();
 
@@ -93,6 +92,7 @@ public class TargetMenuView extends MenuView {
 
   @Override
   public String generateCommand(Object... args) {
+    UUID uuid = this.attack.getId();
     ConfigureCommand.ConfigureAction action = (ConfigureCommand.ConfigureAction) args[0];
     return ConfigureTargetCommand.generate(uuid, action, args[1]);
   }

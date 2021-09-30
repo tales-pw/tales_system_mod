@@ -7,9 +7,9 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import pw.tales.cofdsystem.action_attack.builder.AttackBuilder;
 import pw.tales.cofdsystem.common.EnumSide;
 import pw.tales.cofdsystem.mod.common.TalesCommand;
+import pw.tales.cofdsystem.mod.server.modules.attack.Attack;
 import pw.tales.cofdsystem.mod.server.modules.attack.AttackManager;
 import pw.tales.cofdsystem.mod.server.modules.attack.views.ActorMenuView;
 import pw.tales.cofdsystem.mod.server.modules.attack.views.TargetMenuView;
@@ -49,7 +49,7 @@ public class AttackShowCommand extends TalesCommand {
     }
 
     UUID uuid = UUID.fromString(args[0]);
-    AttackBuilder attack = attackManager.fetch(uuid);
+    Attack attack = this.attackManager.fetch(uuid);
 
     if (attack == null) {
       throw new CommandException("command.configure.builder_not_found");
@@ -59,9 +59,9 @@ public class AttackShowCommand extends TalesCommand {
 
     View view;
     if (side == EnumSide.ACTOR) {
-      view = new ActorMenuView(uuid, this.attackManager, attack);
+      view = new ActorMenuView(attack);
     } else if (side == EnumSide.TARGET) {
-      view = new TargetMenuView(uuid, this.attackManager, attack);
+      view = new TargetMenuView(attack);
     } else {
       return;
     }
