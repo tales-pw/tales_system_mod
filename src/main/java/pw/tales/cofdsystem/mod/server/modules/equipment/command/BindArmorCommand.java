@@ -18,13 +18,12 @@ import net.minecraftforge.server.permission.PermissionAPI;
 import pw.tales.cofdsystem.CofDSystem;
 import pw.tales.cofdsystem.armor.prefabs.ArmorPrefab;
 import pw.tales.cofdsystem.game_object.GameObject;
-import pw.tales.cofdsystem.mod.common.TalesCommand;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_item.GOItemRelation;
 import pw.tales.cofdsystem.mod.server.modules.go_source_local.LocalGOModule;
 import pw.tales.cofdsystem.mod.server.modules.operators.OperatorsModule;
 
 @Singleton
-public class BindArmorCommand extends TalesCommand {
+public class BindArmorCommand extends BindCommand {
 
   private static final String NAME = "s.go.item.armor.bind";
   private static final String SHORT_NAME = "s.armor.bind";
@@ -118,6 +117,8 @@ public class BindArmorCommand extends TalesCommand {
 
     this.localGOModule.save(gameObject);
     this.goItemRelation.bind(heldItem, gameObject);
+
+    disableDefaultTooltip(heldItem);
 
     notifyCommandListener(
         sender,

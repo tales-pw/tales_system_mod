@@ -17,14 +17,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.server.permission.PermissionAPI;
 import pw.tales.cofdsystem.CofDSystem;
 import pw.tales.cofdsystem.game_object.GameObject;
-import pw.tales.cofdsystem.mod.common.TalesCommand;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_item.GOItemRelation;
 import pw.tales.cofdsystem.mod.server.modules.go_source_local.LocalGOModule;
 import pw.tales.cofdsystem.mod.server.modules.operators.OperatorsModule;
 import pw.tales.cofdsystem.weapon.prefabs.WeaponPrefab;
 
 @Singleton
-public class BindWeaponCommand extends TalesCommand {
+public class BindWeaponCommand extends BindCommand {
 
   private static final String NAME = "s.go.item.weapon.bind";
   private static final String SHORT_NAME = "s.weapon.bind";
@@ -117,6 +116,8 @@ public class BindWeaponCommand extends TalesCommand {
     GameObject gameObject = prefab.createGameObject(system);
     this.localGOModule.save(gameObject);
     this.goItemRelation.bind(heldItem, gameObject);
+
+    disableDefaultTooltip(heldItem);
 
     notifyCommandListener(
         sender,
