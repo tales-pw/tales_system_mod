@@ -27,7 +27,7 @@ public class ClientEntityGOControlCommand extends EntityGOControlCommand {
       String[] args
   ) throws CommandException {
     TalesSystem.network.sendToServer(
-        new EntityGOControlMessage(this.targets.getEntities())
+        new EntityGOControlMessage(this.targets.getLoadedEntities())
     );
   }
 }

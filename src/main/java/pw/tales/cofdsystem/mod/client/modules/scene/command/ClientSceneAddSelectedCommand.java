@@ -27,6 +27,6 @@ public class ClientSceneAddSelectedCommand extends SceneAddSelectedCommand {
       ICommandSender sender,
       String[] args
   ) throws CommandException {
-    TalesSystem.network.sendToServer(new SceneAddMessage(this.targets.getEntities()));
+    TalesSystem.network.sendToServer(new SceneAddMessage(this.targets.getLoadedEntities()));
   }
 }

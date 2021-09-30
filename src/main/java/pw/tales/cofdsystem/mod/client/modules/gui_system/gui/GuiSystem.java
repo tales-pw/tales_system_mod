@@ -106,7 +106,7 @@ public class GuiSystem extends GuiChat {
     super.actionPerformed(button);
 
     if (button.id == ATTACK_BUTTON_ID) {
-      Entity[] entities = this.targets.getEntities();
+      Entity[] entities = this.targets.getLoadedEntities();
       TalesSystem.network.sendToServer(new AttackMessage(entities));
     }
 

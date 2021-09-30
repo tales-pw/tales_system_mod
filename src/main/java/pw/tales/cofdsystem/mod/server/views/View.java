@@ -2,6 +2,7 @@ package pw.tales.cofdsystem.mod.server.views;
 
 import com.google.inject.Inject;
 import javax.annotation.Nullable;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -86,12 +87,40 @@ public abstract class View {
    * @return component
    */
   protected ITextComponent buildKV(String key, String value) {
+    ITextComponent keyComponent = this.buildKVLabel(key);
+
+    ITextComponent valueComponent = new TextComponentTranslation(value);
+    valueComponent.getStyle().setColor(TextFormatting.GRAY);
+
+    return this.joinKV(keyComponent, valueComponent);
+  }
+
+  private ITextComponent buildKVLabel(String key) {
     ITextComponent statName = new TextComponentTranslation(key);
     statName.getStyle().setColor(TextFormatting.YELLOW);
+    return statName;
+  }
 
-    ITextComponent statValue = new TextComponentTranslation(value);
-    statValue.getStyle().setColor(TextFormatting.GRAY);
+  private ITextComponent joinKV(
+      ITextComponent keyComponent,
+      ITextComponent valueComponent
+  ) {
+    return keyComponent.appendText(": ").appendSibling(valueComponent);
+  }
 
-    return statName.appendText(": ").appendSibling(statValue);
+  /**
+   * Build component with label and value.
+   *
+   * @param key           Label text.
+   * @param commandSender Command sender (probably entity).
+   * @return component
+   */
+  protected ITextComponent buildKV(String key, ICommandSender commandSender) {
+    ITextComponent keyComponent = this.buildKVLabel(key);
+
+    ITextComponent valueComponent = commandSender.getDisplayName();
+    valueComponent.getStyle().setColor(TextFormatting.GRAY);
+
+    return this.joinKV(keyComponent, valueComponent);
   }
 }

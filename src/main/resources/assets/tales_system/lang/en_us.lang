@@ -148,3 +148,7 @@ cofd.range.short=Short
 cofd.range.medium=Medium
 cofd.range.long=Long
 cofd.range.extreme=Extreme
+
+command.range.wrong_usage=You need to select at least one entity.
+command.range.from_unloaded=Starting point entity is unloaded.
+command.range.to_unloaded=Ending point entity is unloaded.

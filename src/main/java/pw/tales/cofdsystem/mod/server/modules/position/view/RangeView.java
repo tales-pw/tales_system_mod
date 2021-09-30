@@ -3,6 +3,7 @@ package pw.tales.cofdsystem.mod.server.modules.position.view;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.ITextComponent;
 import pw.tales.cofdsystem.common.EnumRange;
@@ -19,10 +20,19 @@ public class RangeView extends View {
       DecimalFormatSymbols.getInstance(Locale.ENGLISH)
   );
 
+  private final ICommandSender from;
+  private final ICommandSender to;
   private final double distance;
   private final EnumRange range;
 
-  public RangeView(double distance, EnumRange range) {
+  public RangeView(
+      ICommandSender from,
+      ICommandSender to,
+      double distance,
+      EnumRange range
+  ) {
+    this.from = from;
+    this.to = to;
     this.distance = distance;
     this.range = range;
   }
@@ -30,10 +40,14 @@ public class RangeView extends View {
   @Override
   public ITextComponent build(EntityPlayerMP viewer) {
     return new TextComponentEmpty()
-        .appendSibling(this.buildHeader("Дальность"))
-        .appendSibling(this.buildKV("Система", this.range))
+        .appendSibling(this.buildHeader("Расстояние"))
+        .appendSibling(this.buildKV("от", this.from))
         .appendText("\n")
-        .appendSibling(this.buildKV("Число", this.distance));
+        .appendSibling(this.buildKV("до", this.to))
+        .appendText("\n")
+        .appendSibling(this.buildKVDistance("Система", this.range))
+        .appendText("\n")
+        .appendSibling(this.buildKVDistance("Число", this.distance));
   }
 
   /**
@@ -43,7 +57,7 @@ public class RangeView extends View {
    * @param enumRange EnumRange object.
    * @return component
    */
-  private ITextComponent buildKV(String key, EnumRange enumRange) {
+  private ITextComponent buildKVDistance(String key, EnumRange enumRange) {
     return this.buildKV(key, getRangeTranslationKey(enumRange));
   }
 
@@ -64,7 +78,7 @@ public class RangeView extends View {
    * @param distance Distance.
    * @return component
    */
-  private ITextComponent buildKV(String key, double distance) {
+  private ITextComponent buildKVDistance(String key, double distance) {
     String distanceText = DISTANCE_FORMAT.format(distance);
     return this.buildKV(key, String.format("%sm", distanceText));
   }
