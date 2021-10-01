@@ -19,6 +19,5 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ./build/libs/tales_system-${RELEASE_VERSION}.jar
-          asset_name: mything
           tag: ${{ github.ref }}
           overwrite: true
