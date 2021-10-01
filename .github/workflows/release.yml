@@ -14,10 +14,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build
         run: ./gradlew build
-      - name: "1"
-        run: echo ./build/libs/tales_system-${RELEASE_VERSION}.jar
       - name: "2"
-        run: ls
+        run: ls ./build/libs/
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
