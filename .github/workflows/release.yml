@@ -20,6 +20,6 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./build/libs/tales_system-${RELEASE_VERSION}.jar
+          file: ./build/libs/tales_system-${{RELEASE_VERSION}}.jar
           tag: ${{ github.ref }}
           overwrite: true
