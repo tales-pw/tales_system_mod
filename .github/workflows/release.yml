@@ -1,23 +1,20 @@
 name: Publish
-
 on:
-  push:
-    tags:
-      - '*'
+  release:
+    types:
+      - created
 
 jobs:
   build:
     name: Publish binaries
     runs-on: ubuntu-latest
+    env:
+      RELEASE_VERSION: ${{ github.event.release.tag_name }}
     steps:
       - uses: actions/checkout@v2
       - name: Build
-        env:
-          RELEASE_VERSION: ${{ github.event.release.tag_name }}
         run: ./gradlew build
       - name: Upload binaries to release
-        env:
-          RELEASE_VERSION: ${{ github.event.release.tag_name }}
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
