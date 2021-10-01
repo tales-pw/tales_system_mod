@@ -6,7 +6,6 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -20,25 +19,25 @@ import pw.tales.cofdsystem.exceptions.CofDSystemException;
 import pw.tales.cofdsystem.mod.common.TalesCommand;
 import pw.tales.cofdsystem.mod.server.modules.attack.Attack;
 import pw.tales.cofdsystem.mod.server.modules.attack.AttackManager;
-import pw.tales.cofdsystem.mod.server.modules.gui_windows.WindowsModule;
-import pw.tales.cofdsystem.mod.server.views.View;
+import pw.tales.cofdsystem.mod.server.modules.attack.AttackNotifications;
 
 public abstract class ConfigureCommand extends TalesCommand {
 
-  protected final AttackManager attackManager;
-  private final EnumSide side;
-  private final WindowsModule windowsModule;
+  protected final EnumSide side;
+
+  protected final AttackManager manager;
+  protected final AttackNotifications notifications;
 
   protected ConfigureCommand(
       String name,
       EnumSide side,
-      WindowsModule windowsModule,
-      AttackManager attackManager
+      AttackNotifications notifications,
+      AttackManager manager
   ) {
     super(name);
     this.side = side;
-    this.windowsModule = windowsModule;
-    this.attackManager = attackManager;
+    this.notifications = notifications;
+    this.manager = manager;
   }
 
   @Override
@@ -67,14 +66,12 @@ public abstract class ConfigureCommand extends TalesCommand {
       ICommandSender sender,
       String[] args
   ) throws CommandException {
-    EntityPlayerMP player = getCommandSenderAsPlayer(sender);
-
     if (args.length < 1) {
       throw new CommandException("command.attack.show.bind.not_enough_arguments");
     }
 
     UUID uuid = UUID.fromString(args[0]);
-    Attack attack = attackManager.fetch(uuid);
+    Attack attack = manager.fetch(uuid);
 
     if (attack == null) {
       throw new CommandException("command.configure.builder_not_found");
@@ -102,17 +99,14 @@ public abstract class ConfigureCommand extends TalesCommand {
       case SET_HAND:
         EnumHand hand = EnumHand.byName(args[2]);
         builder.setHand(this.side, hand);
-        this.updateWindow(player, attack);
         break;
       case SET_MODIFIER:
         int modifier = Integer.parseInt(args[2]);
         builder.setModifier(this.side, modifier);
-        this.updateWindow(player, attack);
         break;
       case SET_RESIST_TYPE:
         EnumResistType resistType = EnumResistType.byName(args[2]);
         builder.setResist(resistType);
-        this.updateWindow(player, attack);
         break;
       case SET_TARGET:
         EnumSpecifiedTarget specTarget = EnumSpecifiedTarget.byName(args[2]);
@@ -120,42 +114,23 @@ public abstract class ConfigureCommand extends TalesCommand {
           specTarget = null;
         }
         builder.setTarget(specTarget);
-        this.updateWindow(player, attack);
         break;
       case SET_ALL_OUT:
         builder.setAllOut(!builder.actorAllOut);
-        this.updateWindow(player, attack);
         break;
       case SPEND_WILLPOWER:
         builder.spendWillpower(this.side, !builder.actorWillpower);
-        this.updateWindow(player, attack);
         break;
       default:
         attack.confirm(this.side);
-        if (attack.isBothConfirmed()) {
-          this.attackManager.finish(uuid);
-        } else {
-          this.updateWindow(player, attack);
-        }
+    }
+
+    if (attack.isBothConfirmed()) {
+      this.manager.finish(uuid);
+    } else {
+      this.notifications.updateWindows(attack, this.side);
     }
   }
-
-  private void updateWindow(
-      EntityPlayerMP player,
-      Attack attack
-  ) {
-    this.windowsModule.updateWindow(
-        player,
-        this.createWindowView(player, attack),
-        attack.getWindowId(),
-        false
-    );
-  }
-
-  protected abstract View createWindowView(
-      EntityPlayerMP entityPlayerMP,
-      Attack attack
-  );
 
   public enum ConfigureAction {
     SET_HAND("set_hand"),
@@ -186,6 +161,7 @@ public abstract class ConfigureCommand extends TalesCommand {
       this.side = side;
     }
 
+    @Nullable
     public static ConfigureAction byName(String name) {
       return NAME_MAP.getOrDefault(name, null);
     }

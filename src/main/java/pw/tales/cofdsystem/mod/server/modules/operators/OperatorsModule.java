@@ -71,7 +71,7 @@ public class OperatorsModule extends ServerCommandModule {
    * @param view     View.
    * @param windowDn Window identifier.
    */
-  public void showWindow(View view, String windowDn) {
+  public void updateWindow(View view, String windowDn) {
     this.getOperators().forEach(e -> this.windowsModule.updateWindow(
         e,
         view,

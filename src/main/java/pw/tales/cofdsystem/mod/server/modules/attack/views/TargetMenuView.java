@@ -54,7 +54,7 @@ public class TargetMenuView extends MenuView {
     TextComponentString root = new TextComponentEmpty();
     root.getStyle().setColor(TextFormatting.GOLD);
     return root
-        .appendSibling(this.buildOpActions(viewer))
+        .appendSibling(this.buildOpInfo(viewer))
         .appendText("\n").appendText("\n")
         .appendSibling(header).appendText("\n")
         .appendSibling(this.buildDefenceComponent())

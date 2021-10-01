@@ -30,8 +30,13 @@ public class Attack {
     return this.id;
   }
 
-  public String getWindowId() {
-    return this.id.toString();
+  public String getWindowId(EnumSide side) {
+    String uuidStr = this.id.toString();
+    if (side == EnumSide.ACTOR) {
+      return String.format("%s_attacker", uuidStr);
+    } else {
+      return String.format("%s_target", uuidStr);
+    }
   }
 
   public AttackBuilder getBuilder() {

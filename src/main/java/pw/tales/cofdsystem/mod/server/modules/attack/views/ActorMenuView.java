@@ -67,7 +67,7 @@ public class ActorMenuView extends MenuView {
     root.getStyle().setColor(TextFormatting.GOLD);
 
     return root
-        .appendSibling(this.buildOpActions(viewer))
+        .appendSibling(this.buildOpInfo(viewer))
         .appendText("\n").appendText("\n")
         .appendSibling(header).appendText("\n")
         .appendSibling(this.buildHandComponent())

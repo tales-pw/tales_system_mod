@@ -1,4 +1,4 @@
-package pw.tales.cofdsystem.mod.server.modules.attack.network;
+package pw.tales.cofdsystem.mod.server.modules.attack.network.handlers;
 
 import com.google.inject.Inject;
 import java.util.Arrays;

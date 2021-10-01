@@ -9,33 +9,21 @@ import pw.tales.cofdsystem.CofDSystem;
 import pw.tales.cofdsystem.action_attack.builder.AttackBuilder;
 import pw.tales.cofdsystem.game_object.GameObject;
 import pw.tales.cofdsystem.mod.server.modules.attack.storage.IAttackRepository;
-import pw.tales.cofdsystem.mod.server.modules.attack.views.ActorMenuView;
-import pw.tales.cofdsystem.mod.server.modules.attack.views.TargetMenuView;
-import pw.tales.cofdsystem.mod.server.modules.gui_windows.WindowsModule;
-import pw.tales.cofdsystem.mod.server.modules.notification.NotificationModule;
-import pw.tales.cofdsystem.mod.server.modules.operators.OperatorsModule;
 
 @Singleton
 public class AttackManager {
-
-  private final IAttackRepository repository;
-  private final WindowsModule windowsModule;
-  private final NotificationModule notificationModule;
-  private final OperatorsModule operatorsModule;
   private final CofDSystem system;
+  private final IAttackRepository repository;
+  private final AttackNotifications notifications;
 
   @Inject
   public AttackManager(
+      CofDSystem system,
       IAttackRepository repository,
-      WindowsModule windowsModule,
-      NotificationModule notificationModule,
-      OperatorsModule operatorsModule,
-      CofDSystem system
+      AttackNotifications notifications
   ) {
     this.repository = repository;
-    this.windowsModule = windowsModule;
-    this.notificationModule = notificationModule;
-    this.operatorsModule = operatorsModule;
+    this.notifications = notifications;
     this.system = system;
   }
 
@@ -50,24 +38,7 @@ public class AttackManager {
 
     Attack attack = this.repository.save(builder);
 
-    this.notificationModule.updateGoWindow(
-        new ActorMenuView(attack),
-        attack.getWindowId(),
-        attacker,
-        true
-    );
-
-    this.notificationModule.updateGoWindow(
-        new TargetMenuView(attack),
-        attack.getWindowId(),
-        target,
-        true
-    );
-
-    this.operatorsModule.showWindow(
-        new ActorMenuView(attack),
-        attack.getWindowId()
-    );
+    this.notifications.updateWindows(attack);
 
     return attack;
   }
@@ -79,8 +50,7 @@ public class AttackManager {
     attack.execute(this.system);
 
     this.repository.remove(uuid);
-
-    this.windowsModule.removeWindowForAll(attack.getWindowId());
+    this.notifications.closeWindows(attack);
   }
 
   @Nullable
@@ -92,7 +62,7 @@ public class AttackManager {
     for (Attack attack : this.repository.getAll()) {
       if (attack.isRelated(gameObject)) {
         this.repository.remove(attack);
-        this.windowsModule.removeWindowForAll(attack.getWindowId());
+        this.notifications.closeWindows(attack);
       }
     }
   }

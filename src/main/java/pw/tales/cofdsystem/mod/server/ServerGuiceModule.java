@@ -2,7 +2,7 @@ package pw.tales.cofdsystem.mod.server;
 
 import pw.tales.cofdsystem.CofDSystem;
 import pw.tales.cofdsystem.mod.common.CommonGuiceModule;
-import pw.tales.cofdsystem.mod.server.modules.attack.network.AttackMessageHandler;
+import pw.tales.cofdsystem.mod.server.modules.attack.network.handlers.AttackMessageHandler;
 import pw.tales.cofdsystem.mod.server.modules.attack.storage.AttackMapRepository;
 import pw.tales.cofdsystem.mod.server.modules.attack.storage.IAttackRepository;
 import pw.tales.cofdsystem.mod.server.modules.equipment.network.handlers.TooltipRequestHandler;
