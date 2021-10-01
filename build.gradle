@@ -13,7 +13,7 @@ buildscript {
 
 apply plugin: "net.minecraftforge.gradle.forge"
 
-version = modVersion
+version = System.getenv('RELEASE_VERSION') ?: "dev"
 group = modGroup
 archivesBaseName = modBaseName
 
@@ -52,7 +52,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testImplementation "org.mockito:mockito-core:3.+"
 
-    shade 'pw.tales:cofdsystem:3.0.0a1'
+    shade 'pw.tales:cofdsystem:3.1.0a4'
     shade 'com.squareup.okhttp3:okhttp:3.11.0'
     shade('com.google.inject:guice:4.1.0') {
         exclude group: "com.google.guava", module: "guava"

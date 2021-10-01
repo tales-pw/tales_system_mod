@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -159,9 +160,9 @@ public class EquipmentModule extends ServerCommandModule {
       @Nullable Armor newArmor
   ) {
     WornArmor trait = gameObject.getTrait(WornArmor.TYPE, null);
-    Armor oldArmor = trait.getArmor();
+    @Nullable Armor oldArmor = trait.getArmor();
 
-    if (oldArmor == newArmor) {
+    if (Objects.equals(oldArmor, newArmor)) {
       return;
     }
 
@@ -262,7 +263,7 @@ public class EquipmentModule extends ServerCommandModule {
     HeldWeapon trait = gameObject.getTrait(HeldWeapon.TYPE, null);
     Weapon oldWeapon = trait.getHand(hand);
 
-    if (oldWeapon == newWeapon) {
+    if (Objects.equals(oldWeapon, newWeapon)) {
       return;
     }
 

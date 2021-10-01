@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
@@ -101,7 +101,7 @@ public class GuiTargets extends Gui {
   private void drawSelectMark(Entity entity) {
     Vec3d vec3d;
 
-    if (entity instanceof EntityLiving) {
+    if (entity instanceof EntityLivingBase) {
       vec3d = projection.transformGlobalPoint(
           entity.getPositionEyes(this.minecraft.getRenderPartialTicks())
       );
