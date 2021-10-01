@@ -18,7 +18,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./libs/tales_system-${RELEASE_VERSION}.jar
+          file: ./build/libs/tales_system-${RELEASE_VERSION}.jar
           asset_name: mything
           tag: ${{ github.ref }}
           overwrite: true
