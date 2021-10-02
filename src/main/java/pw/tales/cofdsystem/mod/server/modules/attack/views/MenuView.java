@@ -10,6 +10,7 @@ import pw.tales.cofdsystem.action_attack.builder.AttackBuilder;
 import pw.tales.cofdsystem.character.Character;
 import pw.tales.cofdsystem.common.EnumSide;
 import pw.tales.cofdsystem.game_object.GameObject;
+import pw.tales.cofdsystem.mod.server.modules.attack.Attack;
 import pw.tales.cofdsystem.mod.server.modules.attack.command.AttackShowCommand;
 import pw.tales.cofdsystem.mod.server.modules.attack.command.ConfigureCommand.ConfigureAction;
 import pw.tales.cofdsystem.mod.server.views.ChatActionsBuilder;
@@ -18,12 +19,10 @@ import pw.tales.cofdsystem.mod.server.views.View;
 
 public abstract class MenuView extends View {
 
-  protected final UUID uuid;
-  protected final AttackBuilder attack;
-  private final EnumSide side;
+  protected final EnumSide side;
+  protected final Attack attack;
 
-  MenuView(UUID uuid, AttackBuilder attack, EnumSide side) {
-    this.uuid = uuid;
+  MenuView(Attack attack, EnumSide side) {
     this.attack = attack;
     this.side = side;
   }
@@ -33,18 +32,21 @@ public abstract class MenuView extends View {
       return new TextComponentEmpty();
     }
 
-    GameObject actor = this.attack.getActor();
-    GameObject target = this.attack.getTarget();
+    UUID uuid = this.attack.getId();
+    AttackBuilder builder = this.attack.getBuilder();
+
+    GameObject actor = builder.getActor();
+    GameObject target = builder.getTarget();
 
     ITextComponent opActionsComponent = new ChatActionsBuilder(TextFormatting.GRAY)
         .addText(
             new Character(actor).getName(),
-            AttackShowCommand.generate(this.uuid, EnumSide.ACTOR),
+            AttackShowCommand.generate(uuid, EnumSide.ACTOR),
             this.side == EnumSide.ACTOR
         )
         .addText(
             new Character(target).getName(),
-            AttackShowCommand.generate(this.uuid, EnumSide.TARGET),
+            AttackShowCommand.generate(uuid, EnumSide.TARGET),
             this.side == EnumSide.TARGET
         )
         .build();

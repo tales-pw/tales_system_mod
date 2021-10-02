@@ -4,14 +4,10 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.util.UUID;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import pw.tales.cofdsystem.action_attack.builder.AttackBuilder;
 import pw.tales.cofdsystem.common.EnumSide;
 import pw.tales.cofdsystem.mod.server.modules.attack.AttackManager;
-import pw.tales.cofdsystem.mod.server.modules.attack.views.ActorMenuView;
-import pw.tales.cofdsystem.mod.server.modules.gui_windows.WindowsModule;
-import pw.tales.cofdsystem.mod.server.views.View;
+import pw.tales.cofdsystem.mod.server.modules.attack.AttackNotifications;
 
 
 @Singleton
@@ -20,8 +16,11 @@ public class ConfigureActorCommand extends ConfigureCommand {
   public static final String NAME = "_s.attack.configure";
 
   @Inject
-  public ConfigureActorCommand(WindowsModule windowsModule, AttackManager attackManager) {
-    super(NAME, EnumSide.ACTOR, windowsModule, attackManager);
+  public ConfigureActorCommand(
+      AttackNotifications attackNotifications,
+      AttackManager attackManager
+  ) {
+    super(NAME, EnumSide.ACTOR, attackNotifications, attackManager);
   }
 
   public static String generate(UUID uuid, ConfigureAction action, Object arg) {
@@ -35,12 +34,6 @@ public class ConfigureActorCommand extends ConfigureCommand {
   }
 
   @Override
-  public String getName() {
-    return ConfigureActorCommand.NAME;
-  }
-
-  @Override
-
   public String getUsage(ICommandSender sender) {
     return "command.attack.usage";
   }
@@ -48,14 +41,5 @@ public class ConfigureActorCommand extends ConfigureCommand {
   @Override
   public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
     return true;
-  }
-
-  @Override
-  protected View createWindowView(
-      EntityPlayerMP player,
-      UUID uuid,
-      AttackBuilder builder
-  ) {
-    return new ActorMenuView(uuid, this.attackManager, builder);
   }
 }

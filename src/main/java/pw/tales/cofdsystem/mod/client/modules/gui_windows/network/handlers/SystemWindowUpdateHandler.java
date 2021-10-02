@@ -23,7 +23,7 @@ public class SystemWindowUpdateHandler implements
       mc.addScheduledTask(() -> module.update(
           message.getId(),
           message.getComponent(),
-          message.getForcedUpdate()
+          message.getForceOpen()
       ));
     }
 

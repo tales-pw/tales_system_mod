@@ -16,7 +16,7 @@ import pw.tales.cofdsystem.mod.common.modules.gui_windows.network.messages.Syste
 import pw.tales.cofdsystem.mod.common.modules.position.network.messages.GetRangeMessage;
 import pw.tales.cofdsystem.mod.common.modules.scene.network.mesages.SceneAddMessage;
 import pw.tales.cofdsystem.mod.common.network.messages.SimpleRollMessage;
-import pw.tales.cofdsystem.mod.server.modules.attack.network.AttackMessageHandler;
+import pw.tales.cofdsystem.mod.server.modules.attack.network.handlers.AttackMessageHandler;
 import pw.tales.cofdsystem.mod.server.modules.equipment.network.handlers.TooltipRequestHandler;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.network.handlers.EntityGOBindHandler;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.network.handlers.EntityGOControlHandler;
