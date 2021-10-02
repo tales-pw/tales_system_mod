@@ -37,7 +37,7 @@ public class NameView extends View {
     if (!name.isEmpty()) {
       return new TextComponentString(name);
     } else {
-      return NO_NAME_COMPONENT;
+      return NO_NAME_COMPONENT.createCopy();
     }
   }
 }
