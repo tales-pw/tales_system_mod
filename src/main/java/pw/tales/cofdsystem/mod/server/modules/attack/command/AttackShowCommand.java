@@ -11,10 +11,7 @@ import pw.tales.cofdsystem.common.EnumSide;
 import pw.tales.cofdsystem.mod.common.TalesCommand;
 import pw.tales.cofdsystem.mod.server.modules.attack.Attack;
 import pw.tales.cofdsystem.mod.server.modules.attack.AttackManager;
-import pw.tales.cofdsystem.mod.server.modules.attack.views.ActorMenuView;
-import pw.tales.cofdsystem.mod.server.modules.attack.views.TargetMenuView;
-import pw.tales.cofdsystem.mod.server.modules.gui_windows.WindowsModule;
-import pw.tales.cofdsystem.mod.server.views.View;
+import pw.tales.cofdsystem.mod.server.modules.attack.AttackNotifications;
 
 
 @Singleton
@@ -23,16 +20,16 @@ public class AttackShowCommand extends TalesCommand {
   private static final String NAME = "_s.attack.show";
 
   private final AttackManager attackManager;
-  private final WindowsModule windowsModule;
+  private final AttackNotifications notifications;
 
   @Inject
   public AttackShowCommand(
       AttackManager attackManager,
-      WindowsModule windowsModule
+      AttackNotifications notifications
   ) {
     super(NAME);
     this.attackManager = attackManager;
-    this.windowsModule = windowsModule;
+    this.notifications = notifications;
   }
 
   public static String generate(UUID uuid, EnumSide side) {
@@ -56,21 +53,6 @@ public class AttackShowCommand extends TalesCommand {
     }
 
     EnumSide side = EnumSide.byName(args[1]);
-
-    View view;
-    if (side == EnumSide.ACTOR) {
-      view = new ActorMenuView(attack);
-    } else if (side == EnumSide.TARGET) {
-      view = new TargetMenuView(attack);
-    } else {
-      return;
-    }
-
-    this.windowsModule.updateWindow(
-        entity,
-        view,
-        uuid.toString(),
-        false
-    );
+    this.notifications.forceOpenWindow(attack, entity, side);
   }
 }

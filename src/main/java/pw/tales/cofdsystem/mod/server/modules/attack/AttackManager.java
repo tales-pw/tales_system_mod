@@ -35,11 +35,8 @@ public class AttackManager {
         attacker,
         target
     );
-
     Attack attack = this.repository.save(builder);
-
     this.notifications.updateWindows(attack);
-
     return attack;
   }
 

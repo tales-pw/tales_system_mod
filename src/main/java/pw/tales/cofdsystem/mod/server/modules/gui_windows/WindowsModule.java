@@ -25,16 +25,16 @@ public class WindowsModule implements IModule {
   /**
    * Open or update remote window.
    *
-   * @param recipient    Recipient.
-   * @param view         View.
-   * @param windowDN     Window identifier.
-   * @param forcedUpdate Should window be forced to be open.
+   * @param recipient Recipient.
+   * @param view      View.
+   * @param windowDN  Window identifier.
+   * @param forceOpen Should window be forced to open.
    */
   public void updateWindow(
       Entity recipient,
       View view,
       String windowDN,
-      boolean forcedUpdate
+      boolean forceOpen
   ) {
     if (!(recipient instanceof EntityPlayerMP)) {
       return;
@@ -44,7 +44,7 @@ public class WindowsModule implements IModule {
 
     ITextComponent component = view.build(player);
     TalesSystem.network.sendTo(
-        new SystemWindowUpdateMessage(windowDN, component, forcedUpdate),
+        new SystemWindowUpdateMessage(windowDN, component, forceOpen),
         player
     );
   }

@@ -4,6 +4,7 @@ import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import net.minecraft.entity.player.EntityPlayer;
 import pw.tales.cofdsystem.CofDSystem;
 import pw.tales.cofdsystem.action.opposition.base.OppositionCompetitive;
 import pw.tales.cofdsystem.action_attack.AttackAction;
@@ -16,6 +17,7 @@ import pw.tales.cofdsystem.mod.common.haxe_adapters.HaxeFn;
 import pw.tales.cofdsystem.mod.server.modules.attack.rpchat_messages.AttackInitiatedMessage;
 import pw.tales.cofdsystem.mod.server.modules.attack.rpchat_messages.AttackMissMessage;
 import pw.tales.cofdsystem.mod.server.modules.attack.views.ActorMenuView;
+import pw.tales.cofdsystem.mod.server.modules.attack.views.MenuView;
 import pw.tales.cofdsystem.mod.server.modules.attack.views.TargetMenuView;
 import pw.tales.cofdsystem.mod.server.modules.gui_windows.WindowsModule;
 import pw.tales.cofdsystem.mod.server.modules.notification.NotificationModule;
@@ -88,41 +90,34 @@ public class AttackNotifications implements IModule {
   }
 
   public void updateAttackerWindows(Attack attack) {
-    GameObject attacker = attack.getBuilder().getActor();
-
-    String windowId = attack.getWindowId(EnumSide.ACTOR);
-    ActorMenuView actorMenuView = new ActorMenuView(attack);
-
-    this.notificationModule.updateGoWindow(
-        actorMenuView,
-        windowId,
-        attacker,
-        true
-    );
-
-    this.operatorsModule.updateWindow(
-        actorMenuView,
-        windowId
-    );
+    this.updateWindows(attack, EnumSide.ACTOR);
   }
 
-  public void updateTargetWindows(Attack attack) {
+  public void updateWindows(Attack attack, EnumSide side) {
     GameObject target = attack.getBuilder().getTarget();
 
-    String windowId = attack.getWindowId(EnumSide.TARGET);
-    TargetMenuView targetMenuView = new TargetMenuView(attack);
+    String windowId = attack.getWindowId(side);
+    MenuView menuView = this.getSideView(side, attack);
 
     this.notificationModule.updateGoWindow(
-        targetMenuView,
+        menuView,
         windowId,
         target,
         true
     );
 
     this.operatorsModule.updateWindow(
-        targetMenuView,
+        menuView,
         windowId
     );
+  }
+
+  public MenuView getSideView(EnumSide side, Attack attack) {
+    if (side == EnumSide.ACTOR) {
+      return new ActorMenuView(attack);
+    } else {
+      return new TargetMenuView(attack);
+    }
   }
 
   public void closeWindows(Attack attack) {
@@ -130,11 +125,19 @@ public class AttackNotifications implements IModule {
     this.windowsModule.removeWindowForAll(attack.getWindowId(EnumSide.TARGET));
   }
 
-  public void updateWindows(Attack attack, EnumSide side) {
-    if (side == EnumSide.ACTOR) {
-      this.updateAttackerWindows(attack);
-    } else if (side == EnumSide.TARGET) {
-      this.updateTargetWindows(attack);
-    }
+  public void updateTargetWindows(Attack attack) {
+    this.updateWindows(attack, EnumSide.TARGET);
+  }
+
+  public void forceOpenWindow(Attack attack, EntityPlayer player, EnumSide side) {
+    String windowId = attack.getWindowId(side);
+    MenuView menuView = this.getSideView(side, attack);
+
+    this.windowsModule.updateWindow(
+        player,
+        menuView,
+        windowId,
+        true
+    );
   }
 }

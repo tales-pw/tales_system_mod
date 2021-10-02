@@ -50,8 +50,8 @@ public class ClientWindowsModule implements IModule {
     return guiTabContainer;
   }
 
-  public void update(String id, ITextComponent component, boolean forcedUpdate) {
-    this.guiTabContainer.update(id, component, forcedUpdate);
+  public void update(String id, ITextComponent component, boolean forceOpen) {
+    this.guiTabContainer.update(id, component, forceOpen);
   }
 
   public void remove(String id) {

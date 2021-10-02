@@ -77,11 +77,12 @@ public class SceneModule extends ServerCommandModule {
   /**
    * Update main scene window. Sets view for main scene view slot.
    *
-   * @param view   Window view builder.
-   * @param entity Entity.
+   * @param view      Window view builder.
+   * @param entity    Entity.
+   * @param forceOpen Should window be forced to open.
    */
-  public void updateSceneWindow(View view, EntityPlayerMP entity, boolean forcedUpdate) {
-    this.windowsModule.updateWindow(entity, view, SCENE_WINDOW_DN, forcedUpdate);
+  public void updateSceneWindow(View view, EntityPlayerMP entity, boolean forceOpen) {
+    this.windowsModule.updateWindow(entity, view, SCENE_WINDOW_DN, forceOpen);
   }
 
   /**

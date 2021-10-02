@@ -76,14 +76,14 @@ public class GuiTabContainer extends GuiScreen {
   public void update(
       String id,
       ITextComponent component,
-      boolean forcedUpdate
+      boolean forceOpen
   ) {
     GuiTab tab = this.ensureTab(id);
 
     // Update content
     tab.update(component);
 
-    if (forcedUpdate) {
+    if (forceOpen) {
       this.open(id);
       this.scrollTo(id);
     }

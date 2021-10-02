@@ -8,7 +8,7 @@ import net.minecraft.util.text.ITextComponent;
 public class SystemWindowUpdateMessage extends SystemWindowMessage {
 
   private ITextComponent component = null;
-  private boolean forcedUpdate = false;
+  private boolean forceOpen = false;
 
   public SystemWindowUpdateMessage() {
   }
@@ -16,11 +16,11 @@ public class SystemWindowUpdateMessage extends SystemWindowMessage {
   public SystemWindowUpdateMessage(
       String id,
       ITextComponent component,
-      boolean forcedUpdate
+      boolean forceOpen
   ) {
     super(id);
     this.component = component;
-    this.forcedUpdate = forcedUpdate;
+    this.forceOpen = forceOpen;
   }
 
   public ITextComponent getComponent() {
@@ -38,7 +38,7 @@ public class SystemWindowUpdateMessage extends SystemWindowMessage {
       e.printStackTrace();
     }
 
-    this.forcedUpdate = packetBuffer.readBoolean();
+    this.forceOpen = packetBuffer.readBoolean();
   }
 
   @Override
@@ -47,14 +47,14 @@ public class SystemWindowUpdateMessage extends SystemWindowMessage {
 
     PacketBuffer packetBuffer = new PacketBuffer(buf);
     packetBuffer.writeTextComponent(this.component);
-    packetBuffer.writeBoolean(this.forcedUpdate);
+    packetBuffer.writeBoolean(this.forceOpen);
   }
 
   public boolean isValid() {
     return super.isValid() && this.component != null;
   }
 
-  public boolean getForcedUpdate() {
-    return this.forcedUpdate;
+  public boolean getForceOpen() {
+    return this.forceOpen;
   }
 }

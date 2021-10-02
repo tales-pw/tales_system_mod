@@ -1,17 +1,17 @@
 package pw.tales.cofdsystem.mod.server.modules.attack.views;
 
+import java.util.UUID;
 import javax.annotation.Nullable;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.event.HoverEvent;
-import net.minecraft.util.text.event.HoverEvent.Action;
 import pw.tales.cofdsystem.action_attack.builder.AttackBuilder;
 import pw.tales.cofdsystem.character.Character;
 import pw.tales.cofdsystem.common.EnumSide;
 import pw.tales.cofdsystem.game_object.GameObject;
 import pw.tales.cofdsystem.mod.server.modules.attack.Attack;
+import pw.tales.cofdsystem.mod.server.modules.attack.command.AttackShowCommand;
 import pw.tales.cofdsystem.mod.server.modules.attack.command.ConfigureCommand.ConfigureAction;
 import pw.tales.cofdsystem.mod.server.views.ChatActionsBuilder;
 import pw.tales.cofdsystem.mod.server.views.TextComponentEmpty;
@@ -27,52 +27,33 @@ public abstract class MenuView extends View {
     this.side = side;
   }
 
-  protected ITextComponent buildOpInfo(@Nullable EntityPlayerMP viewer) {
+  protected ITextComponent buildOpActions(@Nullable EntityPlayerMP viewer) {
     if (!isOperator(viewer)) {
       return new TextComponentEmpty();
     }
 
+    UUID uuid = this.attack.getId();
     AttackBuilder builder = this.attack.getBuilder();
 
     GameObject actor = builder.getActor();
     GameObject target = builder.getTarget();
 
-    // Attacker name
-    ITextComponent attackerComponent = new TextComponentString(
-        new Character(actor).getName()
-    );
-    attackerComponent.getStyle().setColor(TextFormatting.GOLD);
-
-    // Target name
-    ITextComponent targetComponent = new TextComponentString(
-        new Character(target).getName()
-    );
-    targetComponent.getStyle().setColor(TextFormatting.GOLD);
-
-    // Arrow (who attacks who)
-    ITextComponent arrowComponent = new TextComponentString(" -> ");
-    arrowComponent.getStyle().setColor(TextFormatting.GRAY);
-
-    // Attack info
-    ITextComponent infoComponent = new TextComponentEmpty()
-        .appendSibling(
-            new TextComponentString("UUID: ")
+    ITextComponent opActionsComponent = new ChatActionsBuilder(TextFormatting.GRAY)
+        .addText(
+            new Character(actor).getName(),
+            AttackShowCommand.generate(uuid, EnumSide.ACTOR),
+            this.side == EnumSide.ACTOR
         )
-        .appendSibling(
-            new TextComponentString(attack.getId().toString())
-        );
+        .addText(
+            new Character(target).getName(),
+            AttackShowCommand.generate(uuid, EnumSide.TARGET),
+            this.side == EnumSide.TARGET
+        )
+        .build();
 
-    // Final component
-    ITextComponent finalComponent = new TextComponentEmpty()
-        .appendSibling(attackerComponent)
-        .appendSibling(arrowComponent)
-        .appendSibling(targetComponent);
-
-    finalComponent.getStyle().setHoverEvent(new HoverEvent(
-        Action.SHOW_TEXT, infoComponent
-    ));
-
-    return finalComponent;
+    return new TextComponentString("| ")
+        .appendSibling(opActionsComponent)
+        .appendText(" |");
   }
 
   public ITextComponent buildModifiersComponent() {
