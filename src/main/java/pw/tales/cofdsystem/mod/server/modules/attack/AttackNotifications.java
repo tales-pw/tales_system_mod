@@ -105,7 +105,7 @@ public class AttackNotifications implements IModule {
    */
   public void updateSideWindows(Attack attack, EnumSide side, boolean forceOpen) {
     GameObject gameObject = attack.getSideGO(side);
-    String windowId = attack.getWindowId(side);
+    String windowId = attack.getWindowDN(side);
     MenuView menuView = this.getSideView(attack, side);
 
     this.notificationModule.updateGoWindow(
@@ -142,8 +142,8 @@ public class AttackNotifications implements IModule {
    * @param attack Attack object.
    */
   public void removeWindowsForAll(Attack attack) {
-    this.windowsModule.removeWindowForAll(attack.getWindowId(EnumSide.ACTOR));
-    this.windowsModule.removeWindowForAll(attack.getWindowId(EnumSide.TARGET));
+    this.windowsModule.removeWindowForAll(attack.getWindowDN(EnumSide.ACTOR));
+    this.windowsModule.removeWindowForAll(attack.getWindowDN(EnumSide.TARGET));
   }
 
   /**
@@ -154,7 +154,7 @@ public class AttackNotifications implements IModule {
    * @param side   Attack side.
    */
   public void forceOpenWindow(Attack attack, EntityPlayer player, EnumSide side) {
-    String windowId = attack.getWindowId(side);
+    String windowId = attack.getWindowDN(side);
     MenuView menuView = this.getSideView(attack, side);
 
     this.windowsModule.updateWindow(
