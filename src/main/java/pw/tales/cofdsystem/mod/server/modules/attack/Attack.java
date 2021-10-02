@@ -51,6 +51,10 @@ public class Attack {
     }
   }
 
+  public GameObject getSideGO(EnumSide side) {
+    return this.builder.getGameObject(side);
+  }
+
   public boolean isBothConfirmed() {
     return this.confirmedAttacker && this.confirmedTarget;
   }
@@ -73,5 +77,10 @@ public class Attack {
     } else {
       return this.confirmedTarget;
     }
+  }
+
+  @Override
+  public String toString() {
+    return String.format("Attack{id=%s}", id);
   }
 }

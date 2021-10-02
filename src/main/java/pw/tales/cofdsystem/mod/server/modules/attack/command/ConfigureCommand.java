@@ -128,7 +128,7 @@ public abstract class ConfigureCommand extends TalesCommand {
     if (attack.isBothConfirmed()) {
       this.manager.finish(uuid);
     } else {
-      this.notifications.updateWindows(attack, this.side);
+      this.notifications.updateSideWindows(attack, this.side, false);
     }
   }
 

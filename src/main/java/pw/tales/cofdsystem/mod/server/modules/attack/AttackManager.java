@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import pw.tales.cofdsystem.CofDSystem;
 import pw.tales.cofdsystem.action_attack.builder.AttackBuilder;
 import pw.tales.cofdsystem.game_object.GameObject;
+import pw.tales.cofdsystem.mod.TalesSystem;
 import pw.tales.cofdsystem.mod.server.modules.attack.storage.IAttackRepository;
 
 @Singleton
@@ -36,7 +37,10 @@ public class AttackManager {
         target
     );
     Attack attack = this.repository.save(builder);
-    this.notifications.updateWindows(attack);
+    this.notifications.updateWindows(attack, true);
+
+    TalesSystem.logger.info("{} created.", attack);
+
     return attack;
   }
 
@@ -47,7 +51,9 @@ public class AttackManager {
     attack.execute(this.system);
 
     this.repository.remove(uuid);
-    this.notifications.closeWindows(attack);
+    this.notifications.removeWindowsForAll(attack);
+
+    TalesSystem.logger.info("{} executed and removed.", attack);
   }
 
   @Nullable
@@ -59,7 +65,7 @@ public class AttackManager {
     for (Attack attack : this.repository.getAll()) {
       if (attack.isRelated(gameObject)) {
         this.repository.remove(attack);
-        this.notifications.closeWindows(attack);
+        this.notifications.removeWindowsForAll(attack);
       }
     }
   }

@@ -84,26 +84,35 @@ public class AttackNotifications implements IModule {
     );
   }
 
-  public void updateWindows(Attack attack) {
-    this.updateAttackerWindows(attack);
-    this.updateTargetWindows(attack);
+  /**
+   * Update attack windows for everybody.
+   *
+   * @param attack    Attack object.
+   * @param forceOpen Should window be forcefully opened for attacker and target (but not
+   *                  operator).
+   */
+  public void updateWindows(Attack attack, boolean forceOpen) {
+    this.updateSideWindows(attack, EnumSide.ACTOR, forceOpen);
+    this.updateSideWindows(attack, EnumSide.TARGET, forceOpen);
   }
 
-  public void updateAttackerWindows(Attack attack) {
-    this.updateWindows(attack, EnumSide.ACTOR);
-  }
-
-  public void updateWindows(Attack attack, EnumSide side) {
-    GameObject target = attack.getBuilder().getTarget();
-
+  /**
+   * Update attack window for side.
+   *
+   * @param attack    Attack object.
+   * @param side      Attack side (attacker of target).
+   * @param forceOpen Should window be forcefully opened for side (but not operator).
+   */
+  public void updateSideWindows(Attack attack, EnumSide side, boolean forceOpen) {
+    GameObject gameObject = attack.getSideGO(side);
     String windowId = attack.getWindowId(side);
-    MenuView menuView = this.getSideView(side, attack);
+    MenuView menuView = this.getSideView(attack, side);
 
     this.notificationModule.updateGoWindow(
         menuView,
         windowId,
-        target,
-        true
+        gameObject,
+        forceOpen
     );
 
     this.operatorsModule.updateWindow(
@@ -112,18 +121,41 @@ public class AttackNotifications implements IModule {
     );
   }
 
-  public void closeWindows(Attack attack) {
+  /**
+   * Get view for specific side.
+   *
+   * @param attack Attack object.
+   * @param side   Attack side.
+   * @return View.
+   */
+  private MenuView getSideView(Attack attack, EnumSide side) {
+    if (side == EnumSide.ACTOR) {
+      return new ActorMenuView(attack);
+    } else {
+      return new TargetMenuView(attack);
+    }
+  }
+
+  /**
+   * Remove window for everybody.
+   *
+   * @param attack Attack object.
+   */
+  public void removeWindowsForAll(Attack attack) {
     this.windowsModule.removeWindowForAll(attack.getWindowId(EnumSide.ACTOR));
     this.windowsModule.removeWindowForAll(attack.getWindowId(EnumSide.TARGET));
   }
 
-  public void updateTargetWindows(Attack attack) {
-    this.updateWindows(attack, EnumSide.TARGET);
-  }
-
+  /**
+   * Forcefully open window for entity (used to switch to specific side window).
+   *
+   * @param attack Attack object.
+   * @param player Entity.
+   * @param side   Attack side.
+   */
   public void forceOpenWindow(Attack attack, EntityPlayer player, EnumSide side) {
     String windowId = attack.getWindowId(side);
-    MenuView menuView = this.getSideView(side, attack);
+    MenuView menuView = this.getSideView(attack, side);
 
     this.windowsModule.updateWindow(
         player,
@@ -131,13 +163,5 @@ public class AttackNotifications implements IModule {
         windowId,
         true
     );
-  }
-
-  private MenuView getSideView(EnumSide side, Attack attack) {
-    if (side == EnumSide.ACTOR) {
-      return new ActorMenuView(attack);
-    } else {
-      return new TargetMenuView(attack);
-    }
   }
 }

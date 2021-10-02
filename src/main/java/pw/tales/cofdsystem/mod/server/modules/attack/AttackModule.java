@@ -13,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import pw.tales.cofdsystem.game_object.GameObject;
+import pw.tales.cofdsystem.mod.TalesSystem;
 import pw.tales.cofdsystem.mod.Utils;
 import pw.tales.cofdsystem.mod.server.modules.ServerCommandModule;
 import pw.tales.cofdsystem.mod.server.modules.attack.command.AttackShowCommand;
@@ -51,14 +52,24 @@ public class AttackModule extends ServerCommandModule {
   }
 
   public CompletableFuture<Attack> attack(Entity mcAttacker, Entity mcTarget) {
+    TalesSystem.logger.info(
+        "{} initiated attack against {}", mcAttacker, mcTarget
+    );
+
     return Utils.merge(
         this.entityRelation.getGameObject(mcAttacker, false),
         this.entityRelation.getGameObject(mcTarget)
     ).thenApply(pair -> {
-      GameObject actor = pair.getLeft();
+      GameObject attacker = pair.getLeft();
       GameObject target = pair.getRight();
 
-      return this.attackManager.create(actor, target);
+      TalesSystem.logger.info(
+          "{} as {} initiated attack against {} as {}",
+          mcAttacker.getName(), attacker,
+          mcTarget.getName(), target
+      );
+
+      return this.attackManager.create(attacker, target);
     }).exceptionally(origException -> {
 
       if (origException instanceof EntityNotBoundException) {
