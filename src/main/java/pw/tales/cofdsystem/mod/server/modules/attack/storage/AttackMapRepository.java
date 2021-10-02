@@ -3,9 +3,10 @@ package pw.tales.cofdsystem.mod.server.modules.attack.storage;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nullable;
 import pw.tales.cofdsystem.action_attack.builder.AttackBuilder;
@@ -59,8 +60,8 @@ public class AttackMapRepository implements IAttackRepository {
   /**
    * Get all stored Attacks.
    */
-  public Collection<Attack> getAll() {
-    return this.attacks.values();
+  public Set<Attack> getAll() {
+    return new HashSet<>(this.attacks.values());
   }
 
   /**
