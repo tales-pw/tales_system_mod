@@ -11,6 +11,9 @@ import javax.annotation.Nullable;
 import pw.tales.cofdsystem.action_attack.builder.AttackBuilder;
 import pw.tales.cofdsystem.mod.server.modules.attack.Attack;
 
+/**
+ * Attack repository that stores attacks in simple hashmap.
+ */
 @Singleton
 public class AttackMapRepository implements IAttackRepository {
 
@@ -18,8 +21,15 @@ public class AttackMapRepository implements IAttackRepository {
 
   @Inject
   public AttackMapRepository() {
+    // Nothing to set in constructor.
   }
 
+  /**
+   * Save AttackBuilder as new attack.
+   *
+   * @param builder AttackBuilder.
+   * @return New Attack instance.
+   */
   public Attack save(AttackBuilder builder) {
     Attack attack = new Attack(
         UUID.randomUUID(),
@@ -35,20 +45,30 @@ public class AttackMapRepository implements IAttackRepository {
     return attack;
   }
 
-  public void remove(UUID uuid) {
-    this.attacks.remove(uuid);
-  }
-
+  /**
+   * Fetch Attack with specified UUID.
+   *
+   * @param uuid UUID of attack.
+   * @return Attack.
+   */
   @Nullable
   public Attack fetch(UUID uuid) {
-    return attacks.get(uuid);
+    return this.attacks.get(uuid);
   }
 
+  /**
+   * Get all stored Attacks.
+   */
   public Collection<Attack> getAll() {
     return this.attacks.values();
   }
 
-  public void remove(Attack attack) {
-    this.attacks.remove(attack.getId());
+  /**
+   * Remove Attack with specified UUID.
+   *
+   * @param uuid UUID of attack.
+   */
+  public void remove(UUID uuid) {
+    this.attacks.remove(uuid);
   }
 }
