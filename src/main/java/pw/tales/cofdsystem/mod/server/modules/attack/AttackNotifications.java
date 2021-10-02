@@ -112,14 +112,6 @@ public class AttackNotifications implements IModule {
     );
   }
 
-  public MenuView getSideView(EnumSide side, Attack attack) {
-    if (side == EnumSide.ACTOR) {
-      return new ActorMenuView(attack);
-    } else {
-      return new TargetMenuView(attack);
-    }
-  }
-
   public void closeWindows(Attack attack) {
     this.windowsModule.removeWindowForAll(attack.getWindowId(EnumSide.ACTOR));
     this.windowsModule.removeWindowForAll(attack.getWindowId(EnumSide.TARGET));
@@ -139,5 +131,13 @@ public class AttackNotifications implements IModule {
         windowId,
         true
     );
+  }
+
+  private MenuView getSideView(EnumSide side, Attack attack) {
+    if (side == EnumSide.ACTOR) {
+      return new ActorMenuView(attack);
+    } else {
+      return new TargetMenuView(attack);
+    }
   }
 }
