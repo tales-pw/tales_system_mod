@@ -20,13 +20,6 @@ import pw.tales.cofdsystem.mod.server.views.View;
 
 public abstract class MenuView extends View {
 
-  protected static final EnumExplode[] EXPLODES = {
-      EnumExplode.NONE,
-      EnumExplode.NINE_AGAIN,
-      EnumExplode.EIGHT_AGAIN,
-      EnumExplode.ROTE_ACTION
-  };
-
   protected final EnumSide side;
   protected final Attack attack;
 
@@ -96,22 +89,21 @@ public abstract class MenuView extends View {
   }
 
   public ITextComponent buildExplodeComponent() {
-    ChatActionsBuilder builder = new ChatActionsBuilder(
-        TextFormatting.GRAY,
-        2
-    );
+    EnumExplode explode = this.attack.getBuilder().getExplode(this.side);
+    String translationKey = String.format("enum.explode.%s", explode.getName());
 
-    for (EnumExplode explode : EXPLODES) {
-      builder.addText(
-          String.format("enum.explode.%s", explode.getName()),
-          this.generateCommand(ConfigureAction.SET_EXPLODE, explode.getName()),
-          this.attack.getBuilder().getExplode(this.side) == explode
-      );
-    }
+    ITextComponent button = new ChatActionsBuilder(TextFormatting.GRAY)
+        .addText(
+            translationKey,
+            this.generateCommand(
+                ConfigureAction.SET_EXPLODE,
+                explode.next().getName()
+            )
+        )
+        .build();
 
     return new TextComponentEmpty()
-        .appendText("Режим:").appendText("\n")
-        .appendSibling(builder.build())
+        .appendText("Режим: ").appendSibling(button)
         .appendText("\n");
   }
 

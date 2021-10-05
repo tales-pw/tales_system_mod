@@ -116,11 +116,6 @@ public abstract class ConfigureCommand extends TalesCommand {
         break;
       case SET_EXPLODE:
         EnumExplode explode = EnumExplode.findByName(args[2]);
-
-        if (explode == builder.getExplode(this.side)) {
-          explode = EnumExplode.DEFAULT;
-        }
-
         builder.setExplode(this.side, explode);
         break;
       case SET_TARGET:
@@ -155,7 +150,7 @@ public abstract class ConfigureCommand extends TalesCommand {
     SET_HAND("set_hand"),
     SET_ALL_OUT("set_allout", EnumSide.ACTOR),
     SET_RESIST_TYPE("set_resist_type", EnumSide.TARGET),
-    SET_EXPLODE("set_explode"),
+    SET_EXPLODE("next_explode"),
     SPEND_WILLPOWER("spend_willpower"),
     SET_MODIFIER("set_modifier"),
     SET_TARGET("set_target"),
