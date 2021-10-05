@@ -15,6 +15,7 @@ import pw.tales.cofdsystem.action_attack.builder.EnumSpecifiedTarget;
 import pw.tales.cofdsystem.action_attack.builder.exceptions.NoWillpowerBuilderException;
 import pw.tales.cofdsystem.common.EnumHand;
 import pw.tales.cofdsystem.common.EnumSide;
+import pw.tales.cofdsystem.dices.EnumExplode;
 import pw.tales.cofdsystem.exceptions.CofDSystemException;
 import pw.tales.cofdsystem.mod.common.TalesCommand;
 import pw.tales.cofdsystem.mod.server.modules.attack.Attack;
@@ -102,24 +103,42 @@ public abstract class ConfigureCommand extends TalesCommand {
         break;
       case SET_MODIFIER:
         int modifier = Integer.parseInt(args[2]);
+
+        if (modifier == builder.getModifier(this.side)) {
+          modifier = 0;
+        }
+
         builder.setModifier(this.side, modifier);
         break;
       case SET_RESIST_TYPE:
         EnumResistType resistType = EnumResistType.byName(args[2]);
-        builder.setResist(resistType);
+        builder.setResistType(resistType);
+        break;
+      case SET_EXPLODE:
+        EnumExplode explode = EnumExplode.findByName(args[2]);
+
+        if (explode == builder.getExplode(this.side)) {
+          explode = EnumExplode.DEFAULT;
+        }
+
+        builder.setExplode(this.side, explode);
         break;
       case SET_TARGET:
         EnumSpecifiedTarget specTarget = EnumSpecifiedTarget.byName(args[2]);
+
         if (specTarget == builder.specifiedTarget) {
           specTarget = null;
         }
-        builder.setTarget(specTarget);
+
+        builder.setSpecifiedTarget(specTarget);
         break;
       case SET_ALL_OUT:
-        builder.setAllOut(!builder.actorAllOut);
+        boolean oldAllOut = builder.isAllOut();
+        builder.setAllOut(!oldAllOut);
         break;
       case SPEND_WILLPOWER:
-        builder.spendWillpower(this.side, !builder.actorWillpower);
+        boolean oldWillpower = builder.getSpendWillpower(this.side);
+        builder.setSpendWillpower(this.side, !oldWillpower);
         break;
       default:
         attack.confirm(this.side);
@@ -136,6 +155,7 @@ public abstract class ConfigureCommand extends TalesCommand {
     SET_HAND("set_hand"),
     SET_ALL_OUT("set_allout", EnumSide.ACTOR),
     SET_RESIST_TYPE("set_resist_type", EnumSide.TARGET),
+    SET_EXPLODE("set_explode"),
     SPEND_WILLPOWER("spend_willpower"),
     SET_MODIFIER("set_modifier"),
     SET_TARGET("set_target"),

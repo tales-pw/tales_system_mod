@@ -6,7 +6,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minecraft.entity.player.EntityPlayer;
 import pw.tales.cofdsystem.CofDSystem;
-import pw.tales.cofdsystem.action.opposition.base.OppositionCompetitive;
+import pw.tales.cofdsystem.action.competition.Competition;
 import pw.tales.cofdsystem.action_attack.AttackAction;
 import pw.tales.cofdsystem.action_attack.events.AttackInitiatedEvent;
 import pw.tales.cofdsystem.action_attack.events.AttackMissEvent;
@@ -61,9 +61,9 @@ public class AttackNotifications implements IModule {
   public void onAttackMissEvent(AttackMissEvent event) {
     AttackAction attackAction = event.getAttackAction();
 
-    OppositionCompetitive opposition = attackAction.getCompetitiveOpposition();
-    GameObject actor = opposition.getActorPool().getGameObject();
-    GameObject target = opposition.getTargetPool().getGameObject();
+    Competition competition = attackAction.getCompetition();
+    GameObject actor = competition.getActor();
+    GameObject target = competition.getTarget();
 
     this.notificationModule.sendGOAsOrigin(
         new AttackMissMessage(actor),
@@ -74,9 +74,9 @@ public class AttackNotifications implements IModule {
   public void onAttackInitiatedEvent(AttackInitiatedEvent event) {
     AttackAction attackAction = event.getAttackAction();
 
-    OppositionCompetitive opposition = attackAction.getCompetitiveOpposition();
-    GameObject actor = opposition.getActorPool().getGameObject();
-    GameObject target = opposition.getTargetPool().getGameObject();
+    Competition competition = attackAction.getCompetition();
+    GameObject actor = competition.getActor();
+    GameObject target = competition.getTarget();
 
     this.notificationModule.sendGOAsOrigin(
         new AttackInitiatedMessage(actor, target),

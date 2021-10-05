@@ -18,7 +18,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 
 public class GuiTab extends Gui {
 
-  public static final int MAX_LINES = 12;
+  public static final int MAX_LINES = 14;
   public static final int DEFAULT_COLOR = 16777215;
   public static final int BACKGROUND_COLOR = addAlpha(
       Color.black.brighter(),
@@ -164,11 +164,7 @@ public class GuiTab extends Gui {
       return false;
     }
 
-    if (scaledMouseY > top + this.getScaledHeight()) {
-      return false;
-    }
-
-    return true;
+    return scaledMouseY <= top + this.getScaledHeight();
   }
 
   public int getScaledHeight() {
