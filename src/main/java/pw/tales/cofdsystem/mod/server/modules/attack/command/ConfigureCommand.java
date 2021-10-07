@@ -43,7 +43,7 @@ public abstract class ConfigureCommand extends TalesCommand {
   @Override
   protected void handleErrors(
       ICommandSender sender,
-      Exception exception
+      Throwable exception
   ) {
     if (exception instanceof NoWillpowerBuilderException) {
       ITextComponent component = new TextComponentTranslation(

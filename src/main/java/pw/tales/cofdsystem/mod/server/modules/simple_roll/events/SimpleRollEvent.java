@@ -36,11 +36,4 @@ public class SimpleRollEvent extends Event {
       return response;
     }
   }
-
-  public class RollRequest extends SimpleRollEvent {
-
-    public RollRequest(EntityPlayerMP sender, IRollRequest request) {
-      super(sender, request);
-    }
-  }
 }
