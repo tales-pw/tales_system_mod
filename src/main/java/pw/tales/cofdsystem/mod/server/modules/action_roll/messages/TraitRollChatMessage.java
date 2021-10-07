@@ -3,7 +3,7 @@ package pw.tales.cofdsystem.mod.server.modules.action_roll.messages;
 import java.util.List;
 import java.util.Map;
 import pw.tales.cofdsystem.action.events.roll.ActionPostRollEvent;
-import pw.tales.cofdsystem.action.opposition.pool.ActionPool;
+import pw.tales.cofdsystem.action.pool.ActionPool;
 import pw.tales.cofdsystem.dices.RollResponse;
 import pw.tales.cofdsystem.dices.requests.RollRequestTrait;
 import pw.tales.cofdsystem.game_object.GameObject;
