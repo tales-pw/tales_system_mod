@@ -15,7 +15,7 @@ import pw.tales.cofdsystem.mod.common.errors.IErrorHandler;
 public abstract class TalesCommand extends CommandBase {
 
   @Inject
-  public static IErrorHandler ERRORS;
+  public static IErrorHandler errors;
 
   private final String name;
 
@@ -57,7 +57,7 @@ public abstract class TalesCommand extends CommandBase {
   }
 
   protected void handleErrors(ICommandSender sender, Throwable e) {
-    ERRORS.handle(sender, e);
+    errors.handle(sender, e);
   }
 
   public abstract void wrappedExecute(

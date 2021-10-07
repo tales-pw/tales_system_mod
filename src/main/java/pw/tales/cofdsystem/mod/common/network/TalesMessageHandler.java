@@ -18,7 +18,7 @@ public abstract class TalesMessageHandler<R extends IMessage> implements
     IMessageHandler<R, IMessage> {
 
   @Inject
-  public static IErrorHandler ERRORS;
+  public static IErrorHandler errors;
 
   @Override
   @Nullable
@@ -53,7 +53,7 @@ public abstract class TalesMessageHandler<R extends IMessage> implements
       ICommandSender sender,
       Throwable exception
   ) {
-    ERRORS.handle(sender, exception);
+    errors.handle(sender, exception);
   }
 
   public boolean checkPermission(MinecraftServer server, EntityPlayerMP player) {
