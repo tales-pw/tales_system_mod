@@ -14,12 +14,10 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build
         run: ./gradlew build
-      - name: Hack to remove env from jar name (upload action doesn't support it)
-        run: cp ./build/libs/tales_system-$RELEASE_VERSION.jar ./tales_system.jar
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./tales_system.jar
+          file: ./build/libs/tales_system-${{ env.RELEASE_VERSION}}.jar
           tag: ${{ github.ref }}
           overwrite: true
