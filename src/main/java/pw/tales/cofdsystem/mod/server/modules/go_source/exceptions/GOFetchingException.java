@@ -2,7 +2,14 @@ package pw.tales.cofdsystem.mod.server.modules.go_source.exceptions;
 
 public class GOFetchingException extends RuntimeException {
 
-  public GOFetchingException(String valueOf) {
-    super(valueOf);
+  private final String dn;
+
+  public GOFetchingException(String msg, String dn) {
+    super(msg);
+    this.dn = dn;
+  }
+
+  public String getDN() {
+    return dn;
   }
 }
