@@ -16,7 +16,6 @@ import pw.tales.cofdsystem.action_attack.builder.exceptions.NoWillpowerBuilderEx
 import pw.tales.cofdsystem.common.EnumHand;
 import pw.tales.cofdsystem.common.EnumSide;
 import pw.tales.cofdsystem.dices.EnumExplode;
-import pw.tales.cofdsystem.exceptions.CofDSystemException;
 import pw.tales.cofdsystem.mod.common.TalesCommand;
 import pw.tales.cofdsystem.mod.server.modules.attack.Attack;
 import pw.tales.cofdsystem.mod.server.modules.attack.AttackManager;
@@ -42,23 +41,21 @@ public abstract class ConfigureCommand extends TalesCommand {
   }
 
   @Override
-  protected void handleSystemException(
-      MinecraftServer server,
+  protected void handleErrors(
       ICommandSender sender,
-      CofDSystemException systemException
+      Exception exception
   ) {
-    try {
-      throw systemException;
-    } catch (NoWillpowerBuilderException e) {
+    if (exception instanceof NoWillpowerBuilderException) {
       ITextComponent component = new TextComponentTranslation(
           "command.system.error.cant_use_willpower",
           sender.getName()
       );
       this.applyErrorStyle(component);
       sender.sendMessage(component);
-    } catch (CofDSystemException e) {
-      super.handleSystemException(server, sender, e);
+      return;
     }
+
+    super.handleErrors(sender, exception);
   }
 
   @Override
