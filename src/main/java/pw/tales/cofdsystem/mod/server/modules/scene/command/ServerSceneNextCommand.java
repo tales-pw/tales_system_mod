@@ -70,6 +70,9 @@ public class ServerSceneNextCommand extends SceneNextCommand {
       }
 
       turns.nextTurn();
+    }).exceptionally(e -> {
+      this.handleErrors(sender, e);
+      return null;
     });
   }
 

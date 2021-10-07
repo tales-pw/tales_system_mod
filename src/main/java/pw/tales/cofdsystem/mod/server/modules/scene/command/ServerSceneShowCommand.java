@@ -46,6 +46,9 @@ public class ServerSceneShowCommand extends SceneShowCommand {
             gameObject,
             true
         )
-    );
+    ).exceptionally(e -> {
+      this.handleErrors(sender, e);
+      return null;
+    });
   }
 }

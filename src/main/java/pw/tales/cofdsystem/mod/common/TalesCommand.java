@@ -56,7 +56,7 @@ public abstract class TalesCommand extends CommandBase {
     }
   }
 
-  protected void handleErrors(ICommandSender sender, Exception e) {
+  protected void handleErrors(ICommandSender sender, Throwable e) {
     ERRORS.handle(sender, e);
   }
 
