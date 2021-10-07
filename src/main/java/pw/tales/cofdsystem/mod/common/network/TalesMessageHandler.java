@@ -51,7 +51,7 @@ public abstract class TalesMessageHandler<R extends IMessage> implements
 
   protected void handleErrors(
       ICommandSender sender,
-      Exception exception
+      Throwable exception
   ) {
     ERRORS.handle(sender, exception);
   }
