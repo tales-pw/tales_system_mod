@@ -1,7 +1,6 @@
 package pw.tales.cofdsystem.mod.server.modules.attack.views;
 
 import java.util.UUID;
-import javax.annotation.Nullable;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -9,10 +8,12 @@ import net.minecraft.util.text.TextFormatting;
 import pw.tales.cofdsystem.action_attack.builder.AttackBuilder;
 import pw.tales.cofdsystem.character.Character;
 import pw.tales.cofdsystem.common.EnumSide;
+import pw.tales.cofdsystem.dices.EnumExplode;
 import pw.tales.cofdsystem.game_object.GameObject;
 import pw.tales.cofdsystem.mod.server.modules.attack.Attack;
 import pw.tales.cofdsystem.mod.server.modules.attack.command.AttackShowCommand;
 import pw.tales.cofdsystem.mod.server.modules.attack.command.ConfigureCommand.ConfigureAction;
+import pw.tales.cofdsystem.mod.server.modules.notification.views.NameView;
 import pw.tales.cofdsystem.mod.server.views.ChatActionsBuilder;
 import pw.tales.cofdsystem.mod.server.views.TextComponentEmpty;
 import pw.tales.cofdsystem.mod.server.views.View;
@@ -27,11 +28,7 @@ public abstract class MenuView extends View {
     this.side = side;
   }
 
-  protected ITextComponent buildOpActions(@Nullable EntityPlayerMP viewer) {
-    if (!isOperator(viewer)) {
-      return new TextComponentEmpty();
-    }
-
+  protected ITextComponent buildOpActions(EntityPlayerMP player) {
     UUID uuid = this.attack.getId();
     AttackBuilder builder = this.attack.getBuilder();
 
@@ -44,27 +41,21 @@ public abstract class MenuView extends View {
             AttackShowCommand.generate(uuid, EnumSide.ACTOR),
             this.side == EnumSide.ACTOR
         )
-        .addText(
-            new Character(target).getName(),
+        .add(
+            new NameView(target).build(player),
             AttackShowCommand.generate(uuid, EnumSide.TARGET),
             this.side == EnumSide.TARGET
         )
         .build();
 
-    return new TextComponentString("| ")
+    return new TextComponentEmpty()
+        .appendText("| ")
         .appendSibling(opActionsComponent)
-        .appendText(" |");
+        .appendText(" |")
+        .appendText("\n");
   }
 
   public ITextComponent buildModifiersComponent() {
-    // Reset custom modifiers
-    ITextComponent resetModifierComponent = new ChatActionsBuilder(TextFormatting.GRAY)
-        .addText(
-            "отменить",
-            this.generateCommand(ConfigureAction.SET_MODIFIER, 0)
-        )
-        .build();
-
     // Positive custom modifiers
     ChatActionsBuilder positiveModifierBuilder = new ChatActionsBuilder(TextFormatting.GRAY, 10);
     for (int i = 1; i <= 10; i++) {
@@ -88,12 +79,33 @@ public abstract class MenuView extends View {
     ITextComponent negativeModifierComponent = negativeModifierBuilder.build();
 
     return new TextComponentString("Дополнительный модификатор ")
-        .appendSibling(resetModifierComponent).appendText("\n")
+        .appendText("\n")
         .appendSibling(positiveModifierComponent).appendText("\n")
         .appendSibling(negativeModifierComponent).appendText("\n");
   }
 
-  public abstract String generateCommand(Object... arg);
+  protected int getModifier() {
+    return this.attack.getBuilder().getModifier(this.side);
+  }
 
-  public abstract int getModifier();
+  public ITextComponent buildExplodeComponent() {
+    EnumExplode explode = this.attack.getBuilder().getExplode(this.side);
+    String translationKey = String.format("enum.explode.%s", explode.getName());
+
+    ITextComponent button = new ChatActionsBuilder(TextFormatting.GRAY)
+        .addText(
+            translationKey,
+            this.generateCommand(
+                ConfigureAction.SET_EXPLODE,
+                explode.next().getName()
+            )
+        )
+        .build();
+
+    return new TextComponentEmpty()
+        .appendText("Режим: ").appendSibling(button)
+        .appendText("\n");
+  }
+
+  public abstract String generateCommand(Object... arg);
 }

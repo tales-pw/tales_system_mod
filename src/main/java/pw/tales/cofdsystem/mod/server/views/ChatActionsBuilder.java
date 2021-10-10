@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 
@@ -28,7 +29,7 @@ public class ChatActionsBuilder {
   }
 
   public ChatActionsBuilder addText(String text, String command, boolean active) {
-    TextComponentString component = new TextComponentString(text);
+    ITextComponent component = new TextComponentTranslation(text);
     return this.add(component, command, active);
   }
 
@@ -53,7 +54,7 @@ public class ChatActionsBuilder {
   }
 
   public ITextComponent build() {
-    TextComponentString result = new TextComponentString("");
+    TextComponentString result = new TextComponentEmpty();
 
     int i = 0;
     for (ITextComponent actionComponent : actions) {

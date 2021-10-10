@@ -17,7 +17,7 @@ import org.lwjgl.input.Mouse;
 
 public class GuiTabContainer extends GuiScreen {
 
-  public static final int MAX_TAB_LINES = 6;
+  public static final int MAX_TAB_LINES = 7;
 
   private final Map<String, GuiTab> tabs = new HashMap<>();
 

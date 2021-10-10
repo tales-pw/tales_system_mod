@@ -7,7 +7,6 @@ import java.util.UUID;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import pw.tales.cofdsystem.action_attack.builder.AttackBuilder;
 import pw.tales.cofdsystem.action_attack.builder.EnumSpecifiedTarget;
@@ -28,12 +27,6 @@ public class ActorMenuView extends MenuView {
     super(attack, EnumSide.ACTOR);
   }
 
-  @Override
-  public int getModifier() {
-    AttackBuilder builder = this.attack.getBuilder();
-    return builder.actorModifier;
-  }
-
   public ITextComponent build(EntityPlayerMP viewer) {
     // Main Header
     ITextComponent header = new TextComponentString("Атака");
@@ -45,12 +38,12 @@ public class ActorMenuView extends MenuView {
         .addText(
             "Безрассудная атака",
             this.generateCommand(ConfigureAction.SET_ALL_OUT, null),
-            builder.actorAllOut
+            builder.isAllOut()
         )
         .addText(
             "Сила Воли",
             this.generateCommand(ConfigureAction.SPEND_WILLPOWER, null),
-            builder.actorWillpower
+            builder.getSpendWillpower(this.side)
         )
         .build();
 
@@ -58,21 +51,24 @@ public class ActorMenuView extends MenuView {
         .addText(
             "OK",
             this.generateCommand(ConfigureAction.CONFIRM, null),
-            this.attack.isConfirmed(EnumSide.ACTOR)
+            this.attack.isConfirmed(this.side)
         )
         .build();
 
     // Output
-    TextComponentString root = new TextComponentEmpty();
-    root.getStyle().setColor(TextFormatting.GOLD);
+    TextComponentString component = new TextComponentEmpty();
+    component.getStyle().setColor(TextFormatting.GOLD);
 
-    return root
-        .appendSibling(this.buildOpActions(viewer))
-        .appendText("\n").appendText("\n")
+    if (isOperator(viewer)) {
+      component.appendSibling(this.buildOpActions(viewer));
+    }
+
+    return component
         .appendSibling(header).appendText("\n")
         .appendSibling(this.buildHandComponent())
         .appendSibling(this.buildSpecifiedTarget())
         .appendSibling(this.buildModifiersComponent())
+        .appendSibling(this.buildExplodeComponent())
         .appendText("Другое: ").appendSibling(othersComponent).appendText("\n")
         .appendText("Завершить: ").appendSibling(okComponent);
   }
@@ -96,7 +92,7 @@ public class ActorMenuView extends MenuView {
                 ConfigureAction.SET_HAND,
                 HAND
             ),
-            builder.actorHand == HAND
+            builder.getHand(this.side) == HAND
         )
         .addText(
             "Второй рукой",
@@ -105,7 +101,7 @@ public class ActorMenuView extends MenuView {
                 ConfigureAction.SET_HAND,
                 OFFHAND
             ),
-            builder.actorHand == OFFHAND
+            builder.getHand(this.side) == OFFHAND
         )
         .build();
     return new TextComponentString("Рука: ").appendSibling(handComponent).appendText("\n");
@@ -119,12 +115,10 @@ public class ActorMenuView extends MenuView {
     AttackBuilder builder = this.attack.getBuilder();
 
     for (EnumSpecifiedTarget target : TARGETS.values()) {
-      specifiedTarget = specifiedTarget.add(
-          new TextComponentTranslation(
-              String.format("target.%s", target.toString())
-          ),
+      specifiedTarget = specifiedTarget.addText(
+          String.format("target.%s", target.toString()),
           ConfigureActorCommand.generate(uuid, ConfigureAction.SET_TARGET, target),
-          builder.specifiedTarget == target
+          builder.getSpecifiedTarget() == target
       );
     }
 

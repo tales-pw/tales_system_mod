@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import junit.framework.TestCase;
 import pw.tales.cofdsystem.CofDSystem;
-import pw.tales.cofdsystem.action.IAction;
+import pw.tales.cofdsystem.action_attack.AttackAction;
 import pw.tales.cofdsystem.action_attack.builder.AttackBuilder;
 import pw.tales.cofdsystem.common.EnumSide;
 
@@ -37,7 +37,7 @@ public class AttackTest extends TestCase {
 
   public void testExecute() {
     CofDSystem system = mock(CofDSystem.class);
-    IAction action = mock(IAction.class);
+    AttackAction action = mock(AttackAction.class);
 
     when(
         this.builder.build()

@@ -21,12 +21,6 @@ public class TargetMenuView extends MenuView {
     super(attack, EnumSide.TARGET);
   }
 
-  @Override
-  public int getModifier() {
-    AttackBuilder builder = this.attack.getBuilder();
-    return builder.targetModifier;
-  }
-
   public ITextComponent build(EntityPlayerMP viewer) {
     AttackBuilder builder = this.attack.getBuilder();
 
@@ -38,7 +32,7 @@ public class TargetMenuView extends MenuView {
         .addText(
             "Сила Воли",
             this.generateCommand(ConfigureAction.SPEND_WILLPOWER, null),
-            builder.targetWillpower
+            builder.getSpendWillpower(this.side)
         )
         .build();
 
@@ -46,21 +40,32 @@ public class TargetMenuView extends MenuView {
         .addText(
             "OK",
             this.generateCommand(ConfigureAction.CONFIRM, null),
-            this.attack.isConfirmed(EnumSide.TARGET)
+            this.attack.isConfirmed(this.side)
         )
         .build();
 
     // Output
-    TextComponentString root = new TextComponentEmpty();
-    root.getStyle().setColor(TextFormatting.GOLD);
-    return root
-        .appendSibling(this.buildOpActions(viewer))
-        .appendText("\n").appendText("\n")
+    TextComponentString component = new TextComponentEmpty();
+    component.getStyle().setColor(TextFormatting.GOLD);
+
+    if (this.isOperator(viewer)) {
+      component.appendSibling(this.buildOpActions(viewer));
+    }
+
+    component
         .appendSibling(header).appendText("\n")
         .appendSibling(this.buildDefenceComponent())
-        .appendSibling(this.buildModifiersComponent())
+        .appendSibling(this.buildModifiersComponent());
+
+    if (builder.getResistType() == EnumResistType.DODGE) {
+      component.appendSibling(this.buildExplodeComponent());
+    }
+
+    component
         .appendText("Другое: ").appendSibling(othersComponent).appendText("\n")
         .appendText("Завершить: ").appendSibling(okComponent);
+
+    return component;
   }
 
   private ITextComponent buildDefenceComponent() {
@@ -71,17 +76,17 @@ public class TargetMenuView extends MenuView {
         .addText(
             "Обычная защита",
             this.generateCommand(ConfigureAction.SET_RESIST_TYPE, EnumResistType.DEFAULT),
-            builder.targetResistType == EnumResistType.DEFAULT
+            builder.getResistType() == EnumResistType.DEFAULT
         )
         .addText(
             "Уворот",
             this.generateCommand(ConfigureAction.SET_RESIST_TYPE, EnumResistType.DODGE),
-            builder.targetResistType == EnumResistType.DODGE
+            builder.getResistType() == EnumResistType.DODGE
         )
         .addText(
             "Не защищаться",
             this.generateCommand(ConfigureAction.SET_RESIST_TYPE, EnumResistType.NO_DEFENCE),
-            builder.targetResistType == EnumResistType.NO_DEFENCE
+            builder.getResistType() == EnumResistType.NO_DEFENCE
         )
         .build();
 
