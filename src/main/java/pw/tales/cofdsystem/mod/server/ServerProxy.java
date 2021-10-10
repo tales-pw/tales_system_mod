@@ -52,7 +52,10 @@ public class ServerProxy extends CommonProxy {
   @Override
   public void setUp(FMLPreInitializationEvent event) {
     super.setUp(event);
-    this.setUpModules(MODULES);
+
+    for (Class<? extends IModule> module : MODULES) {
+      this.injector.getInstance(module).setUp();
+    }
   }
 
   public void onServerStarted(FMLServerStartingEvent event) {

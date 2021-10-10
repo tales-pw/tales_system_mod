@@ -33,6 +33,9 @@ public class ClientProxy extends ServerProxy {
   @Override
   public void setUp(FMLPreInitializationEvent event) {
     super.setUp(event);
-    this.setUpModules(MODULES);
+
+    for (Class<? extends IModule> module : MODULES) {
+      this.injector.getInstance(module).setUp();
+    }
   }
 }
