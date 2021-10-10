@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import pw.tales.cofdsystem.game_object.GameObject;
+import pw.tales.cofdsystem.mod.TalesSystem;
 import pw.tales.cofdsystem.mod.common.modules.scene.command.SceneNextCommand;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.GOEntityRelation;
 import pw.tales.cofdsystem.mod.server.modules.operators.OperatorsModule;
@@ -70,6 +71,13 @@ public class ServerSceneNextCommand extends SceneNextCommand {
       }
 
       turns.nextTurn();
+
+      TalesSystem.logger.info(
+          "{}'s turn in {} is ended by {}.",
+          gameObject,
+          scene,
+          entity.getName()
+      );
     }).exceptionally(e -> {
       this.handleErrors(sender, e);
       return null;

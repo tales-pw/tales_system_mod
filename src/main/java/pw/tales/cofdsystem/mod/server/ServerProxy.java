@@ -1,12 +1,9 @@
 package pw.tales.cofdsystem.mod.server;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import java.util.Set;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import pw.tales.cofdsystem.CofDSystem;
 import pw.tales.cofdsystem.mod.common.CommonProxy;
 import pw.tales.cofdsystem.mod.common.IModule;
 import pw.tales.cofdsystem.mod.server.modules.action_roll.ActionRollModule;
@@ -47,22 +44,20 @@ public class ServerProxy extends CommonProxy {
       AttackNotifications.class
   );
 
-  private final CofDSystem cofdSystem = new CofDSystem();
-  private final ServerGuiceModule guiceModule = new ServerGuiceModule(cofdSystem);
-  private final Injector injector = Guice.createInjector(guiceModule);
+  @Override
+  protected ServerGuiceModule createGuiceModule() {
+    return new ServerGuiceModule();
+  }
 
   @Override
   public void setUp(FMLPreInitializationEvent event) {
     super.setUp(event);
-
-    for (Class<? extends IModule> module : MODULES) {
-      injector.getInstance(module).setUp();
-    }
+    this.setUpModules(MODULES);
   }
 
   public void onServerStarted(FMLServerStartingEvent event) {
     for (Class<? extends IModule> module : MODULES) {
-      injector.getInstance(module).onServerStart(event);
+      this.injector.getInstance(module).onServerStart(event);
     }
   }
 }

@@ -19,21 +19,14 @@ import pw.tales.cofdsystem.mod.server.modules.simple_roll.network.SimpleRollMess
 import pw.tales.cofdsystem.mod.server.views.View;
 
 public class ServerGuiceModule extends CommonGuiceModule {
-
-  public ServerGuiceModule(CofDSystem cofdSystem) {
-    super(cofdSystem);
-  }
-
-  @Override
-  protected void bindErrorHandler() {
-    bind(IErrorHandler.class).to(ServerErrors.class);
-  }
-
   @Override
   protected void configure() {
     super.configure();
+
+    bind(IErrorHandler.class).to(ServerErrors.class);
     bind(IGOSource.class).to(MergedGoSource.class);
     bind(IAttackRepository.class).to(AttackMapRepository.class);
+    bind(CofDSystem.class).toInstance(new CofDSystem());
 
     requestStaticInjection(ServerSceneAddHandler.class);
     requestStaticInjection(AttackMessageHandler.class);
