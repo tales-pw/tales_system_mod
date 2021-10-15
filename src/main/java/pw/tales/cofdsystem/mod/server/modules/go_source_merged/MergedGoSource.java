@@ -52,7 +52,7 @@ public class MergedGoSource implements IGOSource {
 
     return future.thenApply(gameObject -> {
       if (gameObject == null) {
-        throw new GOFetchingException("GameObject not found in any sources.");
+        throw new GOFetchingException("GameObject not found in any sources.", dn);
       }
       return gameObject;
     });

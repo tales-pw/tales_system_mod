@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.ITextComponent;
 import pw.tales.cofdsystem.CofDSystem;
@@ -200,5 +201,14 @@ public class NotificationModule implements IModule {
     );
     entities.forEach(e -> e.sendMessage(component));
     return entities;
+  }
+
+  public void sendDirectly(ICommandSender recipient, View view) {
+    if (!(recipient instanceof EntityPlayerMP)) {
+      return;
+    }
+
+    EntityPlayerMP player = (EntityPlayerMP) recipient;
+    player.sendMessage(view.build(player));
   }
 }

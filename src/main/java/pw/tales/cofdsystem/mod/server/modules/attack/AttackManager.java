@@ -13,6 +13,7 @@ import pw.tales.cofdsystem.mod.server.modules.attack.storage.IAttackRepository;
 
 @Singleton
 public class AttackManager {
+
   private final CofDSystem system;
   private final IAttackRepository repository;
   private final AttackNotifications notifications;

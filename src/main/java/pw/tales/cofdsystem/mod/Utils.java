@@ -18,9 +18,7 @@ public class Utils {
       Class... clazzes
   ) {
     return future.exceptionally(e -> {
-      while (e instanceof CompletionException) {
-        e = e.getCause();
-      }
+      e = getFutureException(e);
 
       for (Class clazz : clazzes) {
         if (clazz.isAssignableFrom(e.getClass())) {
@@ -30,5 +28,12 @@ public class Utils {
 
       throw new CompletionException(e);
     });
+  }
+
+  public static Throwable getFutureException(Throwable exception) {
+    while (exception instanceof CompletionException) {
+      exception = exception.getCause();
+    }
+    return exception;
   }
 }

@@ -21,20 +21,6 @@ public abstract class View {
   public static OperatorsModule operatorModule;
 
   /**
-   * Apply common header styles to component.
-   *
-   * @param component component.
-   * @return Component (the same but updated with styles).
-   */
-  protected ITextComponent applyHeaderStyles(ITextComponent component) {
-    component.getStyle()
-        .setColor(TextFormatting.BLUE)
-        .setBold(true)
-        .setUnderlined(true);
-    return component.appendText("\n");
-  }
-
-  /**
    * Check if viewer is operator.
    *
    * @param viewer Viewer.
@@ -66,6 +52,20 @@ public abstract class View {
     TextComponentString header = new TextComponentString(text);
     this.applyHeaderStyles(header);
     return header;
+  }
+
+  /**
+   * Apply common header styles to component.
+   *
+   * @param component component.
+   * @return Component (the same but updated with styles).
+   */
+  protected ITextComponent applyHeaderStyles(ITextComponent component) {
+    component.getStyle()
+        .setColor(TextFormatting.BLUE)
+        .setBold(true)
+        .setUnderlined(true);
+    return component.appendText("\n");
   }
 
   /**
@@ -106,6 +106,11 @@ public abstract class View {
       ITextComponent valueComponent
   ) {
     return keyComponent.appendText(": ").appendSibling(valueComponent);
+  }
+
+  public ITextComponent applyErrorStyle(ITextComponent component) {
+    component.getStyle().setColor(TextFormatting.RED);
+    return component;
   }
 
   /**

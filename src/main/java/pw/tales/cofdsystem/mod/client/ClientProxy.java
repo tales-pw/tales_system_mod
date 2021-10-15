@@ -1,11 +1,8 @@
 package pw.tales.cofdsystem.mod.client;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import java.util.Set;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import pw.tales.cofdsystem.CofDSystem;
 import pw.tales.cofdsystem.mod.client.modules.equipment.TooltipClientModule;
 import pw.tales.cofdsystem.mod.client.modules.go_relation_entity.ClientGORelationModule;
 import pw.tales.cofdsystem.mod.client.modules.gui_system.SystemGuiModule;
@@ -28,16 +25,17 @@ public class ClientProxy extends ServerProxy {
       ClientPositionModule.class
   );
 
-  private final CofDSystem cofdSystem = new CofDSystem();
-  private final ClientGuiceModule guiceModule = new ClientGuiceModule(cofdSystem);
-  private final Injector injector = Guice.createInjector(guiceModule);
+  @Override
+  protected ClientGuiceModule createGuiceModule() {
+    return new ClientGuiceModule();
+  }
 
   @Override
   public void setUp(FMLPreInitializationEvent event) {
     super.setUp(event);
 
     for (Class<? extends IModule> module : MODULES) {
-      injector.getInstance(module).setUp();
+      this.injector.getInstance(module).setUp();
     }
   }
 }

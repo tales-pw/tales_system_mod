@@ -198,7 +198,6 @@ public class SceneModule extends ServerCommandModule {
   public void onNewTurn(TurnStartEvent event) {
     Scene scene = event.getInitiative().getScene();
     this.updateTurnWindow(scene);
-//    this.updateSceneMenuWindow(scene);
   }
 
   /**

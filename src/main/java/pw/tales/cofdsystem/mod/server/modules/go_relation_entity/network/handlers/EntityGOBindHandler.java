@@ -10,7 +10,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.server.permission.PermissionAPI;
 import pw.tales.cofdsystem.game_object.GameObject;
-import pw.tales.cofdsystem.mod.TalesSystem;
 import pw.tales.cofdsystem.mod.Utils;
 import pw.tales.cofdsystem.mod.common.modules.go_relation_entity.network.messages.EntityGOBindMessage;
 import pw.tales.cofdsystem.mod.common.network.TalesMessageHandler;
@@ -93,15 +92,7 @@ public class EntityGOBindHandler extends TalesMessageHandler<EntityGOBindMessage
 
       return newGO;
     }).exceptionally(e -> {
-      TextComponentTranslation errorMsg = new TextComponentTranslation(
-          "command.gameobject.use.fetch.failure",
-          finalTarget.getDisplayName(),
-          dn
-      );
-      errorMsg.getStyle().setColor(TextFormatting.RED);
-      player.sendMessage(errorMsg);
-
-      TalesSystem.logger.error("Error while loading character {}: {}", dn, e.getMessage());
+      this.handleErrors(player, e);
       return null;
     });
   }
