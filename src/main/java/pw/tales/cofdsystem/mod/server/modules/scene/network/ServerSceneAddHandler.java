@@ -84,9 +84,15 @@ public class ServerSceneAddHandler extends TalesMessageHandler<SceneAddMessage> 
       int i = 1;
       // Add successes
       for (CompletableFuture<GameObject> future : futures) {
+        GameObject gameObject = future.join();
+
+        if (gameObject == null) {
+          continue;
+        }
+
         component
             .appendText(Integer.toString(i)).appendText(") ")
-            .appendSibling(this.buildSuccess(player, future.join())).appendText("\n");
+            .appendSibling(this.buildSuccess(player, gameObject)).appendText("\n");
 
         i++;
       }
@@ -101,7 +107,10 @@ public class ServerSceneAddHandler extends TalesMessageHandler<SceneAddMessage> 
       }
 
       player.sendMessage(component);
-    }));
+    })).exceptionally(e -> {
+      this.handleErrors(player, e);
+      return null;
+    });
   }
 
   @Nullable

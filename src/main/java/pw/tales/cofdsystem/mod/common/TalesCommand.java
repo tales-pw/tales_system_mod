@@ -1,5 +1,6 @@
 package pw.tales.cofdsystem.mod.common;
 
+import com.google.inject.Inject;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -8,9 +9,13 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import pw.tales.cofdsystem.exceptions.CofDSystemException;
+import pw.tales.cofdsystem.mod.common.errors.IErrorHandler;
 
 
 public abstract class TalesCommand extends CommandBase {
+
+  @Inject
+  public static IErrorHandler errors;
 
   private final String name;
 
@@ -35,6 +40,7 @@ public abstract class TalesCommand extends CommandBase {
     component.getStyle().setColor(TextFormatting.RED);
   }
 
+
   @Override
   public void execute(
       MinecraftServer server,
@@ -43,27 +49,15 @@ public abstract class TalesCommand extends CommandBase {
   ) throws CommandException {
     try {
       this.wrappedExecute(server, sender, args);
-    } catch (CofDSystemException e) {
-      this.handleSystemException(server, sender, e);
+    } catch (CommandException exception) {
+      throw exception;
+    } catch (Exception e) {
+      this.handleErrors(sender, e);
     }
   }
 
-  protected void handleSystemException(
-      MinecraftServer server,
-      ICommandSender sender,
-      CofDSystemException systemException
-  ) {
-    try {
-      throw systemException;
-    } catch (CofDSystemException e) {
-      ITextComponent component = new TextComponentTranslation(
-          "command.system.error.unknown_system_error",
-          e.getMessage()
-      );
-      this.applyErrorStyle(component);
-      sender.sendMessage(component);
-      throw e;
-    }
+  protected void handleErrors(ICommandSender sender, Throwable e) {
+    errors.handle(sender, e);
   }
 
   public abstract void wrappedExecute(

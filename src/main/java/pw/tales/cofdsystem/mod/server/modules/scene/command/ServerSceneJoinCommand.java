@@ -60,10 +60,7 @@ public class ServerSceneJoinCommand extends SceneJoinCommand {
           return gameObject;
         })
         .exceptionally(e -> {
-          this.sendError(
-              player,
-              new CommandException("command.scene.join.no_go")
-          );
+          this.handleErrors(player, e);
           return null;
         });
   }

@@ -9,13 +9,10 @@ import com.google.inject.Singleton;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 import javax.annotation.Nullable;
 import net.minecraft.command.CommandBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
 import pw.tales.cofdsystem.CofDSystem;
 import pw.tales.cofdsystem.action.IAction;
 import pw.tales.cofdsystem.action.events.ActionPerformedEvent;
@@ -30,6 +27,7 @@ import pw.tales.cofdsystem.game_object.GameObject;
 import pw.tales.cofdsystem.mod.TalesSystem;
 import pw.tales.cofdsystem.mod.Utils;
 import pw.tales.cofdsystem.mod.common.haxe_adapters.HaxeFn;
+import pw.tales.cofdsystem.mod.server.errors.ServerErrors;
 import pw.tales.cofdsystem.mod.server.modules.ServerCommandModule;
 import pw.tales.cofdsystem.mod.server.modules.equipment.command.BindArmorCommand;
 import pw.tales.cofdsystem.mod.server.modules.equipment.command.BindWeaponCommand;
@@ -51,6 +49,7 @@ public class EquipmentModule extends ServerCommandModule {
   private final GOItemRelation goItemRelation;
   private final GOEntityRelation goEntityRelation;
   private final NotificationModule notificationModule;
+  private final ServerErrors serverErrors;
 
   @Inject
   public EquipmentModule(
@@ -58,6 +57,7 @@ public class EquipmentModule extends ServerCommandModule {
       GOItemRelation goItemRelation,
       GOEntityRelation goEntityRelation,
       NotificationModule notificationModule,
+      ServerErrors serverErrors,
       Injector injector
   ) {
     super(injector);
@@ -65,6 +65,7 @@ public class EquipmentModule extends ServerCommandModule {
     this.goItemRelation = goItemRelation;
     this.goEntityRelation = goEntityRelation;
     this.notificationModule = notificationModule;
+    this.serverErrors = serverErrors;
   }
 
   @Override
@@ -128,7 +129,10 @@ public class EquipmentModule extends ServerCommandModule {
       Armor armor = pair.getValue();
 
       this.performActionDonArmor(gameObject, armor);
-    }).exceptionally(e -> this.logError(entity, e));
+    }).exceptionally(e -> {
+      this.serverErrors.handle(entity, e);
+      return null;
+    });
   }
 
   public CompletableFuture<Armor> getArmor(ItemStack itemStack) {
@@ -176,17 +180,6 @@ public class EquipmentModule extends ServerCommandModule {
     this.system.act(new DonAction(gameObject, newArmor, system));
   }
 
-  private Void logError(Entity entity, Throwable throwable) {
-    TextComponentTranslation component = new TextComponentTranslation(
-        "equipment.change.error",
-        throwable.getMessage()
-    );
-    component.getStyle().setColor(TextFormatting.RED);
-    entity.sendMessage(component);
-    throwable.printStackTrace();
-    throw new CompletionException(throwable);
-  }
-
   /**
    * Similar to performActionDonArmor but instead of performing action, sets armor directly to
    * trait. Useful for initialization.
@@ -209,7 +202,10 @@ public class EquipmentModule extends ServerCommandModule {
       );
       WornArmor trait = gameObject.getTrait(WornArmor.TYPE, null);
       trait.setArmor(armor);
-    }).exceptionally(e -> this.logError(entity, e));
+    }).exceptionally(e -> {
+      this.serverErrors.handle(entity, e);
+      return null;
+    });
   }
 
   /**
@@ -230,7 +226,10 @@ public class EquipmentModule extends ServerCommandModule {
       GameObject gameObject = pair.getKey();
       Weapon newWeapon = pair.getValue();
       this.performActionPickItem(gameObject, newWeapon, hand);
-    }).exceptionally(e -> this.logError(entity, e));
+    }).exceptionally(e -> {
+      this.serverErrors.handle(entity, e);
+      return null;
+    });
   }
 
   public CompletableFuture<Weapon> getWeapon(ItemStack itemStack) {
@@ -301,7 +300,10 @@ public class EquipmentModule extends ServerCommandModule {
       );
       HeldWeapon trait = gameObject.getTrait(HeldWeapon.TYPE, null);
       trait.setHand(hand, weapon);
-    }).exceptionally(e -> this.logError(entity, e));
+    }).exceptionally(e -> {
+      this.serverErrors.handle(entity, e);
+      return null;
+    });
   }
 
   @Override

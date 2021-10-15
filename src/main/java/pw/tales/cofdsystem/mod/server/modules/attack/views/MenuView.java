@@ -88,6 +88,8 @@ public abstract class MenuView extends View {
     return this.attack.getBuilder().getModifier(this.side);
   }
 
+  public abstract String generateCommand(Object... arg);
+
   public ITextComponent buildExplodeComponent() {
     EnumExplode explode = this.attack.getBuilder().getExplode(this.side);
     String translationKey = String.format("enum.explode.%s", explode.getName());
@@ -106,6 +108,4 @@ public abstract class MenuView extends View {
         .appendText("Режим: ").appendSibling(button)
         .appendText("\n");
   }
-
-  public abstract String generateCommand(Object... arg);
 }

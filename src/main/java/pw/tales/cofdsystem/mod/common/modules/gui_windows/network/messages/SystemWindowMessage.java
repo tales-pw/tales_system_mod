@@ -5,6 +5,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class SystemWindowMessage implements IMessage {
+
   public static final int MAX_IDENTIFIER_LEN = 50;
 
   private String id = null;

@@ -59,8 +59,8 @@ public class RemoteGOModule extends SourceGOModule {
             String.format("Can't get GameObject from %s, because %s",
                 RemoteGOModule.this,
                 o
-            )
-        ));
+            ),
+            dn));
         return null;
       }
     };

@@ -14,6 +14,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import pw.tales.cofdsystem.game_object.GameObject;
+import pw.tales.cofdsystem.mod.TalesSystem;
 import pw.tales.cofdsystem.mod.common.haxe_adapters.HaxeArrayAdapter;
 import pw.tales.cofdsystem.mod.common.modules.scene.command.SceneBeginCommand;
 import pw.tales.cofdsystem.mod.server.modules.operators.OperatorsModule;
@@ -70,6 +71,8 @@ public class ServerSceneBeginCommand extends SceneBeginCommand {
     // Start scene
     scene.begin();
     scene.getTurns().start();
+
+    TalesSystem.logger.info("{} is started by {}.", scene, entity.getName());
   }
 
   public ITextComponent buildRequestConfirmView() {
