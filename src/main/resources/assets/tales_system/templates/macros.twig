@@ -1,13 +1,16 @@
 {%- macro colorize_die(value, permutation, pool_size, number) -%}
+{#- @pebvariable name="value" type="Integer" -#}
+{#- @pebvariable name="pool_size" type="Integer" -#}
+{#- @pebvariable name="permutation" type="pw.tales.cofdsystem.dices.EnumExplode" -#}
     {%- if pool_size == 0 -%}
         {%- if value == 10 -%}
-            {{- value | wrapColor("dice_success") -}}
-        {%- elseif value == 1 -%}
-            {{- value | wrapColor("dice_dramatic_failure") -}}
-        {%- else -%}
-            {{- value | wrapColor("dice_failure") -}}
+        {{- value | wrapColor("dice_success") -}}
+            {%- elseif value == 1 -%}
+        {{- value | wrapColor("dice_dramatic_failure") -}}
+            {%- else -%}
+        {{- value | wrapColor("dice_failure") -}}
         {%- endif -%}
-    {%- elseif permutation.getName() == "rote_action" -%}
+        {%- elseif permutation.getName() == "rote_action" -%}
         {%- if value >= 8 -%}
             {{- value | wrapColor("dice_success") -}}
         {%- elseif (number <= pool_size) -%}
@@ -30,6 +33,7 @@
 {%- endmacro -%}
 
 {%- macro colorizeResult(rollResult) -%}
+{#- @pebvariable name="rollResult" type="pw.tales.cofdsystem.dices.EnumResult" -#}
     {%- if rollResult.getName() == "exceptional_success" -%}
         {%- filter wrapColor("dice_explode") -%}
             исключительный успех
@@ -52,6 +56,7 @@
 {%- endmacro -%}
 
 {%- macro stringifyPermutation(permutation) -%}
+{#- @pebvariable name="permutation" type="pw.tales.cofdsystem.dices.EnumExplode" -#}
     {%- if permutation.getName() == "none" -%}
         Без взрыва
     {%- elseif permutation.getName() == "default" -%}

@@ -1,3 +1,6 @@
+{#- @pebvariable name="traits" type="List<String>" -#}
+{#- @pebvariable name="modifier" type="Integer" -#}
+{#- @pebvariable name="modifiers" type="java.util.Map<String,Object>" -#}
 §eНавыки:§f {{ traits | join(' + ') }} {{- (modifier >= 0) ? ' + ' : ' - ' -}} {{ modifier | abs }}
 
 §eМодификаторы:§f

@@ -1,2 +1,5 @@
-{% import 'assets/tales_system/templates/macros.twig' as macros %}{#- -#}
+{#- @pebvariable name="username" type="String" -#}
+{#- @pebvariable name="result" type="pw.tales.cofdsystem.dices.EnumResult" -#}
+{#- @pebvariable name="successes" type="Integer" -#}
+    {% import 'assets/tales_system/templates/macros.twig' as macros %}{#- -#}
 * {{ username }} бросает дайсы и получает {{ macros.colorizeResult(result) }} [{{ successes }}] * {#- -#}
