@@ -46,7 +46,7 @@ public class AttackTest extends TestCase {
     this.attack.execute(system);
 
     verify(this.builder).build();
-    verify(system).act(action);
+    verify(action).execute();
   }
 
   public void testGetWindowAttackerDn() {
