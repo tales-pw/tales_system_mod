@@ -38,7 +38,7 @@ public class TalesSystem {
   public static CommonProxy proxy;
 
   public TalesSystem() {
-    CofDSystem.versionCheck = false;
+    CofDSystem.VERSION_CHECK = false;
     LoggerManager.setLogger(haxeLogger);
   }
 

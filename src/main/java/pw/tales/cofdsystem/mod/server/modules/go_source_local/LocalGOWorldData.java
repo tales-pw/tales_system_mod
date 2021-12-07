@@ -6,7 +6,7 @@ import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
 import pw.tales.cofdsystem.CofDSystem;
 import pw.tales.cofdsystem.game_object.GameObject;
-import pw.tales.cofdsystem.synchronization.GameObjectSynchronization;
+import pw.tales.cofdsystem.synchronization.serialization.game_object.GameObjectSerialization;
 
 
 /**
@@ -15,6 +15,7 @@ import pw.tales.cofdsystem.synchronization.GameObjectSynchronization;
 public class LocalGOWorldData extends WorldSavedData {
 
   public static CofDSystem cofdsystem = null;
+  private final GameObjectSerialization serialization;
 
   private GameObject gameObject = null;
 
@@ -28,6 +29,8 @@ public class LocalGOWorldData extends WorldSavedData {
     if (cofdsystem == null) {
       throw new RuntimeException("cofdsystem is not set");
     }
+
+    this.serialization = new GameObjectSerialization(cofdsystem);
   }
 
   public static LocalGOWorldData save(MapStorage storage, GameObject gameObject) {
@@ -70,36 +73,21 @@ public class LocalGOWorldData extends WorldSavedData {
       return;
     }
 
-    GameObjectSynchronization sync = GameObjectSynchronization.createDeserializer(
-        LocalGOWorldData.cofdsystem,
-        null
-    );
-
     String data = tag.getString("data");
-    GameObject gameObject = sync.deserialize(data);
-    if (gameObject == null) {
-      return;
-    }
-
-    this.setGameObject(gameObject);
+    GameObject go = this.serialization.deserialize(data);
+    this.setGameObject(go);
   }
 
   @Override
   public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-    GameObject gameObject = this.getGameObject();
+    GameObject go = this.getGameObject();
 
-    if (gameObject == null) {
+    if (go == null) {
       return tag;
     }
 
-    GameObjectSynchronization sync = GameObjectSynchronization.create(
-        LocalGOWorldData.cofdsystem,
-        gameObject
-    );
-
-    String gameObjectDN = gameObject.getDN();
-    tag.setString("dn", gameObjectDN);
-    tag.setString("data", sync.serialize());
+    tag.setString("dn", gameObject.getDN());
+    tag.setString("data", this.serialization.serialize(go));
 
     return tag;
   }
