@@ -177,7 +177,7 @@ public class EquipmentModule extends ServerCommandModule {
         newArmor
     );
 
-    this.system.act(new DonAction(gameObject, newArmor, system));
+    new DonAction(gameObject, newArmor, system).execute();
   }
 
   /**
@@ -274,7 +274,7 @@ public class EquipmentModule extends ServerCommandModule {
         newWeapon
     );
 
-    this.system.act(new PickAction(gameObject, hand, newWeapon, system));
+    new PickAction(gameObject, hand, newWeapon, system).execute();
   }
 
   /**

@@ -10,7 +10,7 @@ import pw.tales.cofdsystem.CofDSystem;
 import pw.tales.cofdsystem.mod.ModConfig;
 import pw.tales.cofdsystem.mod.TalesSystem;
 import pw.tales.cofdsystem.mod.common.IModule;
-import pw.tales.cofdsystem.synchronization.rest.SystemStorage;
+import pw.tales.cofdsystem.synchronization.api.SystemStorage;
 
 @Singleton
 public class SystemDataModule implements IModule {

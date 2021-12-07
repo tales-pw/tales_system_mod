@@ -14,7 +14,7 @@ import pw.tales.cofdsystem.mod.common.haxe_adapters.HaxeArrayAdapter;
 import pw.tales.cofdsystem.mod.common.haxe_adapters.HaxeFn;
 import pw.tales.cofdsystem.mod.server.modules.go_source.SourceGOModule;
 import pw.tales.cofdsystem.mod.server.modules.go_source.exceptions.GOFetchingException;
-import pw.tales.cofdsystem.synchronization.rest.GameObjectStorage;
+import pw.tales.cofdsystem.synchronization.api.GameObjectStorage;
 
 /**
  * Module responsible for fetching GameObject from remote storage.

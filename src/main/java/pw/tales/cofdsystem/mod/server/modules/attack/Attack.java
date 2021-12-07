@@ -99,7 +99,7 @@ public class Attack {
    * Perform attack.
    */
   public void execute(CofDSystem system) {
-    system.act(this.builder.build());
+    this.builder.build().execute();
   }
 
   /**

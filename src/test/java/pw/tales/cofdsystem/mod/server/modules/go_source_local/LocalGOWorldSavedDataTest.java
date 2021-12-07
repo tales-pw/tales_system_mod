@@ -3,7 +3,7 @@ package pw.tales.cofdsystem.mod.server.modules.go_source_local;
 import net.minecraft.nbt.NBTTagCompound;
 import pw.tales.cofdsystem.game_object.GameObject;
 import pw.tales.cofdsystem.mod.TalesSystemTest;
-import pw.tales.cofdsystem.synchronization.GameObjectSynchronization;
+import pw.tales.cofdsystem.synchronization.serialization.game_object.GameObjectSerialization;
 
 public class LocalGOWorldSavedDataTest extends TalesSystemTest {
 
@@ -34,11 +34,7 @@ public class LocalGOWorldSavedDataTest extends TalesSystemTest {
   }
 
   private String serialize(GameObject gameObject) {
-    GameObjectSynchronization sync = GameObjectSynchronization.create(
-        this.system,
-        gameObject
-    );
-    return sync.serialize();
+    return new GameObjectSerialization(this.system).serialize(gameObject);
   }
 
   public void testRecreateFromNBT() {
