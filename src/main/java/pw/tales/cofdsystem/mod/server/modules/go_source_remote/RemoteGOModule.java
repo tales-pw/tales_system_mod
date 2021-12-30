@@ -73,7 +73,8 @@ public class RemoteGOModule extends SourceGOModule {
    * Create client class.
    */
   private GameObjectStorage createGameObjectStorage() {
-    return GameObjectStorage.createForServer(ModConfig.url, cofdsystem, ModConfig.token);
+    return GameObjectStorage
+        .createForServer(ModConfig.systemApiUrl, cofdsystem, ModConfig.systemApiToken);
   }
 
   /**

@@ -1,8 +1,11 @@
 package pw.tales.cofdsystem.mod.server;
 
+import javax.inject.Provider;
 import pw.tales.cofdsystem.CofDSystem;
+import pw.tales.cofdsystem.mod.ModConfig;
 import pw.tales.cofdsystem.mod.common.CommonGuiceModule;
 import pw.tales.cofdsystem.mod.common.errors.IErrorHandler;
+import pw.tales.cofdsystem.mod.server.clients.AccountsClient;
 import pw.tales.cofdsystem.mod.server.errors.ServerErrors;
 import pw.tales.cofdsystem.mod.server.modules.attack.network.handlers.AttackMessageHandler;
 import pw.tales.cofdsystem.mod.server.modules.attack.storage.AttackMapRepository;
@@ -27,6 +30,11 @@ public class ServerGuiceModule extends CommonGuiceModule {
     bind(IGOSource.class).to(MergedGoSource.class);
     bind(IAttackRepository.class).to(AttackMapRepository.class);
     bind(CofDSystem.class).toInstance(new CofDSystem());
+
+    bind(AccountsClient.class).toProvider((Provider<AccountsClient>) () -> new AccountsClient(
+        ModConfig.accountsApiUrl,
+        ModConfig.accountsApiToken
+    ));
 
     requestStaticInjection(ServerSceneAddHandler.class);
     requestStaticInjection(AttackMessageHandler.class);
