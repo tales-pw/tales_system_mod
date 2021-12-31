@@ -24,7 +24,7 @@ minecraft {
 
     replaceIn "TalesSystem.java"
     replace "@MODID@", modBaseName
-    replace "@VERSION@", forgeVersion
+    replace "@VERSION@", version
 
     serverRunArgs += 'nogui'
 }
@@ -88,4 +88,8 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude "mcmod.info"
     }
+}
+
+sourceSets {
+    main { output.resourcesDir = output.classesDir }
 }
