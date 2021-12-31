@@ -1,11 +1,13 @@
-package pw.tales.cofdsystem.mod.server.clients;
+package pw.tales.cofdsystem.mod.server.clients.accounts;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import javax.annotation.ParametersAreNonnullByDefault;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -14,6 +16,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import pw.tales.cofdsystem.mod.server.clients.accounts.exceptions.NotFound;
+import pw.tales.cofdsystem.mod.server.clients.accounts.exceptions.UnknownResponse;
 
 @Singleton
 public class AccountsClient {
@@ -30,15 +34,14 @@ public class AccountsClient {
     this.apiKey = apiKey;
   }
 
-  public CompletableFuture<Binding> get_binding_by_username(String username) {
-    return this.request(
-        "binding/get_by_username",
-        Collections.singletonMap("username", username),
-        Binding.class
-    );
+  public CompletableFuture<Binding> getBindingByUsername(String username) {
+    HashMap<String, Object> data = new HashMap<>();
+    data.put("username", username);
+    return this.request("binding/get_by_username", data, Binding.class);
   }
 
-  private <T> CompletableFuture<T> request(String path, Object data, Class<T> clazz) {
+  private <T> CompletableFuture<T> request(String path, Map<String, Object> data, Class<T> clazz) {
+    data.put("apiKey", this.apiKey);
     String serializedData = this.gson.toJson(data);
 
     Request request = new Request.Builder()
@@ -50,18 +53,27 @@ public class AccountsClient {
 
     this.client.newCall(request).enqueue(new Callback() {
       @Override
+      @ParametersAreNonnullByDefault
       public void onFailure(Call call, IOException e) {
-        e.printStackTrace();
+        future.completeExceptionally(e);
       }
 
       @Override
+      @ParametersAreNonnullByDefault
       public void onResponse(Call call, Response response) throws IOException {
         try (ResponseBody responseBody = response.body()) {
-          if (!response.isSuccessful()) {
-            throw new IOException("Unexpected code " + response);
+          String responseData = responseBody.string();
+
+          if (response.code() == 404) {
+            throw new NotFound();
           }
 
-          AccountsClient.this.gson.fromJson(responseBody.string(), clazz);
+          if (!response.isSuccessful()) {
+            throw new UnknownResponse(response.code(), responseData);
+          }
+
+          T result = AccountsClient.this.gson.fromJson(responseData, clazz);
+          future.complete(result);
         }
       }
     });

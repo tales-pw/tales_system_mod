@@ -5,7 +5,7 @@ import pw.tales.cofdsystem.CofDSystem;
 import pw.tales.cofdsystem.mod.ModConfig;
 import pw.tales.cofdsystem.mod.common.CommonGuiceModule;
 import pw.tales.cofdsystem.mod.common.errors.IErrorHandler;
-import pw.tales.cofdsystem.mod.server.clients.AccountsClient;
+import pw.tales.cofdsystem.mod.server.clients.accounts.AccountsClient;
 import pw.tales.cofdsystem.mod.server.errors.ServerErrors;
 import pw.tales.cofdsystem.mod.server.modules.attack.network.handlers.AttackMessageHandler;
 import pw.tales.cofdsystem.mod.server.modules.attack.storage.AttackMapRepository;
