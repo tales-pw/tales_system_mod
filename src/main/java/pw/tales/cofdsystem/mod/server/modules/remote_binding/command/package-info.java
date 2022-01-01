@@ -1,6 +1,6 @@
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package pw.tales.cofdsystem.mod.server.modules.player.command;
+package pw.tales.cofdsystem.mod.server.modules.remote_binding.command;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import mcp.MethodsReturnNonnullByDefault;

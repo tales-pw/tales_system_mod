@@ -1,4 +1,4 @@
-package pw.tales.cofdsystem.mod.server.modules.player;
+package pw.tales.cofdsystem.mod.server.modules.remote_binding;
 
 import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 
@@ -23,20 +23,23 @@ import pw.tales.cofdsystem.mod.server.errors.ServerErrors;
 import pw.tales.cofdsystem.mod.server.modules.ServerCommandModule;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.GOEntityRelation;
 import pw.tales.cofdsystem.mod.server.modules.go_source.IGOSource;
-import pw.tales.cofdsystem.mod.server.modules.player.command.ForceRemoteBindingCommand;
+import pw.tales.cofdsystem.mod.server.modules.operators.OperatorsModule;
+import pw.tales.cofdsystem.mod.server.modules.remote_binding.command.ForceRemoteBindingCommand;
 
 @Singleton
-public class PlayerModule extends ServerCommandModule {
+public class RemoteBindingModule extends ServerCommandModule {
 
   private final AccountsClient accountsClient;
   private final IGOSource source;
+  private final OperatorsModule operatorsModule;
   private final GOEntityRelation relationModule;
   private final ServerErrors serverErrors;
 
   @Inject
-  public PlayerModule(
+  public RemoteBindingModule(
       AccountsClient accountsClient,
       IGOSource source,
+      OperatorsModule operatorsModule,
       GOEntityRelation relationModule,
       ServerErrors serverErrors,
       Injector injector
@@ -44,6 +47,7 @@ public class PlayerModule extends ServerCommandModule {
     super(injector);
     this.accountsClient = accountsClient;
     this.source = source;
+    this.operatorsModule = operatorsModule;
     this.relationModule = relationModule;
     this.serverErrors = serverErrors;
   }
@@ -57,6 +61,7 @@ public class PlayerModule extends ServerCommandModule {
   public void onPlayerJoin(PlayerLoggedInEvent event) {
     EntityPlayer player = event.player;
 
+    // Don't autobind already bound character
     String bind = this.relationModule.getBind(player);
     if (!Objects.equals(bind, null)) {
       return;
@@ -65,7 +70,7 @@ public class PlayerModule extends ServerCommandModule {
     Utils.ignoreExc(
         this.applyRemoteBinding(player), NotFound.class
     ).exceptionally(e -> {
-      PlayerModule.this.serverErrors.handle(player, e);
+      RemoteBindingModule.this.serverErrors.handle(player, e);
       throw new CompletionException(e);
     });
   }

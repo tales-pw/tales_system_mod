@@ -1,4 +1,4 @@
-package pw.tales.cofdsystem.mod.server.modules.player.command;
+package pw.tales.cofdsystem.mod.server.modules.remote_binding.command;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -11,19 +11,19 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import pw.tales.cofdsystem.exceptions.CofDSystemException;
 import pw.tales.cofdsystem.mod.common.TalesCommand;
-import pw.tales.cofdsystem.mod.server.modules.player.PlayerModule;
+import pw.tales.cofdsystem.mod.server.modules.remote_binding.RemoteBindingModule;
 
 @Singleton
 public class ForceRemoteBindingCommand extends TalesCommand {
 
-  private static final String NAME = "s.go.bind.remote.force";
+  private static final String NAME = "s.go.remote_binding.force";
 
-  private final PlayerModule playerModule;
+  private final RemoteBindingModule remoteBindingModule;
 
   @Inject
-  protected ForceRemoteBindingCommand(PlayerModule playerModule) {
+  protected ForceRemoteBindingCommand(RemoteBindingModule remoteBindingModule) {
     super(NAME);
-    this.playerModule = playerModule;
+    this.remoteBindingModule = remoteBindingModule;
   }
 
   @Override
@@ -43,7 +43,7 @@ public class ForceRemoteBindingCommand extends TalesCommand {
     );
     sender.sendMessage(startMsg);
 
-    this.playerModule.applyRemoteBinding(target).thenApply(
+    this.remoteBindingModule.applyRemoteBinding(target).thenApply(
         gameObject -> {
           ITextComponent msg = new TextComponentTranslation(
               "command.force_remote_binding.success"

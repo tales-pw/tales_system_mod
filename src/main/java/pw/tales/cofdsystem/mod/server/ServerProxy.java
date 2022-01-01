@@ -18,8 +18,8 @@ import pw.tales.cofdsystem.mod.server.modules.go_source_remote.RemoteGOModule;
 import pw.tales.cofdsystem.mod.server.modules.gui_windows.WindowsModule;
 import pw.tales.cofdsystem.mod.server.modules.notification.NotificationModule;
 import pw.tales.cofdsystem.mod.server.modules.operators.OperatorsModule;
-import pw.tales.cofdsystem.mod.server.modules.player.PlayerModule;
 import pw.tales.cofdsystem.mod.server.modules.position.ServerPositionModule;
+import pw.tales.cofdsystem.mod.server.modules.remote_binding.RemoteBindingModule;
 import pw.tales.cofdsystem.mod.server.modules.scene.SceneModule;
 import pw.tales.cofdsystem.mod.server.modules.simple_roll.SimpleRollModule;
 import pw.tales.cofdsystem.mod.server.modules.system_data.SystemDataModule;
@@ -28,7 +28,7 @@ public class ServerProxy extends CommonProxy {
 
   private static final Set<Class<? extends IModule>> MODULES = ImmutableSet.of(
       OperatorsModule.class,
-      PlayerModule.class,
+      RemoteBindingModule.class,
       SystemDataModule.class,
       GOEntityRelation.class,
       GOItemRelation.class,
