@@ -71,11 +71,13 @@ public class AccountsClient {
           String responseData = responseBody.string();
 
           if (response.code() == 404) {
-            throw new NotFound();
+            this.onFailure(call, new NotFound());
+            return;
           }
 
           if (!response.isSuccessful()) {
-            throw new UnknownResponse(response.code(), responseData);
+            this.onFailure(call, new UnknownResponse(response.code(), responseData));
+            return;
           }
 
           T result = AccountsClient.this.gson.fromJson(responseData, clazz);

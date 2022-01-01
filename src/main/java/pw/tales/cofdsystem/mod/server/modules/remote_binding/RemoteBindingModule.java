@@ -97,7 +97,7 @@ public class RemoteBindingModule extends ServerCommandModule {
             username
         );
       } else {
-        TalesSystem.logger.error("Error while setting remote binding for.", e);
+        TalesSystem.logger.error("Error while setting remote binding.", e);
       }
 
       throw new CompletionException(e);

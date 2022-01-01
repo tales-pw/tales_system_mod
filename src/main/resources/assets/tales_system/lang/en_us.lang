@@ -149,6 +149,8 @@ cofd.range.medium=Medium
 cofd.range.long=Long
 cofd.range.extreme=Extreme
 
+pw.tales.mod.error.generic=Unexpected error appeared. Contact server administrator.
+
 command.range.wrong_usage=You need to select at least one entity.
 command.range.from_unloaded=Starting point entity is unloaded.
 command.range.to_unloaded=Ending point entity is unloaded.
