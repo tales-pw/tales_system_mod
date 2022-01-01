@@ -18,7 +18,7 @@ public class DefaultErrorHandler extends BaseErrorHandler<Exception> {
     e.printStackTrace();
 
     ITextComponent component = new TextComponentTranslation(
-        "commands.generic.exception"
+        "pw.tales.mod.error.generic"
     );
     component.getStyle().setColor(TextFormatting.RED);
 
