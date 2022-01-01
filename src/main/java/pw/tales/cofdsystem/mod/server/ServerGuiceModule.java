@@ -1,6 +1,7 @@
 package pw.tales.cofdsystem.mod.server;
 
 import javax.inject.Provider;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import pw.tales.cofdsystem.CofDSystem;
 import pw.tales.cofdsystem.mod.ModConfig;
 import pw.tales.cofdsystem.mod.common.CommonGuiceModule;
@@ -33,7 +34,8 @@ public class ServerGuiceModule extends CommonGuiceModule {
 
     bind(AccountsClient.class).toProvider((Provider<AccountsClient>) () -> new AccountsClient(
         ModConfig.accountsApiUrl,
-        ModConfig.accountsApiToken
+        ModConfig.accountsApiToken,
+        r -> FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(r)
     ));
 
     requestStaticInjection(ServerSceneAddHandler.class);

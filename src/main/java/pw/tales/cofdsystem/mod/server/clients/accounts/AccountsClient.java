@@ -27,11 +27,17 @@ public class AccountsClient {
 
   private final String url;
   private final String apiKey;
+  private final IScheduler scheduler;
 
   @Inject
-  public AccountsClient(String url, String apiKey) {
+  public AccountsClient(
+      String url,
+      String apiKey,
+      IScheduler scheduler
+  ) {
     this.url = url;
     this.apiKey = apiKey;
+    this.scheduler = scheduler;
   }
 
   public CompletableFuture<Binding> getBindingByUsername(String username) {
@@ -51,11 +57,12 @@ public class AccountsClient {
 
     CompletableFuture<T> future = new CompletableFuture<>();
 
+    IScheduler scheduler = this.scheduler;
     this.client.newCall(request).enqueue(new Callback() {
       @Override
       @ParametersAreNonnullByDefault
       public void onFailure(Call call, IOException e) {
-        future.completeExceptionally(e);
+        scheduler.schedule(() -> future.completeExceptionally(e));
       }
 
       @Override
@@ -73,7 +80,7 @@ public class AccountsClient {
           }
 
           T result = AccountsClient.this.gson.fromJson(responseData, clazz);
-          future.complete(result);
+          scheduler.schedule(() -> future.complete(result));
         }
       }
     });
