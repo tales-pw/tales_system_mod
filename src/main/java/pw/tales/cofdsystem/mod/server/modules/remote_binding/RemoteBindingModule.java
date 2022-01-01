@@ -61,7 +61,12 @@ public class RemoteBindingModule extends ServerCommandModule {
   public void onPlayerJoin(PlayerLoggedInEvent event) {
     EntityPlayer player = event.player;
 
-    // Don't autobind already bound character
+    // Don't autobind operators.
+    if (this.operatorsModule.isOperator(player)) {
+      return;
+    }
+
+    // Don't autobind already bound character.
     String bind = this.relationModule.getBind(player);
     if (!Objects.equals(bind, null)) {
       return;
@@ -90,17 +95,6 @@ public class RemoteBindingModule extends ServerCommandModule {
           username
       );
       return gameObject;
-    }).exceptionally(e -> {
-      if (e instanceof NotFound) {
-        TalesSystem.logger.info(
-            "Binding for {} not found.",
-            username
-        );
-      } else {
-        TalesSystem.logger.error("Error while setting remote binding.", e);
-      }
-
-      throw new CompletionException(e);
     });
   }
 
