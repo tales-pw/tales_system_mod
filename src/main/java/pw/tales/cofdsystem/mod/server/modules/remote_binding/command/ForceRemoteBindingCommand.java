@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import pw.tales.cofdsystem.exceptions.CofDSystemException;
 import pw.tales.cofdsystem.mod.common.TalesCommand;
 import pw.tales.cofdsystem.mod.server.modules.remote_binding.RemoteBindingModule;
@@ -41,13 +42,16 @@ public class ForceRemoteBindingCommand extends TalesCommand {
     ITextComponent startMsg = new TextComponentTranslation(
         "command.force_remote_binding.start"
     );
+    startMsg.getStyle().setColor(TextFormatting.GREEN);
     sender.sendMessage(startMsg);
 
     this.remoteBindingModule.applyRemoteBinding(target).thenApply(
         gameObject -> {
           ITextComponent msg = new TextComponentTranslation(
-              "command.force_remote_binding.success"
+              "command.force_remote_binding.success",
+              gameObject.getDN()
           );
+          msg.getStyle().setColor(TextFormatting.GREEN);
           sender.sendMessage(msg);
           return gameObject;
         }
