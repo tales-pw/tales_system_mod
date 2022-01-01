@@ -57,7 +57,6 @@ public class AccountsClient {
 
     CompletableFuture<T> future = new CompletableFuture<>();
 
-    IScheduler scheduler = this.scheduler;
     this.client.newCall(request).enqueue(new Callback() {
       @Override
       @ParametersAreNonnullByDefault
