@@ -96,6 +96,8 @@ public class RemoteBindingModule extends ServerCommandModule {
             "Binding for {} not found.",
             username
         );
+      } else {
+        TalesSystem.logger.error("Error while setting remote binding for.", e);
       }
 
       throw new CompletionException(e);
