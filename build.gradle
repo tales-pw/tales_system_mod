@@ -13,7 +13,7 @@ buildscript {
 
 apply plugin: "net.minecraftforge.gradle.forge"
 
-version = System.getenv('RELEASE_VERSION') ?: "dev"
+version = System.getenv('RELEASE_VERSION') ?: "0.0.0-dev"
 group = modGroup
 archivesBaseName = modBaseName
 
@@ -88,8 +88,4 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude "mcmod.info"
     }
-}
-
-sourceSets {
-    main { output.resourcesDir = output.classesDir }
 }
