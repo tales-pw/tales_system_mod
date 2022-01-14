@@ -4,3 +4,7 @@ build
 /.gradle/
 *.iml
 logs
+
+tales_system_mod.iml
+tales_system_mod.ipr
+tales_system_mod.iws

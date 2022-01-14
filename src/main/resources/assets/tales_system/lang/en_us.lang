@@ -149,6 +149,12 @@ cofd.range.medium=Medium
 cofd.range.long=Long
 cofd.range.extreme=Extreme
 
+pw.tales.mod.error.generic=Unexpected error appeared. Contact server administrator.
+
 command.range.wrong_usage=You need to select at least one entity.
 command.range.from_unloaded=Starting point entity is unloaded.
 command.range.to_unloaded=Ending point entity is unloaded.
+
+command.force_remote_binding.wrong_usage=Too many arguments, expected "username" or none.
+command.force_remote_binding.start=Fetching remote GameObject Bind...
+command.force_remote_binding.success=Remote GameObject Bind is applied: %s

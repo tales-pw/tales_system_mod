@@ -5,6 +5,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import pw.tales.cofdsystem.mod.TalesSystem;
 
 @Singleton
 public class DefaultErrorHandler extends BaseErrorHandler<Exception> {
@@ -15,10 +16,10 @@ public class DefaultErrorHandler extends BaseErrorHandler<Exception> {
 
   @Override
   public void handleError(ICommandSender recipient, Exception e) {
-    e.printStackTrace();
+    TalesSystem.logger.error("Unexpected error.", e);
 
     ITextComponent component = new TextComponentTranslation(
-        "commands.generic.exception"
+        "pw.tales.mod.error.generic"
     );
     component.getStyle().setColor(TextFormatting.RED);
 
