@@ -37,7 +37,7 @@ public class SystemDataModule implements IModule {
   }
 
   private void loadRemoteData() {
-    SystemStorage systemStorage = new SystemStorage(ModConfig.url);
+    SystemStorage systemStorage = new SystemStorage(ModConfig.systemApiUrl);
     systemStorage.onSuccess = new Function(0, 0) {
       @Override
       public Object __hx_invoke0_o() {

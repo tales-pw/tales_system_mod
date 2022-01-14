@@ -149,6 +149,12 @@ cofd.range.medium=Средняя
 cofd.range.long=Дальняя
 cofd.range.extreme=Огромная
 
+pw.tales.mod.error.generic=Возникла ошибка. Сообщите администратору.
+
 command.range.wrong_usage=Нужно выбрать хотя бы одну цель.
 command.range.from_unloaded=Цель, выступающая начальной точкой, недоступна (выгружена).
 command.range.to_unloaded=Цель, выступающая конечной точкой, недоступна (выгружена).
+
+command.force_remote_binding.wrong_usage=Слишком много аргументов, ожидалось "username" или ничего.
+command.force_remote_binding.start=Извлекаем GameObject Bind...
+command.force_remote_binding.success=GameObject Bind применён: %s
