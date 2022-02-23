@@ -32,7 +32,7 @@ public class ClientEntityGOBindCommand extends EntityGOBindCommand {
     }
 
     TalesSystem.network.sendToServer(
-        new EntityGOBindMessage(dn, this.targets.getLoadedEntities())
+        new EntityGOBindMessage(dn, true, this.targets.getLoadedEntities())
     );
   }
 }

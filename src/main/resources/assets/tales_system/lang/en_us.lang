@@ -45,9 +45,10 @@ command.configure.builder_not_found=This attack not found
 command.error.no_arguments=Required argument pool_size is not specified
 command.error.pool_size_border=Pool size should between 0 and 50.
 command.error.pool_size_integer=Pool size should be integer.
-command.gameobject.use.failure.multiple=While technicly possible, multiple targets are forbidden.
+command.gameobject.use.failure.multiple=While technically possible, multiple targets are forbidden.
 command.gameobject.use.failure.no_target=No target to relate to character.
-command.gameobject.use.fetch.attempt=%s is in process of relating to %s
+command.gameobject.use.fetch.attempt=%s is in process of relating to dn=%s
+command.gameobject.use.fetch.clone=Using %s, clone of %s
 command.gameobject.use.fetch.failure=%s can't be related to %s
 command.gameobject.use.fetch.success=%s successfully related to %s
 command.gameobject.use.no_dn=You should specify character dn.
