@@ -37,7 +37,6 @@ public class EntityGOBindHandler extends TalesMessageHandler<EntityGOBindMessage
   }
 
   private void notifyUseClone(EntityPlayerMP sender, GameObject go, GameObject clone) {
-    // Notify command is working
     TextComponentTranslation startMsg = new TextComponentTranslation(
         "command.gameobject.use.fetch.clone",
         clone,
@@ -48,7 +47,6 @@ public class EntityGOBindHandler extends TalesMessageHandler<EntityGOBindMessage
   }
 
   public void notifyStart(ICommandSender sender, Entity target, String dn) {
-    // Notify command is working
     TextComponentTranslation startMsg = new TextComponentTranslation(
         "command.gameobject.use.fetch.attempt",
         target.getDisplayName(),
