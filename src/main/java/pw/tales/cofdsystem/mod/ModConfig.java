@@ -6,7 +6,7 @@ import net.minecraftforge.common.config.Config;
 @Config(modid = TalesSystem.MOD_ID)
 public class ModConfig {
 
-  public static String systemApiUrl = "https://napi.tales.pw";
+  public static String systemApiUrl = "https://api.tales.pw";
   public static String systemApiToken = "server_token";
 
   public static String accountsApiUrl = "http://auth.tales.pw";

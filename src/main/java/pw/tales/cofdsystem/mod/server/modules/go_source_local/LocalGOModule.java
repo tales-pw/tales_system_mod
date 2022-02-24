@@ -74,4 +74,16 @@ public class LocalGOModule extends SourceGOModule {
         gameObject.version
     );
   }
+
+  public GameObject cloneGameObject(GameObject gameObject) {
+    GameObject clone = gameObject.clone();
+    this.save(clone);
+    TalesSystem.logger.info(
+        "{}, clone of {}, create and saved to {}",
+        clone,
+        gameObject,
+        this
+    );
+    return clone;
+  }
 }

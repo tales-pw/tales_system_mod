@@ -3,6 +3,7 @@ package pw.tales.cofdsystem.mod.server.modules.go_relation_entity.network.handle
 import com.google.inject.Inject;
 import java.util.concurrent.CompletableFuture;
 import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -14,6 +15,7 @@ import pw.tales.cofdsystem.mod.Utils;
 import pw.tales.cofdsystem.mod.common.modules.go_relation_entity.network.messages.EntityGOBindMessage;
 import pw.tales.cofdsystem.mod.common.network.TalesMessageHandler;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.GOEntityRelation;
+import pw.tales.cofdsystem.mod.server.modules.go_source_local.LocalGOModule;
 import pw.tales.cofdsystem.mod.server.modules.operators.OperatorsModule;
 
 public class EntityGOBindHandler extends TalesMessageHandler<EntityGOBindMessage> {
@@ -22,12 +24,46 @@ public class EntityGOBindHandler extends TalesMessageHandler<EntityGOBindMessage
   @Inject
   public static GOEntityRelation goEntityRelation;
 
+  @SuppressWarnings("java:S1444")
+  @Inject
+  public static LocalGOModule localStorageModule;
+
   @Override
   public boolean checkPermission(MinecraftServer server, EntityPlayerMP player) {
     return PermissionAPI.hasPermission(
         player,
         OperatorsModule.SYSTEM_OPERATOR_PERMISSION
     );
+  }
+
+  private void notifyUseClone(EntityPlayerMP sender, GameObject go, GameObject clone) {
+    TextComponentTranslation startMsg = new TextComponentTranslation(
+        "command.gameobject.use.fetch.clone",
+        clone,
+        go
+    );
+    startMsg.getStyle().setColor(TextFormatting.GREEN);
+    sender.sendMessage(startMsg);
+  }
+
+  public void notifyStart(ICommandSender sender, Entity target, String dn) {
+    TextComponentTranslation startMsg = new TextComponentTranslation(
+        "command.gameobject.use.fetch.attempt",
+        target.getDisplayName(),
+        dn
+    );
+    startMsg.getStyle().setColor(TextFormatting.GREEN);
+    sender.sendMessage(startMsg);
+  }
+
+  public void notifySuccess(ICommandSender sender, Entity target, GameObject gameObject) {
+    TextComponentTranslation successMsg = new TextComponentTranslation(
+        "command.gameobject.use.fetch.success",
+        target.getDisplayName(),
+        gameObject
+    );
+    successMsg.getStyle().setColor(TextFormatting.GREEN);
+    sender.sendMessage(successMsg);
   }
 
   @Override
@@ -47,25 +83,29 @@ public class EntityGOBindHandler extends TalesMessageHandler<EntityGOBindMessage
 
     // To whom to bind
     String dn = message.getDn();
-    CompletableFuture<GameObject> future;
+    CompletableFuture<GameObject> gameObjectFuture;
+
     if (dn.equals("")) {
-      future = CompletableFuture.completedFuture(null);
+      gameObjectFuture = CompletableFuture.completedFuture(null);
     } else {
-      future = goEntityRelation.getGameObject(dn);
+      gameObjectFuture = goEntityRelation.getGameObject(dn);
     }
 
     // Notify command is working
-    TextComponentTranslation startMsg = new TextComponentTranslation(
-        "command.gameobject.use.fetch.attempt",
-        finalTarget.getDisplayName(),
-        dn
-    );
-    startMsg.getStyle().setColor(TextFormatting.GREEN);
-    player.sendMessage(startMsg);
+    this.notifyStart(player, finalTarget, dn);
+
+    // Use game object's clone
+    if (message.isClone()) {
+      gameObjectFuture = gameObjectFuture.thenApply(go -> {
+        GameObject clone = localStorageModule.cloneGameObject(go);
+        this.notifyUseClone(player, go, clone);
+        return clone;
+      });
+    }
 
     Utils.merge(
         goEntityRelation.getGameObject(finalTarget).exceptionally(e -> null),
-        future
+        gameObjectFuture
     ).thenApply(entry -> {
       // Unbind old
       GameObject oldGO = entry.getLeft();
@@ -81,14 +121,7 @@ public class EntityGOBindHandler extends TalesMessageHandler<EntityGOBindMessage
         goEntityRelation.attach(finalTarget, newGO);
       }
 
-      // Notify about success
-      TextComponentTranslation successMsg = new TextComponentTranslation(
-          "command.gameobject.use.fetch.success",
-          finalTarget.getDisplayName(),
-          newGO
-      );
-      successMsg.getStyle().setColor(TextFormatting.GREEN);
-      player.sendMessage(successMsg);
+      this.notifySuccess(player, finalTarget, newGO);
 
       return newGO;
     }).exceptionally(e -> {

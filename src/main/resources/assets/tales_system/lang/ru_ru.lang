@@ -47,7 +47,8 @@ command.error.pool_size_border=Размер пула должен быть от 
 command.error.pool_size_integer=Размер пула должен быть числом
 command.gameobject.use.failure.multiple=Хоть и технически возможно, несколько целей для отображения запрещены.
 command.gameobject.use.failure.no_target=Не выбрано ни одной цели для отоборажения в персонажа.
-command.gameobject.use.fetch.attempt=%s находится в процессе отображения в %s
+command.gameobject.use.fetch.attempt=%s находится в процессе отображения в dn=%s
+command.gameobject.use.fetch.clone=Используется %s, клон %s
 command.gameobject.use.fetch.failure=%s не может быть отображен в %s
 command.gameobject.use.fetch.success=%s успешно отображен в %s
 command.gameobject.use.no_dn=Укажите DN персонажа.
