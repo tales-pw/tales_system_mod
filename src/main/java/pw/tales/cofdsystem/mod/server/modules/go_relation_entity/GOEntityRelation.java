@@ -6,13 +6,13 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
@@ -29,6 +29,7 @@ import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.capabilities.bi
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.capabilities.binding.GOBindingProvider;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.events.GameObjectAttachedEvent;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.events.GameObjectDetachedEvent;
+import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.exceptions.AlreadyAttachedException;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.exceptions.EntityNotBoundException;
 import pw.tales.cofdsystem.mod.server.modules.go_source.IGOSource;
 
@@ -41,7 +42,7 @@ public class GOEntityRelation extends GORelation<Entity> implements IModule {
   private final IGOSource goSource;
   private final FMLCommonHandler fmlCommonHandler;
 
-  private final Map<GameObject, Set<UUID>> attachment = new HashMap<>();
+  private final Map<GameObject, UUID> attachment = new HashMap<>();
   private final Map<Entity, Entity> control = new HashMap<>();
 
   @Inject
@@ -103,15 +104,21 @@ public class GOEntityRelation extends GORelation<Entity> implements IModule {
    * @param gameObject GameObject.
    */
   public void attach(Entity entity, GameObject gameObject) {
-    Set<UUID> entities = this.getEntityUUIDs(gameObject);
+    Entity attachedEntity = this.getEntity(gameObject);
     UUID persistentID = entity.getPersistentID();
 
-    // Check is needed to not post event when gameObject already attached.
-    if (entities.contains(persistentID)) {
-      return;
+    if (attachedEntity != null) {
+      TalesSystem.logger.warn(
+          "Attempt to attach {} to {}, which is already attached to {}, unbinding it.",
+          entity,
+          gameObject,
+          attachedEntity
+      );
+      this.bind(entity, null);
+      throw new AlreadyAttachedException();
     }
-
-    entities.add(persistentID);
+  
+    this.attachment.put(gameObject, persistentID);
     EVENT_BUS.post(new GameObjectAttachedEvent(entity, gameObject));
   }
 
@@ -121,15 +128,9 @@ public class GOEntityRelation extends GORelation<Entity> implements IModule {
    * @param gameObject GameObject.
    * @return Set of UUIDs.
    */
-  private Set<UUID> getEntityUUIDs(GameObject gameObject) {
-    Set<UUID> entities;
-    if (attachment.containsKey(gameObject)) {
-      entities = attachment.get(gameObject);
-    } else {
-      entities = new HashSet<>();
-      attachment.put(gameObject, entities);
-    }
-    return entities;
+  @Nullable
+  private UUID getEntityUUID(GameObject gameObject) {
+    return this.attachment.getOrDefault(gameObject, null);
   }
 
   /**
@@ -186,20 +187,21 @@ public class GOEntityRelation extends GORelation<Entity> implements IModule {
    * @param gameObject GameObject.
    */
   public void detach(Entity entity, GameObject gameObject) {
-    Set<UUID> entities = this.getEntityUUIDs(gameObject);
+    UUID attachedId = this.getEntityUUID(gameObject);
     UUID persistentID = entity.getPersistentID();
 
     // Check is needed to not post event when gameObject already detached.
-    if (!entities.contains(persistentID)) {
+    if (attachedId != persistentID) {
       return;
     }
 
-    entities.remove(persistentID);
+    attachment.remove(gameObject);
     EVENT_BUS.post(new GameObjectDetachedEvent(entity, gameObject));
   }
 
-  public Set<Entity> getEntities(GameObject gameObject) {
-    return this.getEntities(gameObject, Entity.class);
+  @Nullable
+  public Entity getEntity(GameObject gameObject) {
+    return this.getEntity(gameObject, Entity.class);
   }
 
   /**
@@ -208,20 +210,26 @@ public class GOEntityRelation extends GORelation<Entity> implements IModule {
    * @param gameObject GameObject for which to get Entity
    * @return Entity
    */
-  public <T extends Entity> Set<T> getEntities(GameObject gameObject, Class<T> clazz) {
-    Set<UUID> uuids = attachment.getOrDefault(gameObject, null);
-    if (uuids == null) {
-      return Collections.emptySet();
+  @Nullable
+  public <T extends Entity> T getEntity(GameObject gameObject, Class<T> clazz) {
+    UUID uuid = this.getEntityUUID(gameObject);
+
+    if (uuid == null) {
+      return null;
     }
 
     MinecraftServer server = this.fmlCommonHandler.getMinecraftServerInstance();
+    Entity entity = server.getEntityFromUuid(uuid);
 
-    return uuids.stream()
-        .map(server::getEntityFromUuid)
-        .filter(Objects::nonNull)
-        .filter(e -> clazz.isAssignableFrom(e.getClass()))
-        .map(clazz::cast)
-        .collect(Collectors.toSet());
+    if (entity == null) {
+      return null;
+    }
+
+    if (!clazz.isAssignableFrom(entity.getClass())) {
+      return null;
+    }
+
+    return clazz.cast(entity);
   }
 
   /**

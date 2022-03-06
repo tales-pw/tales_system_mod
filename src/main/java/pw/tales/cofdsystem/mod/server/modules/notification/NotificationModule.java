@@ -5,9 +5,9 @@ import com.google.inject.Singleton;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.ITextComponent;
@@ -140,8 +140,7 @@ public class NotificationModule implements IModule {
    */
   private List<ISpeaker> getOrigins(GameObject... gameObjects) {
     return Arrays.stream(gameObjects)
-        .map(this.goEntityRelation::getEntities)
-        .flatMap(Collection::stream)
+        .map(this.goEntityRelation::getEntity)
         .map(ForgeEntitySpeaker::new)
         .collect(Collectors.toList());
   }
@@ -152,23 +151,30 @@ public class NotificationModule implements IModule {
    * @param gameObject GameObject to update window to.
    * @return Entities who received window update.
    */
-  public Set<EntityPlayerMP> updateGoWindow(
+  @Nullable
+  public EntityPlayerMP updateGoWindow(
       View view,
       String windowDN,
       GameObject gameObject,
       boolean forcedUpdate
   ) {
-    Set<EntityPlayerMP> entities = this.goEntityRelation.getEntities(
+    EntityPlayerMP entity = this.goEntityRelation.getEntity(
         gameObject,
         EntityPlayerMP.class
     );
-    entities.forEach(entity -> this.windowsModule.updateWindow(
+
+    if (entity == null) {
+      return null;
+    }
+
+    this.windowsModule.updateWindow(
         entity,
         view,
         windowDN,
         forcedUpdate
-    ));
-    return entities;
+    );
+
+    return entity;
   }
 
   /**
@@ -178,13 +184,19 @@ public class NotificationModule implements IModule {
    * @param gameObject GameObject to send message to.
    * @return Entities who received message.
    */
-  public Set<EntityPlayerMP> sendGODirectly(View view, GameObject gameObject) {
-    Set<EntityPlayerMP> entities = this.goEntityRelation.getEntities(
+  @Nullable
+  public EntityPlayerMP sendGODirectly(View view, GameObject gameObject) {
+    EntityPlayerMP entity = this.goEntityRelation.getEntity(
         gameObject,
         EntityPlayerMP.class
     );
-    entities.forEach(e -> e.sendMessage(view.build(e)));
-    return entities;
+
+    if (entity == null) {
+      return null;
+    }
+
+    entity.sendMessage(view.build(entity));
+    return entity;
   }
 
   /**
@@ -194,13 +206,19 @@ public class NotificationModule implements IModule {
    * @param gameObject GameObject to send message to.
    * @return Entities who received message.
    */
-  public Set<EntityPlayerMP> sendGODirectly(ITextComponent component, GameObject gameObject) {
-    Set<EntityPlayerMP> entities = this.goEntityRelation.getEntities(
+  @Nullable
+  public EntityPlayerMP sendGODirectly(ITextComponent component, GameObject gameObject) {
+    EntityPlayerMP entity = this.goEntityRelation.getEntity(
         gameObject,
         EntityPlayerMP.class
     );
-    entities.forEach(e -> e.sendMessage(component));
-    return entities;
+
+    if (entity == null) {
+      return null;
+    }
+
+    entity.sendMessage(component);
+    return entity;
   }
 
   public void sendDirectly(ICommandSender recipient, View view) {
