@@ -10,6 +10,7 @@ import net.minecraft.command.ICommandSender;
 import pw.tales.cofdsystem.mod.Utils;
 import pw.tales.cofdsystem.mod.common.errors.IErrorHandler;
 import pw.tales.cofdsystem.mod.common.errors.handlers.DefaultErrorHandler;
+import pw.tales.cofdsystem.mod.server.errors.error_handlers.AlreadyAttachedHandler;
 import pw.tales.cofdsystem.mod.server.errors.error_handlers.GOFetchingErrorHandler;
 import pw.tales.cofdsystem.mod.server.errors.error_handlers.NotBoundErrorHandler;
 import pw.tales.cofdsystem.mod.server.errors.error_handlers.SystemErrorHandler;
@@ -18,6 +19,7 @@ import pw.tales.cofdsystem.mod.server.errors.error_handlers.SystemErrorHandler;
 public class ServerErrors implements IErrorHandler {
 
   private static final List<Class<? extends IErrorHandler>> HANDLER_CLASSES = ImmutableList.of(
+      AlreadyAttachedHandler.class,
       NotBoundErrorHandler.class,
       GOFetchingErrorHandler.class,
       SystemErrorHandler.class

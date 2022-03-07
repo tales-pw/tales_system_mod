@@ -4,15 +4,11 @@ import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
@@ -100,26 +96,29 @@ public class GOEntityRelation extends GORelation<Entity> implements IModule {
   /**
    * Add entity to "GameObject to Entity"-mapping.
    *
-   * @param entity     Entity.
+   * @param targetEntity     Entity.
    * @param gameObject GameObject.
    */
-  public void attach(Entity entity, GameObject gameObject) {
+  public void attach(Entity targetEntity, GameObject gameObject) {
     Entity attachedEntity = this.getEntity(gameObject);
-    UUID persistentID = entity.getPersistentID();
+
+    if (Objects.equals(attachedEntity, targetEntity)) {
+      return;
+    }
 
     if (attachedEntity != null) {
       TalesSystem.logger.warn(
-          "Attempt to attach {} to {}, which is already attached to {}, unbinding it.",
-          entity,
+          "Attempt to attach {} to {}, which is already attached to {}.",
+          targetEntity,
           gameObject,
           attachedEntity
       );
-      this.bind(entity, null);
-      throw new AlreadyAttachedException();
+      this.bind(targetEntity, null);
+      throw new AlreadyAttachedException(targetEntity, gameObject, attachedEntity);
     }
   
-    this.attachment.put(gameObject, persistentID);
-    EVENT_BUS.post(new GameObjectAttachedEvent(entity, gameObject));
+    this.attachment.put(gameObject, targetEntity.getPersistentID());
+    EVENT_BUS.post(new GameObjectAttachedEvent(targetEntity, gameObject));
   }
 
   /**
