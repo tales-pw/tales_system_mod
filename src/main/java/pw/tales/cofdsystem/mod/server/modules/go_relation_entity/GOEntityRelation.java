@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
@@ -22,7 +21,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import pw.tales.cofdsystem.game_object.GameObject;
 import pw.tales.cofdsystem.mod.TalesSystem;
 import pw.tales.cofdsystem.mod.common.IModule;
-import pw.tales.cofdsystem.mod.common.errors.IErrorHandler;
 import pw.tales.cofdsystem.mod.server.modules.go_relation.GORelation;
 import pw.tales.cofdsystem.mod.server.modules.go_relation.exceptions.NotBoundException;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.capabilities.binding.GOBindingHolder;
@@ -40,7 +38,6 @@ import pw.tales.cofdsystem.mod.server.modules.go_source.IGOSource;
 public class GOEntityRelation extends GORelation<Entity> implements IModule {
 
   private final IGOSource goSource;
-  private final IErrorHandler errors;
   private final FMLCommonHandler fmlCommonHandler;
 
   private final BiMap<GameObject, UUID> attachment = HashBiMap.create();
@@ -49,12 +46,10 @@ public class GOEntityRelation extends GORelation<Entity> implements IModule {
   @Inject
   public GOEntityRelation(
       IGOSource goSource,
-      IErrorHandler errors,
       FMLCommonHandler fmlCommonHandler
   ) {
     super(goSource);
     this.goSource = goSource;
-    this.errors = errors;
     this.fmlCommonHandler = fmlCommonHandler;
   }
 
@@ -100,9 +95,6 @@ public class GOEntityRelation extends GORelation<Entity> implements IModule {
     return super.getGameObject(finalHolder).thenApply(gameObject -> {
       this.attach(finalHolder, gameObject);
       return gameObject;
-    }).exceptionally(e -> {
-      this.errors.handle(finalHolder, e);
-      throw new CompletionException(e);
     });
   }
 
