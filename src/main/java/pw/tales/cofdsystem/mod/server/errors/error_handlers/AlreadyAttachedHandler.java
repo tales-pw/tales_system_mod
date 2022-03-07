@@ -6,9 +6,10 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import pw.tales.cofdsystem.game_object.GameObject;
+import pw.tales.cofdsystem.mod.TalesSystem;
 import pw.tales.cofdsystem.mod.common.errors.handlers.BaseErrorHandler;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.exceptions.AlreadyAttachedException;
 import pw.tales.cofdsystem.mod.server.modules.notification.NotificationModule;
@@ -35,6 +36,13 @@ public class AlreadyAttachedHandler extends BaseErrorHandler<AlreadyAttachedExce
         gameObject,
         attachedEntity
     ));
+
+    TalesSystem.logger.warn(
+        "Attempt to attach {} to {}, which is already attached to {}.",
+        targetEntity,
+        gameObject,
+        attachedEntity
+    );
   }
 
   static class AlreadyAttachedView extends View {
@@ -51,7 +59,12 @@ public class AlreadyAttachedHandler extends BaseErrorHandler<AlreadyAttachedExce
 
     @Override
     public ITextComponent build(EntityPlayerMP viewer) {
-      ITextComponent component = new TextComponentString("");
+      ITextComponent component = new TextComponentTranslation(
+          "gameobject.attach.failure",
+          this.targetEntity.getDisplayName(),
+          this.gameObject.getDN(),
+          this.attachedEntity.getName()
+      );
       component.getStyle().setColor(TextFormatting.RED);
       return component;
     }
