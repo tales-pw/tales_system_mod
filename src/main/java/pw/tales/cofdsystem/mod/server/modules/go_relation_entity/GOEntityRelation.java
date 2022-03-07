@@ -2,6 +2,8 @@ package pw.tales.cofdsystem.mod.server.modules.go_relation_entity;
 
 import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.util.HashMap;
@@ -38,7 +40,7 @@ public class GOEntityRelation extends GORelation<Entity> implements IModule {
   private final IGOSource goSource;
   private final FMLCommonHandler fmlCommonHandler;
 
-  private final Map<GameObject, UUID> attachment = new HashMap<>();
+  private final BiMap<GameObject, UUID> attachment = HashBiMap.create();
   private final Map<Entity, Entity> control = new HashMap<>();
 
   @Inject
