@@ -1,6 +1,6 @@
 package pw.tales.cofdsystem.mod.server.modules.go_source.events;
 
-import net.minecraftforge.fml.common.eventhandler.Event;
+import import net.minecraftforge.eventbus.api.Event;
 import pw.tales.cofdsystem.game_object.GameObject;
 
 public class GameObjectEvent extends Event {

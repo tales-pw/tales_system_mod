@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import pw.tales.cofdsystem.mod.TalesSystem;
 import pw.tales.cofdsystem.mod.common.IModule;
 import pw.tales.cofdsystem.mod.server.modules.equipment.system_slots.ArmorSlot;

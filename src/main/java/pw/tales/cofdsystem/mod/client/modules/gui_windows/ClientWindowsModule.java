@@ -7,7 +7,7 @@ import com.google.inject.Singleton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import pw.tales.cofdsystem.mod.client.modules.gui_system.gui.GuiSystem;
 import pw.tales.cofdsystem.mod.client.modules.gui_windows.gui.GuiTabContainer;
 import pw.tales.cofdsystem.mod.common.IModule;

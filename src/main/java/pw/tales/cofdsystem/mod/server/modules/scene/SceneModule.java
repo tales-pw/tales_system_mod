@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import net.minecraft.command.CommandBase;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import pw.tales.cofdsystem.CofDSystem;
 import pw.tales.cofdsystem.game_object.GameObject;
 import pw.tales.cofdsystem.mod.common.haxe_adapters.HaxeArrayAdapter;

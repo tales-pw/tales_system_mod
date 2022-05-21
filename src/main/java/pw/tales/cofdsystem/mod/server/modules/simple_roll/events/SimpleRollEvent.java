@@ -1,7 +1,7 @@
 package pw.tales.cofdsystem.mod.server.modules.simple_roll.events;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.common.eventhandler.Event;
+import import net.minecraftforge.eventbus.api.Event;
 import pw.tales.cofdsystem.dices.IRollRequest;
 import pw.tales.cofdsystem.dices.RollResponse;
 
