@@ -1,10 +1,25 @@
-.idea
-build
-/run/
-/.gradle/
-*.iml
-logs
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
 
-tales_system_mod.iml
-tales_system_mod.ipr
-tales_system_mod.iws
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run
+
+# Files from Forge MDK
+forge*changelog.txt
