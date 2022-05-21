@@ -150,7 +150,8 @@ public class SceneModule extends ServerCommandModule {
    * @param gameObject GameObject.
    * @return List of entities that received window update.
    */
-  public Set<EntityPlayerMP> updateTurnWindow(
+  @Nullable
+  public EntityPlayerMP updateTurnWindow(
       Scene scene,
       GameObject gameObject,
       boolean forcedUpdate
@@ -175,7 +176,7 @@ public class SceneModule extends ServerCommandModule {
     // while removing them from bound list
     SceneModule.getParticipants(scene).stream().map(
         gameObject -> this.updateTurnWindow(scene, gameObject, false)
-    ).forEach(turnBoundEntities::removeAll);
+    ).forEach(turnBoundEntities::remove);
 
     // Send to bound entities
     TurnsMenuView view = new TurnsMenuView(scene, null);
