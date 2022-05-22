@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
 import javax.annotation.Nullable;
 import net.minecraft.command.CommandException;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
@@ -40,7 +40,7 @@ public class ServerSceneAddHandler extends TalesMessageHandler<SceneAddMessage> 
   public static GOEntityRelation goEntityRelation;
 
   @Override
-  public boolean checkPermission(MinecraftServer server, EntityPlayerMP player) {
+  public boolean checkPermission(MinecraftServer server, ServerPlayerEntity player) {
     return PermissionAPI.hasPermission(
         player,
         OperatorsModule.SYSTEM_OPERATOR_PERMISSION
@@ -48,7 +48,7 @@ public class ServerSceneAddHandler extends TalesMessageHandler<SceneAddMessage> 
   }
 
   @Override
-  public void process(EntityPlayerMP player, SceneAddMessage message) throws CommandException {
+  public void process(ServerPlayerEntity player, SceneAddMessage message) throws CommandException {
     Entity[] targets = message.getEntities();
 
     if (targets.length == 0) {
@@ -149,7 +149,7 @@ public class ServerSceneAddHandler extends TalesMessageHandler<SceneAddMessage> 
     return gameObjectComponent;
   }
 
-  public ITextComponent buildSuccess(EntityPlayerMP viewer, GameObject gameObject) {
+  public ITextComponent buildSuccess(ServerPlayerEntity viewer, GameObject gameObject) {
     ITextComponent gameObjectComponent = new NameView(gameObject).build(viewer);
     gameObjectComponent.getStyle().setColor(TextFormatting.GREEN);
     gameObjectComponent.appendText(": ").appendSibling(

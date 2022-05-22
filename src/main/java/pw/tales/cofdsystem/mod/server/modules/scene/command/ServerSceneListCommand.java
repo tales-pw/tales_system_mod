@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import pw.tales.cofdsystem.mod.common.modules.scene.command.SceneListCommand;
 import pw.tales.cofdsystem.mod.server.modules.operators.OperatorsModule;
@@ -38,7 +38,7 @@ public class ServerSceneListCommand extends SceneListCommand {
       ICommandSender sender,
       String[] args
   ) throws CommandException {
-    EntityPlayerMP entity = getCommandSenderAsPlayer(sender);
+    ServerPlayerEntity entity = getCommandSenderAsPlayer(sender);
     SceneListView view = new SceneListView(sceneModule);
     this.sceneModule.updateSceneWindow(view, entity, false);
   }

@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import net.minecraft.command.CommandBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import pw.tales.cofdsystem.game_object.GameObject;
@@ -59,7 +59,7 @@ public class RemoteBindingModule extends ServerCommandModule {
 
   @SubscribeEvent
   public void onPlayerJoin(PlayerLoggedInEvent event) {
-    EntityPlayer player = event.player;
+    PlayerEntity player = event.player;
 
     // Don't autobind operators.
     if (this.operatorsModule.isOperator(player)) {
@@ -80,7 +80,7 @@ public class RemoteBindingModule extends ServerCommandModule {
     });
   }
 
-  public CompletableFuture<GameObject> applyRemoteBinding(EntityPlayer player) {
+  public CompletableFuture<GameObject> applyRemoteBinding(PlayerEntity player) {
     String username = player.getName();
 
     TalesSystem.logger.info("Loading binding for {}.", username);

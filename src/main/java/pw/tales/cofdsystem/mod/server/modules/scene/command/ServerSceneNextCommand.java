@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import pw.tales.cofdsystem.game_object.GameObject;
 import pw.tales.cofdsystem.mod.TalesSystem;
@@ -46,7 +46,7 @@ public class ServerSceneNextCommand extends SceneNextCommand {
       ICommandSender sender,
       String[] args
   ) throws CommandException {
-    EntityPlayerMP entity = getCommandSenderAsPlayer(sender);
+    ServerPlayerEntity entity = getCommandSenderAsPlayer(sender);
 
     if (args.length < 1) {
       throw new CommandException("command.attack.show.bind.not_enough_arguments");
@@ -84,7 +84,7 @@ public class ServerSceneNextCommand extends SceneNextCommand {
     });
   }
 
-  public boolean canNext(EntityPlayer entity, GameObject gameObject, Turns turns) {
+  public boolean canNext(PlayerEntity entity, GameObject gameObject, Turns turns) {
     boolean isSenderTurn = turns.getTurn() == gameObject;
     boolean isSenderOp = this.operatorsModule.isOperator(entity);
     return isSenderOp || isSenderTurn;

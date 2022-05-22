@@ -1,7 +1,7 @@
 package pw.tales.cofdsystem.mod.server.modules.scene.views;
 
 import javax.annotation.Nullable;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -23,7 +23,7 @@ public class SceneMenuView extends SceneView {
     super(scene);
   }
 
-  public ITextComponent build(EntityPlayerMP viewer) {
+  public ITextComponent build(ServerPlayerEntity viewer) {
     return new TextComponentEmpty()
         .appendSibling(this.buildHeader())
         .appendSibling(
@@ -38,7 +38,7 @@ public class SceneMenuView extends SceneView {
     return this.applyHeaderStyles(component);
   }
 
-  private ITextComponent buildSceneView(EntityPlayerMP viewer, @Nullable Scene scene) {
+  private ITextComponent buildSceneView(ServerPlayerEntity viewer, @Nullable Scene scene) {
     if (scene == null) {
       return new TextComponentTranslation("command.scene.menu.bound.no");
     }

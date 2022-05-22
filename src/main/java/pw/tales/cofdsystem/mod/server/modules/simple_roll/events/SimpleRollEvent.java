@@ -1,21 +1,21 @@
 package pw.tales.cofdsystem.mod.server.modules.simple_roll.events;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import import net.minecraftforge.eventbus.api.Event;
 import pw.tales.cofdsystem.dices.IRollRequest;
 import pw.tales.cofdsystem.dices.RollResponse;
 
 public class SimpleRollEvent extends Event {
 
-  private final EntityPlayerMP sender;
+  private final ServerPlayerEntity sender;
   private final IRollRequest request;
 
-  public SimpleRollEvent(EntityPlayerMP sender, IRollRequest request) {
+  public SimpleRollEvent(ServerPlayerEntity sender, IRollRequest request) {
     this.sender = sender;
     this.request = request;
   }
 
-  public EntityPlayerMP getSender() {
+  public ServerPlayerEntity getSender() {
     return sender;
   }
 
@@ -27,7 +27,7 @@ public class SimpleRollEvent extends Event {
 
     private final RollResponse response;
 
-    public RollResult(EntityPlayerMP sender, IRollRequest request, RollResponse response) {
+    public RollResult(ServerPlayerEntity sender, IRollRequest request, RollResponse response) {
       super(sender, request);
       this.response = response;
     }

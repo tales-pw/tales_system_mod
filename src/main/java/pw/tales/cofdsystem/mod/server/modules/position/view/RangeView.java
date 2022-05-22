@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import pw.tales.cofdsystem.common.EnumRange;
 import pw.tales.cofdsystem.mod.server.views.TextComponentEmpty;
@@ -38,7 +38,7 @@ public class RangeView extends View {
   }
 
   @Override
-  public ITextComponent build(EntityPlayerMP viewer) {
+  public ITextComponent build(ServerPlayerEntity viewer) {
     return new TextComponentEmpty()
         .appendSibling(this.buildHeader("Расстояние"))
         .appendSibling(this.buildKV("от", this.from))

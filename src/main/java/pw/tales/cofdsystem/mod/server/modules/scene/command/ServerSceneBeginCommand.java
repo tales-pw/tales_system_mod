@@ -6,7 +6,7 @@ import java.util.List;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -50,7 +50,7 @@ public class ServerSceneBeginCommand extends SceneBeginCommand {
       ICommandSender sender,
       String[] args
   ) throws CommandException {
-    EntityPlayerMP entity = getCommandSenderAsPlayer(sender);
+    ServerPlayerEntity entity = getCommandSenderAsPlayer(sender);
 
     Scene scene = this.sceneModule.getBoundScene(entity);
     if (scene == null) {

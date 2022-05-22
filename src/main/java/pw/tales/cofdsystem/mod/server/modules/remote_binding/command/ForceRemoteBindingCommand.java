@@ -5,7 +5,7 @@ import com.google.inject.Singleton;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -30,7 +30,7 @@ public class ForceRemoteBindingCommand extends TalesCommand {
   @Override
   public void wrappedExecute(MinecraftServer server, ICommandSender sender, String[] args)
       throws CommandException, CofDSystemException {
-    EntityPlayer target;
+    PlayerEntity target;
     if (args.length == 0) {
       target = CommandBase.getCommandSenderAsPlayer(sender);
     } else if (args.length == 1) {

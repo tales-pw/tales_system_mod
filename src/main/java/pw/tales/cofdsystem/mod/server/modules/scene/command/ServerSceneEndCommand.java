@@ -5,7 +5,7 @@ import com.google.inject.Singleton;
 import java.util.Set;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import pw.tales.cofdsystem.mod.common.modules.scene.command.SceneEndCommand;
 import pw.tales.cofdsystem.mod.server.modules.gui_windows.WindowsModule;
@@ -43,7 +43,7 @@ public class ServerSceneEndCommand extends SceneEndCommand {
       ICommandSender sender,
       String[] args
   ) throws CommandException {
-    EntityPlayerMP entity = getCommandSenderAsPlayer(sender);
+    ServerPlayerEntity entity = getCommandSenderAsPlayer(sender);
 
     Scene scene = this.sceneModule.getBoundScene(entity);
     if (scene == null) {
@@ -53,7 +53,7 @@ public class ServerSceneEndCommand extends SceneEndCommand {
     scene.end();
 
     // Unbind scene
-    Set<EntityPlayerMP> entities = this.sceneModule.unbindScene(scene);
+    Set<ServerPlayerEntity> entities = this.sceneModule.unbindScene(scene);
     this.sceneModule.getSceneRegistry().unregister(scene);
     this.windowsModule.removeWindowForAll(scene.getDN());
 

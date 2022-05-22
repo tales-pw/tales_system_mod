@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -58,7 +58,7 @@ public class AlreadyAttachedHandler extends BaseErrorHandler<AlreadyAttachedExce
     }
 
     @Override
-    public ITextComponent build(EntityPlayerMP viewer) {
+    public ITextComponent build(ServerPlayerEntity viewer) {
       ITextComponent component = new TextComponentTranslation(
           "gameobject.attach.failure",
           this.targetEntity.getDisplayName(),

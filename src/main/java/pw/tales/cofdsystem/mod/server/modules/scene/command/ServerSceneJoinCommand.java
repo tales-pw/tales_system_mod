@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentTranslation;
 import pw.tales.cofdsystem.mod.common.modules.scene.command.SceneJoinCommand;
@@ -43,7 +43,7 @@ public class ServerSceneJoinCommand extends SceneJoinCommand {
       ICommandSender sender,
       String[] args
   ) throws CommandException {
-    EntityPlayerMP player = getCommandSenderAsPlayer(sender);
+    ServerPlayerEntity player = getCommandSenderAsPlayer(sender);
 
     Scene scene = this.sceneModule.getBoundScene(player);
     if (scene == null) {

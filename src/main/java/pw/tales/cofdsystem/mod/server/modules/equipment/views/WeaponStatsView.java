@@ -1,7 +1,7 @@
 package pw.tales.cofdsystem.mod.server.modules.equipment.views;
 
 import java.util.List;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -21,7 +21,7 @@ public class WeaponStatsView extends StatsView {
   }
 
   @Override
-  public ITextComponent build(EntityPlayerMP viewer) {
+  public ITextComponent build(ServerPlayerEntity viewer) {
     ITextComponent header = this.buildHeader("Предмет является оружием:");
 
     List<TraitType> tags = new HaxeArrayAdapter<>(this.weapon.getWeaponTags());

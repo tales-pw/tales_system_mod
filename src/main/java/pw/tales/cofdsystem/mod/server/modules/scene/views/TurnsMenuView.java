@@ -2,7 +2,7 @@ package pw.tales.cofdsystem.mod.server.modules.scene.views;
 
 import java.util.List;
 import javax.annotation.Nullable;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -31,7 +31,7 @@ public class TurnsMenuView extends SceneView {
   }
 
   @Override
-  public ITextComponent build(@Nullable EntityPlayerMP viewer) {
+  public ITextComponent build(@Nullable ServerPlayerEntity viewer) {
     return new TextComponentEmpty()
         .appendSibling(this.buildHeader())
         .appendSibling(this.buildTurnOrder(viewer))
@@ -45,7 +45,7 @@ public class TurnsMenuView extends SceneView {
     return this.applyHeaderStyles(component);
   }
 
-  private ITextComponent buildActions(@Nullable EntityPlayerMP viewer) {
+  private ITextComponent buildActions(@Nullable ServerPlayerEntity viewer) {
     ChatActionsBuilder initiativeActions = new ChatActionsBuilder(TextFormatting.GRAY);
 
     boolean viewerTurn = this.scene.getTurns().getTurn() == this.gameObject;
@@ -61,7 +61,7 @@ public class TurnsMenuView extends SceneView {
     return initiativeActions.build();
   }
 
-  private ITextComponent buildTurnOrder(@Nullable EntityPlayerMP viewer) {
+  private ITextComponent buildTurnOrder(@Nullable ServerPlayerEntity viewer) {
     Initiative initiative = this.scene.getInitiative();
     Turns turns = this.scene.getTurns();
 
@@ -91,7 +91,7 @@ public class TurnsMenuView extends SceneView {
   }
 
   private ITextComponent buildInitiativeElement(
-      @Nullable EntityPlayerMP viewer,
+      @Nullable ServerPlayerEntity viewer,
       GameObject gameObject,
       boolean currentTurn
   ) {

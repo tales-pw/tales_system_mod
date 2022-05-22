@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import net.minecraft.command.CommandBase;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import pw.tales.cofdsystem.CofDSystem;
 import pw.tales.cofdsystem.game_object.GameObject;
@@ -51,7 +51,7 @@ public class SceneModule extends ServerCommandModule {
   private final WindowsModule windowsModule;
 
   private final Registry<Scene> scenes = new Registry<>(false, false);
-  private final HashMap<EntityPlayerMP, Scene> mapping = new HashMap<>();
+  private final HashMap<ServerPlayerEntity, Scene> mapping = new HashMap<>();
 
   @Inject
   public SceneModule(
@@ -81,7 +81,7 @@ public class SceneModule extends ServerCommandModule {
    * @param entity    Entity.
    * @param forceOpen Should window be forced to open.
    */
-  public void updateSceneWindow(View view, EntityPlayerMP entity, boolean forceOpen) {
+  public void updateSceneWindow(View view, ServerPlayerEntity entity, boolean forceOpen) {
     this.windowsModule.updateWindow(entity, view, SCENE_WINDOW_DN, forceOpen);
   }
 
@@ -90,7 +90,7 @@ public class SceneModule extends ServerCommandModule {
    *
    * @param entity Entity.
    */
-  public void updateSceneMenuWindow(EntityPlayerMP entity) {
+  public void updateSceneMenuWindow(ServerPlayerEntity entity) {
     Scene scene = this.getBoundScene(entity);
     SceneMenuView view = new SceneMenuView(scene);
     this.updateSceneWindow(view, entity, true);
@@ -151,7 +151,7 @@ public class SceneModule extends ServerCommandModule {
    * @return List of entities that received window update.
    */
   @Nullable
-  public EntityPlayerMP updateTurnWindow(
+  public ServerPlayerEntity updateTurnWindow(
       Scene scene,
       GameObject gameObject,
       boolean forcedUpdate
@@ -170,7 +170,7 @@ public class SceneModule extends ServerCommandModule {
    * @param scene Scene.
    */
   public void updateTurnWindow(Scene scene) {
-    Set<EntityPlayerMP> turnBoundEntities = this.getBoundEntities(scene);
+    Set<ServerPlayerEntity> turnBoundEntities = this.getBoundEntities(scene);
 
     // Fetch entities that participate in fight
     // while removing them from bound list
@@ -227,8 +227,8 @@ public class SceneModule extends ServerCommandModule {
    * @param scene Scene.
    * @return Entities unbound from scene.
    */
-  public Set<EntityPlayerMP> unbindScene(Scene scene) {
-    Set<EntityPlayerMP> entities = this.getBoundEntities(scene);
+  public Set<ServerPlayerEntity> unbindScene(Scene scene) {
+    Set<ServerPlayerEntity> entities = this.getBoundEntities(scene);
     entities.forEach(mapping::remove);
     return entities;
   }
@@ -237,7 +237,7 @@ public class SceneModule extends ServerCommandModule {
    * @param scene Scene.
    * @return List of all entities bound to scene.
    */
-  public Set<EntityPlayerMP> getBoundEntities(Scene scene) {
+  public Set<ServerPlayerEntity> getBoundEntities(Scene scene) {
     return this.mapping.entrySet().stream()
         .filter(e -> e.getValue() == scene)
         .map(Entry::getKey)
@@ -249,7 +249,7 @@ public class SceneModule extends ServerCommandModule {
    * @return Scene bound to entity (null if not bound).
    */
   @Nullable
-  public Scene getBoundScene(EntityPlayerMP entity) {
+  public Scene getBoundScene(ServerPlayerEntity entity) {
     return this.mapping.getOrDefault(entity, null);
   }
 
@@ -260,7 +260,7 @@ public class SceneModule extends ServerCommandModule {
    * @param entity Entity.
    * @param scene  Scene.
    */
-  public void bindScene(EntityPlayerMP entity, Scene scene) {
+  public void bindScene(ServerPlayerEntity entity, Scene scene) {
     this.mapping.put(entity, scene);
   }
 

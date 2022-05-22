@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumHand;
@@ -106,7 +106,7 @@ public class BindArmorCommand extends BindCommand {
       throw new CommandException("commands.wiki_type_item.unknown_wikitype", wikitype);
     }
 
-    EntityPlayer player = (EntityPlayer) sender;
+    PlayerEntity player = (PlayerEntity) sender;
     ItemStack heldItem = player.getHeldItem(EnumHand.MAIN_HAND);
 
     if (heldItem == ItemStack.EMPTY) {

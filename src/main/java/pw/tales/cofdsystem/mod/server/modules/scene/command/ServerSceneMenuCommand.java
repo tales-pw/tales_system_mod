@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import pw.tales.cofdsystem.mod.common.modules.scene.command.SceneMenuCommand;
 import pw.tales.cofdsystem.mod.server.modules.operators.OperatorsModule;
@@ -37,7 +37,7 @@ public class ServerSceneMenuCommand extends SceneMenuCommand {
       ICommandSender sender,
       String[] args
   ) throws CommandException {
-    EntityPlayerMP entity = getCommandSenderAsPlayer(sender);
+    ServerPlayerEntity entity = getCommandSenderAsPlayer(sender);
     this.sceneModule.updateSceneMenuWindow(entity);
   }
 }

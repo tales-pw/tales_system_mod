@@ -3,7 +3,7 @@ package pw.tales.cofdsystem.mod.server.modules.equipment;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.util.concurrent.CompletableFuture;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import pw.tales.cofdsystem.mod.Utils;
@@ -23,7 +23,7 @@ public class TooltipServerModule implements IModule {
   }
 
   public CompletableFuture<ITextComponent> buildTooltip(
-      EntityPlayerMP player,
+      ServerPlayerEntity player,
       ItemStack itemStack
   ) {
     return Utils.merge(
@@ -52,7 +52,7 @@ public class TooltipServerModule implements IModule {
   }
 
   public CompletableFuture<ITextComponent> buildArmorTooltip(
-      EntityPlayerMP player,
+      ServerPlayerEntity player,
       ItemStack itemStack
   ) {
     return this.equipmentModule.getArmor(itemStack).thenApply(armor -> {
@@ -65,7 +65,7 @@ public class TooltipServerModule implements IModule {
   }
 
   public CompletableFuture<ITextComponent> buildWeaponTooltip(
-      EntityPlayerMP player,
+      ServerPlayerEntity player,
       ItemStack itemStack
   ) {
 

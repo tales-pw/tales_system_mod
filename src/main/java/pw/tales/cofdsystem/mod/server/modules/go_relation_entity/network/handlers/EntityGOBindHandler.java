@@ -5,7 +5,7 @@ import java.util.concurrent.CompletableFuture;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -29,14 +29,14 @@ public class EntityGOBindHandler extends TalesMessageHandler<EntityGOBindMessage
   public static LocalGOModule localStorageModule;
 
   @Override
-  public boolean checkPermission(MinecraftServer server, EntityPlayerMP player) {
+  public boolean checkPermission(MinecraftServer server, ServerPlayerEntity player) {
     return PermissionAPI.hasPermission(
         player,
         OperatorsModule.SYSTEM_OPERATOR_PERMISSION
     );
   }
 
-  private void notifyUseClone(EntityPlayerMP sender, GameObject go, GameObject clone) {
+  private void notifyUseClone(ServerPlayerEntity sender, GameObject go, GameObject clone) {
     TextComponentTranslation startMsg = new TextComponentTranslation(
         "command.gameobject.use.fetch.clone",
         clone,
@@ -67,7 +67,7 @@ public class EntityGOBindHandler extends TalesMessageHandler<EntityGOBindMessage
   }
 
   @Override
-  public void process(EntityPlayerMP player, EntityGOBindMessage message) throws CommandException {
+  public void process(ServerPlayerEntity player, EntityGOBindMessage message) throws CommandException {
     // Who to bind
     Entity[] targets = message.getEntities();
 

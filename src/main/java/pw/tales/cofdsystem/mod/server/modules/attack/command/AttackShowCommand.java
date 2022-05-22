@@ -5,7 +5,7 @@ import com.google.inject.Singleton;
 import java.util.UUID;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import pw.tales.cofdsystem.common.EnumSide;
 import pw.tales.cofdsystem.mod.common.TalesCommand;
@@ -39,7 +39,7 @@ public class AttackShowCommand extends TalesCommand {
   @Override
   public void wrappedExecute(MinecraftServer server, ICommandSender sender, String[] args)
       throws CommandException {
-    EntityPlayerMP entity = getCommandSenderAsPlayer(sender);
+    ServerPlayerEntity entity = getCommandSenderAsPlayer(sender);
 
     if (args.length < 2) {
       throw new CommandException("command.attack.show.bind.not_enough_arguments");

@@ -3,7 +3,7 @@ package pw.tales.cofdsystem.mod.server.modules.gui_windows;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import pw.tales.cofdsystem.mod.TalesSystem;
 import pw.tales.cofdsystem.mod.common.IModule;
@@ -36,11 +36,11 @@ public class WindowsModule implements IModule {
       String windowDN,
       boolean forceOpen
   ) {
-    if (!(recipient instanceof EntityPlayerMP)) {
+    if (!(recipient instanceof ServerPlayerEntity)) {
       return;
     }
 
-    EntityPlayerMP player = (EntityPlayerMP) recipient;
+    ServerPlayerEntity player = (ServerPlayerEntity) recipient;
 
     ITextComponent component = view.build(player);
     TalesSystem.network.sendTo(
@@ -56,13 +56,13 @@ public class WindowsModule implements IModule {
    * @param windowDn  Window identifier.
    */
   public void removeWindow(Entity recipient, String windowDn) {
-    if (!(recipient instanceof EntityPlayerMP)) {
+    if (!(recipient instanceof ServerPlayerEntity)) {
       return;
     }
 
     TalesSystem.network.sendTo(
         new SystemWindowRemoveMessage(windowDn),
-        (EntityPlayerMP) recipient
+        (ServerPlayerEntity) recipient
     );
   }
 

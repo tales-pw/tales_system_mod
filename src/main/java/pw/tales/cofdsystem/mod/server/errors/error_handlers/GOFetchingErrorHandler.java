@@ -3,7 +3,7 @@ package pw.tales.cofdsystem.mod.server.errors.error_handlers;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -46,7 +46,7 @@ public class GOFetchingErrorHandler extends BaseErrorHandler<GOFetchingException
     }
 
     @Override
-    public ITextComponent build(EntityPlayerMP viewer) {
+    public ITextComponent build(ServerPlayerEntity viewer) {
       ITextComponent component = new TextComponentTranslation(
           "command.gameobject.use.fetch.failure",
           viewer.getDisplayName(),

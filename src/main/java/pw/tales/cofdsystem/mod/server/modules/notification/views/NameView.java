@@ -1,6 +1,6 @@
 package pw.tales.cofdsystem.mod.server.modules.notification.views;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -32,7 +32,7 @@ public class NameView extends View {
   }
 
   @Override
-  public ITextComponent build(EntityPlayerMP viewer) {
+  public ITextComponent build(ServerPlayerEntity viewer) {
     String name = new Character(this.gameObject).getName();
     if (!name.isEmpty()) {
       return new TextComponentString(name);

@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import javax.annotation.Nullable;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -25,7 +25,7 @@ public abstract class TalesMessageHandler<R extends IMessage> implements
   public IMessage onMessage(R message, MessageContext ctx) {
     MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
     server.addScheduledTask(() -> {
-      EntityPlayerMP player = ctx.getServerHandler().player;
+      ServerPlayerEntity player = ctx.getServerHandler().player;
 
       if (!checkPermission(server, player)) {
         TextComponentTranslation component = new TextComponentTranslation(
@@ -56,9 +56,9 @@ public abstract class TalesMessageHandler<R extends IMessage> implements
     errors.handle(sender, exception);
   }
 
-  public boolean checkPermission(MinecraftServer server, EntityPlayerMP player) {
+  public boolean checkPermission(MinecraftServer server, ServerPlayerEntity player) {
     return true;
   }
 
-  public abstract void process(EntityPlayerMP player, R message) throws CommandException;
+  public abstract void process(ServerPlayerEntity player, R message) throws CommandException;
 }

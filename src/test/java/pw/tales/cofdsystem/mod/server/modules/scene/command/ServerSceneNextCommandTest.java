@@ -4,7 +4,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import junit.framework.TestCase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import pw.tales.cofdsystem.game_object.GameObject;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.GOEntityRelation;
 import pw.tales.cofdsystem.mod.server.modules.operators.OperatorsModule;
@@ -16,7 +16,7 @@ public class ServerSceneNextCommandTest extends TestCase {
   private ServerSceneNextCommand command;
 
   private GameObject gameObject;
-  private EntityPlayer entity;
+  private PlayerEntity entity;
   private Turns turns;
   private OperatorsModule operatorsModule;
 
@@ -27,7 +27,7 @@ public class ServerSceneNextCommandTest extends TestCase {
     this.operatorsModule = mock(OperatorsModule.class);
 
     this.gameObject = mock(GameObject.class);
-    this.entity = mock(EntityPlayer.class);
+    this.entity = mock(PlayerEntity.class);
     this.turns = mock(Turns.class);
 
     this.command = new ServerSceneNextCommand(

@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import pw.tales.cofdsystem.mod.common.modules.scene.command.SceneShowCommand;
 import pw.tales.cofdsystem.mod.server.modules.go_relation_entity.GOEntityRelation;
@@ -33,7 +33,7 @@ public class ServerSceneShowCommand extends SceneShowCommand {
       ICommandSender sender,
       String[] args
   ) throws CommandException {
-    EntityPlayerMP entity = getCommandSenderAsPlayer(sender);
+    ServerPlayerEntity entity = getCommandSenderAsPlayer(sender);
 
     Scene scene = this.sceneModule.getBoundScene(entity);
     if (scene == null) {

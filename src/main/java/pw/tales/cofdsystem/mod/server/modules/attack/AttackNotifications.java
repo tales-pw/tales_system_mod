@@ -4,7 +4,7 @@ import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import pw.tales.cofdsystem.CofDSystem;
 import pw.tales.cofdsystem.action.competition.Competition;
 import pw.tales.cofdsystem.action_attack.AttackAction;
@@ -153,7 +153,7 @@ public class AttackNotifications implements IModule {
    * @param player Entity.
    * @param side   Attack side.
    */
-  public void forceOpenWindow(Attack attack, EntityPlayer player, EnumSide side) {
+  public void forceOpenWindow(Attack attack, PlayerEntity player, EnumSide side) {
     String windowId = attack.getWindowDN(side);
     MenuView menuView = this.getSideView(attack, side);
 

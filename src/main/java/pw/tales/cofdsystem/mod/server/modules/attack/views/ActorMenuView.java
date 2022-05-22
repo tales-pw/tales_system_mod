@@ -4,7 +4,7 @@ import static pw.tales.cofdsystem.common.EnumHand.HAND;
 import static pw.tales.cofdsystem.common.EnumHand.OFFHAND;
 
 import java.util.UUID;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -27,7 +27,7 @@ public class ActorMenuView extends MenuView {
     super(attack, EnumSide.ACTOR);
   }
 
-  public ITextComponent build(EntityPlayerMP viewer) {
+  public ITextComponent build(ServerPlayerEntity viewer) {
     // Main Header
     ITextComponent header = new TextComponentString("Атака");
     header.getStyle().setBold(true).setColor(TextFormatting.DARK_AQUA);

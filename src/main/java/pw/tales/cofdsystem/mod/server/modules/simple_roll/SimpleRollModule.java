@@ -8,7 +8,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.minecraft.command.CommandBase;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import pw.tales.cofdsystem.CofDSystem;
 import pw.tales.cofdsystem.dices.IRollRequest;
@@ -49,14 +49,14 @@ public class SimpleRollModule extends ServerCommandModule {
     return ImmutableSet.of(SimpleRollCommand.class);
   }
 
-  public void roll(EntityPlayerMP player, IRollRequest request) {
+  public void roll(ServerPlayerEntity player, IRollRequest request) {
     RollResponse response = system.dices.roll(request);
     EVENT_BUS.post(new RollResult(player, request, response));
   }
 
   @SubscribeEvent
   public void onSimpleRollEvent(RollResult event) {
-    EntityPlayerMP player = event.getSender();
+    ServerPlayerEntity player = event.getSender();
 
     this.goEntityRelation.getGameObject(player).thenApply((gameObject -> {
       Environment environment = new SimpleRollMessage(

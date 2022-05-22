@@ -1,7 +1,7 @@
 package pw.tales.cofdsystem.mod.server.modules.scene.views;
 
 import java.util.List;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -22,7 +22,7 @@ public class SceneListView extends View {
   }
 
   @Override
-  public ITextComponent build(EntityPlayerMP viewer) {
+  public ITextComponent build(ServerPlayerEntity viewer) {
     List<Scene> scenes = new HaxeArrayAdapter<>(initiativeModule.getSceneRegistry().items());
 
     return new TextComponentEmpty()
@@ -40,7 +40,7 @@ public class SceneListView extends View {
     return component;
   }
 
-  public ITextComponent buildSceneListView(EntityPlayerMP viewer, List<Scene> scenes) {
+  public ITextComponent buildSceneListView(ServerPlayerEntity viewer, List<Scene> scenes) {
     if (scenes.isEmpty()) {
       ITextComponent emptyComponent = new TextComponentTranslation("command.scene.list.empty");
       emptyComponent.getStyle().setColor(TextFormatting.GRAY).setItalic(true);

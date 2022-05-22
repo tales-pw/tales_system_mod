@@ -9,7 +9,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import pw.tales.cofdsystem.CofDSystem;
 import pw.tales.cofdsystem.character.traits.advantages.health.events.GameObjectDamagedEvent;
@@ -152,15 +152,15 @@ public class NotificationModule implements IModule {
    * @return Entities who received window update.
    */
   @Nullable
-  public EntityPlayerMP updateGoWindow(
+  public ServerPlayerEntity updateGoWindow(
       View view,
       String windowDN,
       GameObject gameObject,
       boolean forcedUpdate
   ) {
-    EntityPlayerMP entity = this.goEntityRelation.getEntity(
+    ServerPlayerEntity entity = this.goEntityRelation.getEntity(
         gameObject,
-        EntityPlayerMP.class
+        ServerPlayerEntity.class
     );
 
     if (entity == null) {
@@ -185,10 +185,10 @@ public class NotificationModule implements IModule {
    * @return Entities who received message.
    */
   @Nullable
-  public EntityPlayerMP sendGODirectly(View view, GameObject gameObject) {
-    EntityPlayerMP entity = this.goEntityRelation.getEntity(
+  public ServerPlayerEntity sendGODirectly(View view, GameObject gameObject) {
+    ServerPlayerEntity entity = this.goEntityRelation.getEntity(
         gameObject,
-        EntityPlayerMP.class
+        ServerPlayerEntity.class
     );
 
     if (entity == null) {
@@ -207,10 +207,10 @@ public class NotificationModule implements IModule {
    * @return Entities who received message.
    */
   @Nullable
-  public EntityPlayerMP sendGODirectly(ITextComponent component, GameObject gameObject) {
-    EntityPlayerMP entity = this.goEntityRelation.getEntity(
+  public ServerPlayerEntity sendGODirectly(ITextComponent component, GameObject gameObject) {
+    ServerPlayerEntity entity = this.goEntityRelation.getEntity(
         gameObject,
-        EntityPlayerMP.class
+        ServerPlayerEntity.class
     );
 
     if (entity == null) {
@@ -222,11 +222,11 @@ public class NotificationModule implements IModule {
   }
 
   public void sendDirectly(ICommandSender recipient, View view) {
-    if (!(recipient instanceof EntityPlayerMP)) {
+    if (!(recipient instanceof ServerPlayerEntity)) {
       return;
     }
 
-    EntityPlayerMP player = (EntityPlayerMP) recipient;
+    ServerPlayerEntity player = (ServerPlayerEntity) recipient;
     player.sendMessage(view.build(player));
   }
 }

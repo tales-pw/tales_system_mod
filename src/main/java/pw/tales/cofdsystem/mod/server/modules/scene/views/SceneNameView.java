@@ -2,7 +2,7 @@ package pw.tales.cofdsystem.mod.server.modules.scene.views;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -21,11 +21,11 @@ public class SceneNameView extends View {
     this.scene = scene;
   }
 
-  public static ITextComponent build(EntityPlayerMP viewer, Scene scene) {
+  public static ITextComponent build(ServerPlayerEntity viewer, Scene scene) {
     return new SceneNameView(scene).build(viewer);
   }
 
-  public ITextComponent build(EntityPlayerMP viewer) {
+  public ITextComponent build(ServerPlayerEntity viewer) {
     List<GameObject> order = new HaxeArrayAdapter<>(scene.getInitiative().getOrder());
 
     ITextComponent sceneComponent;

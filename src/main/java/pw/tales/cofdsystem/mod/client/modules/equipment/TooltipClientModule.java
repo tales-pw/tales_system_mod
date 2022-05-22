@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -32,7 +32,7 @@ public class TooltipClientModule implements IModule {
 
   @SubscribeEvent
   public void onItemTooltip(ItemTooltipEvent event) {
-    EntityPlayer player = event.getEntityPlayer();
+    PlayerEntity player = event.getPlayerEntity();
 
     // Skip this handler when building search tree as it is too early.
     if (player == null) {

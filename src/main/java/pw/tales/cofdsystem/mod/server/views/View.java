@@ -3,7 +3,7 @@ package pw.tales.cofdsystem.mod.server.views;
 import com.google.inject.Inject;
 import javax.annotation.Nullable;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -26,7 +26,7 @@ public abstract class View {
    * @param viewer Viewer.
    * @return True if they are operator, False if not or is null.
    */
-  public boolean isOperator(@Nullable EntityPlayerMP viewer) {
+  public boolean isOperator(@Nullable ServerPlayerEntity viewer) {
     if (viewer == null) {
       return false;
     }
@@ -40,7 +40,7 @@ public abstract class View {
    * @param viewer Somebody who will see result message.
    * @return ITextComponent.
    */
-  public abstract ITextComponent build(EntityPlayerMP viewer);
+  public abstract ITextComponent build(ServerPlayerEntity viewer);
 
   /**
    * Build header component.

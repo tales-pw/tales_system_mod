@@ -3,8 +3,8 @@ package pw.tales.cofdsystem.mod.server.errors.error_handlers;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import pw.tales.cofdsystem.mod.common.errors.handlers.BaseErrorHandler;
@@ -41,7 +41,7 @@ public class NotBoundErrorHandler extends BaseErrorHandler<NotBoundException> {
     }
 
     @Override
-    public ITextComponent build(EntityPlayerMP viewer) {
+    public ITextComponent build(ServerPlayerEntity viewer) {
       String holderStr = this.getHolderString();
 
       ITextComponent components = new TextComponentTranslation(
@@ -53,8 +53,8 @@ public class NotBoundErrorHandler extends BaseErrorHandler<NotBoundException> {
     }
 
     public String getHolderString() {
-      if (this.holder instanceof EntityPlayer) {
-        EntityPlayer player = (EntityPlayer) this.holder;
+      if (this.holder instanceof PlayerEntity) {
+        PlayerEntity player = (PlayerEntity) this.holder;
         return player.getDisplayNameString();
       } else {
         return this.holder.toString();

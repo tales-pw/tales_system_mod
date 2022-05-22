@@ -3,7 +3,7 @@ package pw.tales.cofdsystem.mod.server.errors.error_handlers;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import pw.tales.cofdsystem.exceptions.CofDSystemException;
@@ -40,7 +40,7 @@ public class SystemErrorHandler extends BaseErrorHandler<CofDSystemException> {
     }
 
     @Override
-    public ITextComponent build(EntityPlayerMP viewer) {
+    public ITextComponent build(ServerPlayerEntity viewer) {
       ITextComponent component = new TextComponentTranslation(
           "command.system.error.unknown_system_error",
           e.getMessage()

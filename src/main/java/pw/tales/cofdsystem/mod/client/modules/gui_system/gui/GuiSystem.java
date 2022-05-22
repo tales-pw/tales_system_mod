@@ -3,7 +3,7 @@ package pw.tales.cofdsystem.mod.client.modules.gui_system.gui;
 import com.google.inject.Inject;
 import java.io.IOException;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.entity.ClientPlayerEntity;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.entity.Entity;
@@ -110,7 +110,7 @@ public class GuiSystem extends GuiChat {
       TalesSystem.network.sendToServer(new AttackMessage(entities));
     }
 
-    EntityPlayerSP player = Minecraft.getMinecraft().player;
+    ClientPlayerEntity player = Minecraft.getMinecraft().player;
     if (button.id == COMBAT_TRACKER_ID) {
       player.sendChatMessage(SceneMenuCommand.generate());
     }

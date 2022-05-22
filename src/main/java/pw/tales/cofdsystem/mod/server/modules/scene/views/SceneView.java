@@ -1,7 +1,7 @@
 package pw.tales.cofdsystem.mod.server.modules.scene.views;
 
 import javax.annotation.Nullable;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import pw.tales.cofdsystem.mod.server.modules.scene.exceptions.NoSceneViewException;
 import pw.tales.cofdsystem.mod.server.views.View;
@@ -15,7 +15,7 @@ public abstract class SceneView extends View {
     this.scene = scene;
   }
 
-  public ITextComponent buildSceneName(EntityPlayerMP viewer) {
+  public ITextComponent buildSceneName(ServerPlayerEntity viewer) {
     if (this.scene == null) {
       throw new NoSceneViewException();
     }

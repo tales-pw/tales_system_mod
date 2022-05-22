@@ -1,6 +1,6 @@
 package pw.tales.cofdsystem.mod.server.modules.equipment.views;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import pw.tales.cofdsystem.armor.Armor;
 import pw.tales.cofdsystem.mod.server.views.TextComponentEmpty;
@@ -14,7 +14,7 @@ public class ArmorStatsView extends StatsView {
   }
 
   @Override
-  public ITextComponent build(EntityPlayerMP viewer) {
+  public ITextComponent build(ServerPlayerEntity viewer) {
     ITextComponent header = this.buildHeader("Предмет является доспехом:");
     return new TextComponentEmpty()
         .appendSibling(header)

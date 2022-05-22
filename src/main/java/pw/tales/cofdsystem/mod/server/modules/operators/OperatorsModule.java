@@ -8,8 +8,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
@@ -85,7 +85,7 @@ public class OperatorsModule extends ServerCommandModule {
    *
    * @return Set of operators.
    */
-  public Set<EntityPlayerMP> getOperators() {
+  public Set<ServerPlayerEntity> getOperators() {
     return fmlCommonHandler.getMinecraftServerInstance()
         .getPlayerList()
         .getPlayers()
@@ -101,12 +101,12 @@ public class OperatorsModule extends ServerCommandModule {
    * @return True if operator, False if not or not player.
    */
   public boolean isOperator(ICommandSender commandSender) {
-    if (!(commandSender instanceof EntityPlayer)) {
+    if (!(commandSender instanceof PlayerEntity)) {
       return false;
     }
 
     return PermissionAPI.hasPermission(
-        (EntityPlayer) commandSender,
+        (PlayerEntity) commandSender,
         OperatorsModule.SYSTEM_OPERATOR_PERMISSION
     );
   }
@@ -136,12 +136,12 @@ public class OperatorsModule extends ServerCommandModule {
    * @return True if has access to system console, False if not or not player.
    */
   public boolean isConsoleOperator(ICommandSender commandSender) {
-    if (!(commandSender instanceof EntityPlayer)) {
+    if (!(commandSender instanceof PlayerEntity)) {
       return false;
     }
 
     return PermissionAPI.hasPermission(
-        (EntityPlayer) commandSender,
+        (PlayerEntity) commandSender,
         OperatorsModule.SYSTEM_CONSOLE_OPERATOR_PERMISSION
     );
   }

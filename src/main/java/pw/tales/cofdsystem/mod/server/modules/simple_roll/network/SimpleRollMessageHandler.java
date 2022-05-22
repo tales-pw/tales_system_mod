@@ -2,7 +2,7 @@ package pw.tales.cofdsystem.mod.server.modules.simple_roll.network;
 
 import com.google.inject.Inject;
 import net.minecraft.command.CommandException;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import pw.tales.cofdsystem.mod.common.network.TalesMessageHandler;
 import pw.tales.cofdsystem.mod.common.network.messages.SimpleRollMessage;
 import pw.tales.cofdsystem.mod.server.modules.simple_roll.SimpleRollModule;
@@ -14,7 +14,7 @@ public class SimpleRollMessageHandler extends TalesMessageHandler<SimpleRollMess
   public static SimpleRollModule rollModule;
 
   @Override
-  public void process(EntityPlayerMP player, SimpleRollMessage message) throws CommandException {
+  public void process(ServerPlayerEntity player, SimpleRollMessage message) throws CommandException {
     rollModule.roll(player, message.request);
   }
 }

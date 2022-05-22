@@ -5,7 +5,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import pw.tales.cofdsystem.common.EnumRange;
 import pw.tales.cofdsystem.mod.common.modules.position.network.messages.GetRangeMessage;
 import pw.tales.cofdsystem.mod.common.network.TalesMessageHandler;
@@ -18,7 +18,7 @@ public class GetRangeMessageHandler extends TalesMessageHandler<GetRangeMessage>
   private static ServerPositionModule positionModule;
 
   @Override
-  public void process(EntityPlayerMP player, GetRangeMessage message) throws CommandException {
+  public void process(ServerPlayerEntity player, GetRangeMessage message) throws CommandException {
     Entity[] entities = message.getEntities();
 
     ICommandSender from;

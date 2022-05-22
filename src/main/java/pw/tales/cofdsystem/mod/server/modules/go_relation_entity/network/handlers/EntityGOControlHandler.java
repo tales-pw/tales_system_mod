@@ -3,7 +3,7 @@ package pw.tales.cofdsystem.mod.server.modules.go_relation_entity.network.handle
 import com.google.inject.Inject;
 import net.minecraft.command.CommandException;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -20,7 +20,7 @@ public class EntityGOControlHandler extends TalesMessageHandler<EntityGOControlM
   public static GOEntityRelation goEntityRelation;
 
   @Override
-  public boolean checkPermission(MinecraftServer server, EntityPlayerMP player) {
+  public boolean checkPermission(MinecraftServer server, ServerPlayerEntity player) {
     return PermissionAPI.hasPermission(
         player,
         OperatorsModule.SYSTEM_OPERATOR_PERMISSION
@@ -28,7 +28,7 @@ public class EntityGOControlHandler extends TalesMessageHandler<EntityGOControlM
   }
 
   @Override
-  public void process(EntityPlayerMP player, EntityGOControlMessage message)
+  public void process(ServerPlayerEntity player, EntityGOControlMessage message)
       throws CommandException {
     Entity[] targets = message.getEntities();
 

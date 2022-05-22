@@ -1,7 +1,7 @@
 package pw.tales.cofdsystem.mod.server.modules.attack.views;
 
 import java.util.UUID;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -21,7 +21,7 @@ public class TargetMenuView extends MenuView {
     super(attack, EnumSide.TARGET);
   }
 
-  public ITextComponent build(EntityPlayerMP viewer) {
+  public ITextComponent build(ServerPlayerEntity viewer) {
     AttackBuilder builder = this.attack.getBuilder();
 
     // Main Header
